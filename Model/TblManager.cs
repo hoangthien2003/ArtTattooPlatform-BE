@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace back_end.Model;
+
+public partial class TblManager
+{
+    public int ManagerId { get; set; }
+
+    public string? FisrtName { get; set; }
+
+    public string? LastName { get; set; }
+
+    public string? Gender { get; set; }
+
+    public string? ManagerPhone { get; set; }
+
+    public int? UserId { get; set; }
+
+    public virtual ICollection<TblStudio> TblStudios { get; set; } = new List<TblStudio>();
+
+    public virtual TblUser? User { get; set; }
+}
