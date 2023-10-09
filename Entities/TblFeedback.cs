@@ -15,8 +15,6 @@ public partial class TblFeedback
 
     public DateTime? FeedbackDate { get; set; }
 
-    public virtual ICollection<ImageFeedback> ImageFeedbacks { get; set; } = new List<ImageFeedback>();
-
     public virtual TblMember? Member { get; set; }
 
     public virtual TblService? Service { get; set; }
