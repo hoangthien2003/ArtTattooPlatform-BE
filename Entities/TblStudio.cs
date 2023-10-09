@@ -19,7 +19,7 @@ public partial class TblStudio
 
     public string? Description { get; set; }
 
-    public string? Avatar { get; set; }
+    public string? Logo { get; set; }
 
     public virtual TblManager? Manager { get; set; }
 
