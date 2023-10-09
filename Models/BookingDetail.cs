@@ -10,6 +10,6 @@
         public decimal? Price { get; set; }
         public virtual Booking Booking { get; set; }
         public virtual Service Service { get; set; }
-        public virtual Feedback Artist { get; set; }
+        public virtual FeedbackRequest Artist { get; set; }
     }
 }

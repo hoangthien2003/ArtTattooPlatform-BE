@@ -1,8 +1,6 @@
-﻿using back_end.Entities;
-
-namespace back_end.Models
+﻿namespace back_end.Models
 {
-    public class Feedback
+    public class FeedbackRequest
     {
         public int FeedbackId { get; set; }
 
@@ -14,8 +12,5 @@ namespace back_end.Models
 
         public DateTime? FeedbackDate { get; set; }
 
-       
-
-        
     }
 }

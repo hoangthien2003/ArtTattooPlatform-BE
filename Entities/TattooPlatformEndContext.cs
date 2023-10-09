@@ -44,7 +44,6 @@ public partial class TattooPlatformEndContext : DbContext
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=35.240.234.172;Initial Catalog=TattooPlatformEND;User ID=sa;Password=ArtTattoo123@;TrustServerCertificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -61,9 +60,7 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
             entity.Property(e => e.Image).HasMaxLength(30);
 
-            entity.HasOne(d => d.Feedback).WithMany(p => p.ImageFeedbacks)
-                .HasForeignKey(d => d.FeedbackId)
-                .HasConstraintName("FK_ImageFeedback");
+           
         });
 
         modelBuilder.Entity<TblArtist>(entity =>
