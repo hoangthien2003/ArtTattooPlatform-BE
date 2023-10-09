@@ -19,7 +19,7 @@ namespace back_end.Controller
         }
 
         [HttpPost("AddArtist")]
-        public async Task<IActionResult> AddArtistAsync([FromForm] Artist artistRequest)
+        public async Task<IActionResult> AddArtistAsync([FromForm] Feedback artistRequest)
         {
             var existedArtist = await _context.TblArtists.
                 FirstOrDefaultAsync(artist => artist.PhoneNumber == artistRequest.NumberPhone);
@@ -58,7 +58,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdateArtist/{artistID}")]
-        public async Task<IActionResult> UpdateArtistAsync(int artistID, [FromForm] Artist artistRequest)
+        public async Task<IActionResult> UpdateArtistAsync(int artistID, [FromForm] Feedback artistRequest)
         {
             var artist = await _context.TblArtists.FindAsync(artistID);
             if (artist == null)

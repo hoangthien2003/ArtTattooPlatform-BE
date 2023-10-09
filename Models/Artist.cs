@@ -1,6 +1,6 @@
 ﻿namespace back_end.Models
 {
-    public class Artist
+    public class Feedback
     {
         public string ArtistName { get; set; }
         public bool Gender { get; set; }
