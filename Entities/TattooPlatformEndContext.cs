@@ -285,11 +285,12 @@ public partial class TattooPlatformEndContext : DbContext
 
             entity.ToTable("tbl_Studio");
 
-            entity.Property(e => e.StudioId)
-                .ValueGeneratedNever()
-                .HasColumnName("StudioID");
+            entity.Property(e => e.StudioId).HasColumnName("StudioID");
             entity.Property(e => e.Address).HasMaxLength(30);
-            entity.Property(e => e.IsActive).HasColumnName("isActive");
+            entity.Property(e => e.Avatar)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.Description).HasMaxLength(100);
             entity.Property(e => e.ManagerId).HasColumnName("ManagerID");
             entity.Property(e => e.StudioEmail).HasMaxLength(30);
             entity.Property(e => e.StudioName).HasMaxLength(30);

@@ -38,13 +38,7 @@ namespace back_end.Controller
             };
             if (serviceRequest.Image.Length > 0)
             {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Assets", 
-                    serviceRequest.Image.FileName);
-                using(var stream = System.IO.File.Create(path))
-                {
-                    await serviceRequest.Image.CopyToAsync(stream);
-                }
-                service.ImageService = "http://35.240.234.172:8181/Assets/" + serviceRequest.Image.FileName;
+                service.ImageService = await Utils.Utils.UploadGetURLImageAsync(serviceRequest.Image);
             }
             _context.TblServices.Add(service);
             _context.SaveChanges();

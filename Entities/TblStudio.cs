@@ -9,8 +9,6 @@ public partial class TblStudio
 
     public string? StudioName { get; set; }
 
-    public int? IsActive { get; set; }
-
     public string? Address { get; set; }
 
     public string? StudioPhone { get; set; }
@@ -18,6 +16,10 @@ public partial class TblStudio
     public string? StudioEmail { get; set; }
 
     public int? ManagerId { get; set; }
+
+    public string? Description { get; set; }
+
+    public string? Avatar { get; set; }
 
     public virtual TblManager? Manager { get; set; }
 
