@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace back_end.Model;
+namespace back_end.Entities;
 
 public partial class TblRole
 {

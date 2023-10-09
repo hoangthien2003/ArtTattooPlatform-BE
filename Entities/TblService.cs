@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace back_end.Model;
+namespace back_end.Entities;
 
 public partial class TblService
 {
@@ -9,27 +9,27 @@ public partial class TblService
 
     public string? ServiceName { get; set; }
 
-    public string? Image { get; set; }
-
     public string? Description { get; set; }
 
-    public decimal? Price { get; set; }
+    public string? Price { get; set; }
 
     public string? CategoryId { get; set; }
 
     public string? ImageService { get; set; }
 
-    public bool? IsActive { get; set; }
-
-    public int? ServiceItemId { get; set; }
-
     public int? ArtistId { get; set; }
 
+    public int? StudioId { get; set; }
+
     public virtual TblArtist? Artist { get; set; }
+
+    public virtual TblStudio? Studio { get; set; }
 
     public virtual ICollection<TblBookingDetail> TblBookingDetails { get; set; } = new List<TblBookingDetail>();
 
     public virtual ICollection<TblFeedback> TblFeedbacks { get; set; } = new List<TblFeedback>();
 
-    public virtual ICollection<TblStudio> TblStudios { get; set; } = new List<TblStudio>();
+    public virtual ICollection<TblImageService> TblImageServices { get; set; } = new List<TblImageService>();
+
+    public virtual ICollection<TblPayment> TblPayments { get; set; } = new List<TblPayment>();
 }

@@ -1,8 +1,8 @@
-﻿namespace back_end.Model
+﻿namespace back_end.Models
 {
     public class LoginRequest
     {
-        public string Email { get; set; }
+        public string Email {  get; set; }
         public string Password { get; set; }
     }
 }

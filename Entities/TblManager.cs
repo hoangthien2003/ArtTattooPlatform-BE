@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace back_end.Model;
+namespace back_end.Entities;
 
 public partial class TblManager
 {
     public int ManagerId { get; set; }
 
-    public string? FisrtName { get; set; }
-
-    public string? LastName { get; set; }
+    public string? ManagerName { get; set; }
 
     public string? Gender { get; set; }
 

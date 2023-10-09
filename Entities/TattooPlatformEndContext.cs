@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using back_end.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace back_end;
+namespace back_end.Entities;
 
-public partial class TattooThuBayContext : DbContext
+public partial class TattooPlatformEndContext : DbContext
 {
-    public TattooThuBayContext()
+    public TattooPlatformEndContext()
     {
     }
 
-    public TattooThuBayContext(DbContextOptions<TattooThuBayContext> options)
+    public TattooPlatformEndContext(DbContextOptions<TattooPlatformEndContext> options)
         : base(options)
     {
     }
+
+    public virtual DbSet<ImageFeedback> ImageFeedbacks { get; set; }
 
     public virtual DbSet<TblArtist> TblArtists { get; set; }
 
@@ -22,15 +23,15 @@ public partial class TattooThuBayContext : DbContext
 
     public virtual DbSet<TblBookingDetail> TblBookingDetails { get; set; }
 
-
-    public virtual DbSet<TblCetificate> TblCetificates { get; set; }
-
     public virtual DbSet<TblFeedback> TblFeedbacks { get; set; }
 
+    public virtual DbSet<TblImageService> TblImageServices { get; set; }
 
     public virtual DbSet<TblManager> TblManagers { get; set; }
 
     public virtual DbSet<TblMember> TblMembers { get; set; }
+
+    public virtual DbSet<TblPayment> TblPayments { get; set; }
 
     public virtual DbSet<TblRole> TblRoles { get; set; }
 
@@ -43,47 +44,43 @@ public partial class TattooThuBayContext : DbContext
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-               .SetBasePath(Directory.GetCurrentDirectory())
-               .AddJsonFile("appsettings.json")
-               .Build();
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            optionsBuilder.UseSqlServer(connectionString);
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=35.240.234.172;Initial Catalog=TattooPlatformEND;User ID=sa;Password=ArtTattoo123@;TrustServerCertificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ImageFeedback>(entity =>
+        {
+            entity.HasKey(e => e.ImageFeedbackId).HasName("PK__ImageFee__9A5AE7A4CA52A2DD");
+
+            entity.ToTable("ImageFeedback");
+
+            entity.Property(e => e.ImageFeedbackId)
+                .ValueGeneratedNever()
+                .HasColumnName("ImageFeedbackID");
+            entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
+            entity.Property(e => e.Image).HasMaxLength(30);
+
+            entity.HasOne(d => d.Feedback).WithMany(p => p.ImageFeedbacks)
+                .HasForeignKey(d => d.FeedbackId)
+                .HasConstraintName("FK_ImageFeedback");
+        });
+
         modelBuilder.Entity<TblArtist>(entity =>
         {
-            entity.HasKey(e => e.ArtistId).HasName("PK__tbl_Arti__25706B70A0840A69");
+            entity.HasKey(e => e.ArtistId).HasName("PK__tbl_Arti__25706B7077AD2D61");
 
             entity.ToTable("tbl_Artist");
 
-            entity.Property(e => e.ArtistId)
-                .ValueGeneratedNever()
-                .HasColumnName("ArtistID");
-            entity.Property(e => e.CreateArtist).HasColumnType("datetime");
-            entity.Property(e => e.Email).HasMaxLength(30);
-            entity.Property(e => e.FisrtName).HasMaxLength(30);
-            entity.Property(e => e.FullName).HasMaxLength(30);
-            entity.Property(e => e.ImageArtist).HasMaxLength(100);
-            entity.Property(e => e.LastName).HasMaxLength(20);
-            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.ArtistId).HasColumnName("ArtistID");
+            entity.Property(e => e.ArtistName).HasMaxLength(30);
             entity.Property(e => e.PhoneNumber).HasMaxLength(30);
             entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.Member).WithMany(p => p.TblArtists)
-                .HasForeignKey(d => d.MemberId)
-                .HasConstraintName("FK_Artist");
         });
 
         modelBuilder.Entity<TblBooking>(entity =>
         {
-            entity.HasKey(e => e.BookingId).HasName("PK__tbl_Book__73951ACD0B05FE6A");
+            entity.HasKey(e => e.BookingId).HasName("PK__tbl_Book__73951ACDD0CFC33D");
 
             entity.ToTable("tbl_Booking");
 
@@ -101,7 +98,7 @@ public partial class TattooThuBayContext : DbContext
 
         modelBuilder.Entity<TblBookingDetail>(entity =>
         {
-            entity.HasKey(e => e.BookingDetailId).HasName("PK__tbl_Book__8136D47AE147BE85");
+            entity.HasKey(e => e.BookingDetailId).HasName("PK__tbl_Book__8136D47AEB50265B");
 
             entity.ToTable("tbl_BookingDetail");
 
@@ -126,24 +123,9 @@ public partial class TattooThuBayContext : DbContext
                 .HasConstraintName("FK_BookingDetail_Service");
         });
 
-        modelBuilder.Entity<TblCetificate>(entity =>
-        {
-            entity.HasKey(e => e.CetificateId).HasName("PK__tbl_Ceti__8D9CF4CC95F70B51");
-
-            entity.ToTable("tbl_Cetificate");
-
-            entity.Property(e => e.CetificateId).ValueGeneratedNever();
-            entity.Property(e => e.ArtistId).HasColumnName("ArtistID");
-            entity.Property(e => e.Cerificate).HasMaxLength(100);
-
-            entity.HasOne(d => d.Artist).WithMany(p => p.TblCetificates)
-                .HasForeignKey(d => d.ArtistId)
-                .HasConstraintName("FK_Cetificate");
-        });
-
         modelBuilder.Entity<TblFeedback>(entity =>
         {
-            entity.HasKey(e => e.FeedbackId).HasName("PK__tbl_Feed__6A4BEDF677E5E668");
+            entity.HasKey(e => e.FeedbackId).HasName("PK__tbl_Feed__6A4BEDF6DF00DDBA");
 
             entity.ToTable("tbl_Feedback");
 
@@ -164,48 +146,87 @@ public partial class TattooThuBayContext : DbContext
                 .HasConstraintName("FK_Feedback_Service");
         });
 
+        modelBuilder.Entity<TblImageService>(entity =>
+        {
+            entity.HasKey(e => e.ImageServiceId).HasName("PK__tbl_Imag__D23744EAB899A571");
+
+            entity.ToTable("tbl_ImageService");
+
+            entity.Property(e => e.ImageServiceId)
+                .ValueGeneratedNever()
+                .HasColumnName("ImageServiceID");
+            entity.Property(e => e.Image).HasMaxLength(100);
+            entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+
+            entity.HasOne(d => d.Service).WithMany(p => p.TblImageServices)
+                .HasForeignKey(d => d.ServiceId)
+                .HasConstraintName("FK_ImageService");
+        });
+
         modelBuilder.Entity<TblManager>(entity =>
         {
-            entity.HasKey(e => e.ManagerId).HasName("PK__tbl_Mana__3BA2AA81F8054CB6");
+            entity.HasKey(e => e.ManagerId).HasName("PK__tbl_Mana__3BA2AA8199ACDBAA");
 
             entity.ToTable("tbl_Manager");
 
-            entity.Property(e => e.ManagerId)
-                .ValueGeneratedNever()
-                .HasColumnName("ManagerID");
-            entity.Property(e => e.FisrtName).HasMaxLength(20);
+            entity.Property(e => e.ManagerId).HasColumnName("ManagerID");
             entity.Property(e => e.Gender).HasMaxLength(20);
-            entity.Property(e => e.LastName).HasMaxLength(30);
+            entity.Property(e => e.ManagerName).HasMaxLength(50);
             entity.Property(e => e.ManagerPhone).HasMaxLength(20);
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.User).WithMany(p => p.TblManagers)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_tbl_Manager_tbl_User");
+                .HasConstraintName("FK_Manager_User");
         });
 
         modelBuilder.Entity<TblMember>(entity =>
         {
-            entity.HasKey(e => e.MemberId).HasName("PK__tbl_Memb__0CF04B38B951631F");
+            entity.HasKey(e => e.MemberId).HasName("PK__tbl_Memb__0CF04B38D2887CA5");
 
             entity.ToTable("tbl_Member");
 
             entity.Property(e => e.MemberId)
                 .ValueGeneratedNever()
                 .HasColumnName("MemberID");
-            entity.Property(e => e.CreateMember).HasColumnType("datetime");
-            entity.Property(e => e.Email).HasMaxLength(30);
             entity.Property(e => e.MemberName).HasMaxLength(30);
             entity.Property(e => e.PhoneNumber).HasMaxLength(30);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.User).WithMany(p => p.TblMembers)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_tbl_Member_tbl_User");
+                .HasConstraintName("FK_Member");
+        });
+
+        modelBuilder.Entity<TblPayment>(entity =>
+        {
+            entity.HasKey(e => e.PaymentId).HasName("PK__tbl_Paym__9B556A582576E420");
+
+            entity.ToTable("tbl_Payment");
+
+            entity.Property(e => e.PaymentId)
+                .ValueGeneratedNever()
+                .HasColumnName("PaymentID");
+            entity.Property(e => e.Bonus).HasColumnType("money");
+            entity.Property(e => e.Currency).HasMaxLength(20);
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.PaymentAmount).HasColumnType("money");
+            entity.Property(e => e.PaymentDate).HasColumnType("datetime");
+            entity.Property(e => e.PaymentStatus).HasMaxLength(20);
+            entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.TblPayments)
+                .HasForeignKey(d => d.MemberId)
+                .HasConstraintName("FK_Payment_Member");
+
+            entity.HasOne(d => d.Service).WithMany(p => p.TblPayments)
+                .HasForeignKey(d => d.ServiceId)
+                .HasConstraintName("FK_Payment_Service");
         });
 
         modelBuilder.Entity<TblRole>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__tbl_Role__8AFACE3A6CA545D0");
+            entity.HasKey(e => e.RoleId).HasName("PK__tbl_Role__8AFACE3A673EF5AE");
 
             entity.ToTable("tbl_Role");
 
@@ -217,7 +238,7 @@ public partial class TattooThuBayContext : DbContext
 
         modelBuilder.Entity<TblSchedule>(entity =>
         {
-            entity.HasKey(e => e.ScheduleId).HasName("PK__tbl_Sche__9C8A5B4930B9EDE5");
+            entity.HasKey(e => e.ScheduleId).HasName("PK__tbl_Sche__9C8A5B4980845A92");
 
             entity.ToTable("tbl_Schedule");
 
@@ -234,32 +255,33 @@ public partial class TattooThuBayContext : DbContext
 
         modelBuilder.Entity<TblService>(entity =>
         {
-            entity.HasKey(e => e.ServiceId).HasName("PK__tbl_Serv__C51BB0EA1BE3C153");
+            entity.HasKey(e => e.ServiceId).HasName("PK__tbl_Serv__C51BB0EA154B50EB");
 
             entity.ToTable("tbl_Service");
 
-            entity.Property(e => e.ServiceId)
-                .ValueGeneratedNever()
-                .HasColumnName("ServiceID");
+            entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
             entity.Property(e => e.ArtistId).HasColumnName("ArtistID");
             entity.Property(e => e.CategoryId)
                 .HasMaxLength(30)
                 .HasColumnName("CategoryID");
             entity.Property(e => e.Description).HasMaxLength(200);
-            entity.Property(e => e.Image).HasMaxLength(100);
-            entity.Property(e => e.ImageService).HasMaxLength(30);
-            entity.Property(e => e.Price).HasColumnType("money");
-            entity.Property(e => e.ServiceItemId).HasColumnName("ServiceItemID");
+            entity.Property(e => e.ImageService).HasMaxLength(100);
+            entity.Property(e => e.Price).HasMaxLength(10);
             entity.Property(e => e.ServiceName).HasMaxLength(30);
+            entity.Property(e => e.StudioId).HasColumnName("StudioID");
 
             entity.HasOne(d => d.Artist).WithMany(p => p.TblServices)
                 .HasForeignKey(d => d.ArtistId)
                 .HasConstraintName("FK_Service_Artist");
+
+            entity.HasOne(d => d.Studio).WithMany(p => p.TblServices)
+                .HasForeignKey(d => d.StudioId)
+                .HasConstraintName("FK_Service_Studio");
         });
 
         modelBuilder.Entity<TblStudio>(entity =>
         {
-            entity.HasKey(e => e.StudioId).HasName("PK__tbl_Stud__4ACC3B50463D2651");
+            entity.HasKey(e => e.StudioId).HasName("PK__tbl_Stud__4ACC3B504091F053");
 
             entity.ToTable("tbl_Studio");
 
@@ -269,7 +291,6 @@ public partial class TattooThuBayContext : DbContext
             entity.Property(e => e.Address).HasMaxLength(30);
             entity.Property(e => e.IsActive).HasColumnName("isActive");
             entity.Property(e => e.ManagerId).HasColumnName("ManagerID");
-            entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
             entity.Property(e => e.StudioEmail).HasMaxLength(30);
             entity.Property(e => e.StudioName).HasMaxLength(30);
             entity.Property(e => e.StudioPhone).HasMaxLength(20);
@@ -277,18 +298,15 @@ public partial class TattooThuBayContext : DbContext
             entity.HasOne(d => d.Manager).WithMany(p => p.TblStudios)
                 .HasForeignKey(d => d.ManagerId)
                 .HasConstraintName("FK_Studio_Manager");
-
-            entity.HasOne(d => d.Service).WithMany(p => p.TblStudios)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK_Studio_Service");
         });
 
         modelBuilder.Entity<TblUser>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__tbl_User__1788CC4CD86737A9");
+            entity.HasKey(e => e.UserId).HasName("PK__tbl_User__1788CC4CF5BC973D");
 
-            entity.ToTable("tbl_User");
+            entity.ToTable("tbl_User", tb => tb.HasTrigger("Trig_Add_User_By_Role"));
 
+            entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.CreateUser).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Image).HasMaxLength(200);
@@ -296,12 +314,11 @@ public partial class TattooThuBayContext : DbContext
             entity.Property(e => e.RoleId)
                 .HasMaxLength(20)
                 .HasColumnName("RoleID");
-            entity.Property(e => e.Status).HasDefaultValueSql("((0))");
-            entity.Property(e => e.Username).HasMaxLength(30);
+            entity.Property(e => e.UserName).HasMaxLength(30);
 
             entity.HasOne(d => d.Role).WithMany(p => p.TblUsers)
                 .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK_tbl_User_tbl_Role");
+                .HasConstraintName("FK_Role");
         });
 
         OnModelCreatingPartial(modelBuilder);

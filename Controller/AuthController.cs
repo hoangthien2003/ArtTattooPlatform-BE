@@ -1,4 +1,5 @@
-﻿using back_end.Model;
+﻿using back_end.Entities;
+using back_end.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace back_end.Controller
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private TattooThuBayContext _context = new TattooThuBayContext();
+        private TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
         public AuthController(IConfiguration configuration)
         {
@@ -28,7 +29,7 @@ namespace back_end.Controller
             {
                 return BadRequest("auth/existed-email");
             }
-            bool isExistUsername = await _context.TblUsers.AnyAsync(u => u.Username == request.Username);
+            bool isExistUsername = await _context.TblUsers.AnyAsync(u => u.UserName == request.Username);
             if (isExistUsername)
             {
                 return BadRequest("auth/existed-username");
@@ -37,10 +38,9 @@ namespace back_end.Controller
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password, salt);
             TblUser user = new()
             {
-                Username = request.Username,
+                UserName = request.Username,
                 Email = request.Email,
                 Password = hashedPassword,
-                Status = true,
                 CreateUser = DateTime.UtcNow,
                 RoleId = "MB"
             };
@@ -75,7 +75,7 @@ namespace back_end.Controller
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Role, user.RoleId),
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

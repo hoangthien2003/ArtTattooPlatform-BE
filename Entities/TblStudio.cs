@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace back_end.Model;
+namespace back_end.Entities;
 
 public partial class TblStudio
 {
@@ -17,11 +17,9 @@ public partial class TblStudio
 
     public string? StudioEmail { get; set; }
 
-    public int? ServiceId { get; set; }
-
     public int? ManagerId { get; set; }
 
     public virtual TblManager? Manager { get; set; }
 
-    public virtual TblService? Service { get; set; }
+    public virtual ICollection<TblService> TblServices { get; set; } = new List<TblService>();
 }

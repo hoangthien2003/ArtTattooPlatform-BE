@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace back_end.Model;
+namespace back_end.Entities;
 
 public partial class TblFeedback
 {
@@ -14,6 +14,8 @@ public partial class TblFeedback
     public int? ServiceId { get; set; }
 
     public DateTime? FeedbackDate { get; set; }
+
+    public virtual ICollection<ImageFeedback> ImageFeedbacks { get; set; } = new List<ImageFeedback>();
 
     public virtual TblMember? Member { get; set; }
 
