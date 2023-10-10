@@ -1,6 +1,6 @@
 ﻿namespace back_end.Models
 {
-    public class FeedbackRequest
+    public class Feedback
     {
         public int FeedbackId { get; set; }
 
