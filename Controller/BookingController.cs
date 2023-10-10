@@ -1,11 +1,8 @@
 ﻿using back_end.Entities;
 using back_end.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace back_end.Controllers
 {
@@ -20,22 +17,20 @@ namespace back_end.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
+        [Authorize(Roles = "MB, MN")]
         public async Task<IActionResult> GetBookings()
         {
             var bookings = await _context.TblBookings
-                .Include(b => b.Member)
-                .Include(b => b.TblBookingDetails)
                 .ToListAsync();
             return Ok(bookings);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBooking(int id)
+        [HttpGet("GetBookingByID/{bookingID}")]
+        [Authorize(Roles = "MB, MN")]
+        public async Task<IActionResult> GetBooking([FromRoute] int id)
         {
             var booking = await _context.TblBookings
-                .Include(b => b.Member)
-                .Include(b => b.TblBookingDetails)
                 .FirstOrDefaultAsync(b => b.BookingId == id);
 
             if (booking == null)
@@ -46,60 +41,28 @@ namespace back_end.Controllers
             return Ok(booking);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateBooking([FromBody] Booking bookingRequest)
+        [HttpPost("AddBooking")]
+        [Authorize(Roles = "MB")]
+        public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest)
         {
-            var isBookingExisted = await _context.TblBookings.FindAsync(bookingRequest.BookingId);
-            if (isBookingExisted != null)
+            var booking = new TblBooking
             {
-                return Ok("Booking existed.");
-            }
-
-            var bookings = new TblBooking
-            {
-                MemberId = bookingRequest.MemberId,
-                BookingId = bookingRequest.BookingId,
+                MemberId = bookingRequest.MemberID,
+                ServiceId = bookingRequest.ServiceID,
+                StudioId = bookingRequest.StudioID,
                 BookingDate = bookingRequest.BookingDate,
-                StudioId = bookingRequest.StudioId,
+                PhoneNumber = bookingRequest.PhoneNumber,
+                Total = bookingRequest.Total
             };
 
-            _context.TblBookings.Add(bookings);
+            _context.TblBookings.Add(booking);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetBooking", new { id = bookingRequest.BookingId }, bookingRequest);
+            return Ok(booking);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBooking(int id, [FromBody] Booking booking)
-        {
-            if (id != booking.BookingId)
-            {
-                return BadRequest("Invalid booking ID.");
-            }
-
-            _context.Entry(booking).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BookingExists(id))
-                {
-                    return NotFound("Booking not found.");
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBooking(int id)
+        [HttpDelete("DeleteBooking/{deleteID}")]
+        [Authorize(Roles = "MB")]
+        public async Task<IActionResult> DeleteBooking([FromRoute] int id)
         {
             var booking = await _context.TblBookings.FindAsync(id);
             if (booking == null)
@@ -111,11 +74,6 @@ namespace back_end.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(booking);
-        }
-
-        private bool BookingExists(int id)
-        {
-            return _context.TblBookings.Any(e => e.BookingId == id);
         }
     }
 }

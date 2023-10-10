@@ -6,13 +6,19 @@ namespace back_end.Models
 {
     public class Booking
     {
-        public int BookingId { get; set; }
-        public int? MemberId { get; set; }
-        public DateTime? BookingDate { get; set; }
-        public int? StudioId { get; set; }
-        public virtual TblMember? Member { get; set; }
+        public int? BookingID { get; set; }
 
-        public virtual ICollection<BookingDetail> BookingDetails { get; set; } = new List<BookingDetail>();
+        public int MemberID { get; set; }
+
+        public int StudioID { get; set; }
+
+        public int ServiceID { get; set; }
+
+        public DateTime BookingDate { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public decimal Total { get; set; }
     }
 
 }
