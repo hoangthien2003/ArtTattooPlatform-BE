@@ -19,6 +19,29 @@ namespace back_end.Controller
             return Ok(studioList);
         }
 
+        [HttpGet("GetStudioByID/{studioID}")]
+        public async Task<IActionResult> GetStudioByIDAsync([FromRoute] int studioID)
+        {
+            var studio = await _context.TblStudios.FindAsync(studioID);
+            if (studio == null)
+            {
+                return BadRequest("Studio is unavailable!");
+            }
+            return Ok(studio);
+        }
+
+        [HttpGet("GetLogoNameByID/{studioID}")]
+        public async Task<IActionResult> GetLogoNameByIDAsync([FromRoute] int studioID)
+        {
+            var result = await _context.TblStudios.Select(studio => new
+            {
+                StudioID = studio.StudioId,
+                StudioName = studio.StudioName,
+                Logo = studio.Logo
+            }).Where(studio => studio.StudioID == studioID).FirstOrDefaultAsync();
+            return Ok(result);
+        }
+
         [HttpPost("AddStudio")]
         public async Task<IActionResult> AddStudioAsync([FromForm] Studio studioRequest)
         {
@@ -37,17 +60,38 @@ namespace back_end.Controller
                 ManagerId = studioRequest.ManagerID,
                 Description = studioRequest.Description
             };
-            if (studioRequest.Avatar.Length > 0)
+            if (studioRequest.Logo.Length > 0)
             {
-                studio.Avatar = await Utils.Utils.UploadGetURLImageAsync(studioRequest.Avatar);
+                studio.Logo = await Utils.Utils.UploadGetURLImageAsync(studioRequest.Logo);
             }
             _context.TblStudios.Add(studio);
             await _context.SaveChangesAsync();
             return Ok(studio);
         }
 
-        [HttpDelete("DeleteStudio")]
-        public async Task<IActionResult> DeleteStudioAsync(int studioID)
+        [HttpPut("UpdateStudio/{studioID}")]
+        public async Task<IActionResult> UpdateStudioAsync([FromForm] Studio studioRequest, [FromRoute] int studioID)
+        {
+            var studio = await _context.TblStudios.FindAsync(studioID);
+            if (studio == null)
+            {
+                return BadRequest("Studio not found!");
+            }
+            studio.StudioName = studioRequest.StudioName;
+            studio.Address = studioRequest.Address;
+            studio.StudioPhone = studioRequest.StudioPhone;
+            studio.StudioEmail = studioRequest.StudioEmail;
+            studio.Description = studioRequest.Description;
+            if (studioRequest.Logo.Length > 0)
+            {
+                studio.Logo = await Utils.Utils.UploadGetURLImageAsync(studioRequest.Logo);
+            }
+            await _context.SaveChangesAsync();
+            return Ok(studio);
+        }
+
+        [HttpDelete("DeleteStudio/{studioID}")]
+        public async Task<IActionResult> DeleteStudioAsync([FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);
             if (studio == null)
