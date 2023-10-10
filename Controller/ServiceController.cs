@@ -14,6 +14,7 @@ namespace back_end.Controller
         private TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
         [HttpGet("GetAll")]
+        [Authorize(Roles = "MB, MN")]
         public IActionResult GetAllService()
         {
             var serviceList = _context.TblServices.ToList();
@@ -21,6 +22,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetServiceByID/{serviceID}")]
+        [Authorize(Roles = "MB, MN")]
         public async Task<IActionResult> GetServiceByIDAsync([FromRoute] int serviceID)
         {
             var service = await _context.TblServices.FindAsync(serviceID);
@@ -32,6 +34,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetServicesByName/{serviceName}")]
+        [Authorize(Roles = "MB, MN")]
         public IActionResult GetServiceByName([FromRoute] string serviceName)
         {
             var service = _context.TblServices.Where(service => service.ServiceName == serviceName).Take(5).ToList();
@@ -43,6 +46,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetServiceByCategory/{categoryID}")]
+        [Authorize(Roles = "MB, MN")]
         public IActionResult GetServiceByCategory([FromRoute] string categoryID)
         {
             var service = _context.TblServices.Where(service => service.CategoryId == categoryID).ToList();
@@ -54,6 +58,7 @@ namespace back_end.Controller
         }
 
         [HttpPost("Add")]
+        [Authorize(Roles = "MN")]
         public async Task<IActionResult> AddServiceAsync([FromForm] Service serviceRequest)
         {
             var isServiceExisted = await _context.TblServices.FindAsync(serviceRequest.ServiceID);
@@ -79,6 +84,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdateService/{serviceID}")]
+        [Authorize(Roles = "MN")]
         public async Task<IActionResult> UpdateServiceAsync([FromForm] Service serviceRequest, [FromRoute] int serviceID)
         {
             var service = await _context.TblServices.FindAsync(serviceID);
@@ -99,6 +105,7 @@ namespace back_end.Controller
         }
 
         [HttpDelete("Delete/{serviceID}")]
+        [Authorize(Roles = "MN")]
         public async Task<IActionResult> DeleteServiceAsync([FromRoute] int serviceID)
         {
             var service = await _context.TblServices.FindAsync(serviceID);
