@@ -18,7 +18,7 @@ namespace back_end.Controller
             return Ok(feedBackList);
         }
         [HttpPost("AddFeedback")]
-        public async Task<IActionResult> AddFeedbackAsync([FromForm] Feedback feedbackRequest)
+        public async Task<IActionResult> AddFeedbackAsync([FromForm] FeedbackRequest feedbackRequest)
         {
 
             var FeedBacK = new TblFeedback
@@ -45,7 +45,7 @@ namespace back_end.Controller
             return Ok(feedback);
         }
         [HttpPut("UpdateFeedBack/{FeedBackID}")]
-        public async Task<IActionResult> UpdateFeedBackAsync(int feedbackID, [FromForm] Feedback feedBackRequest)
+        public async Task<IActionResult> UpdateFeedBackAsync(int feedbackID, [FromForm] FeedbackRequest feedBackRequest)
         {
             var feedback = await _context.TblFeedbacks.FindAsync(feedbackID);
             if (feedback == null)
