@@ -1,5 +1,6 @@
 ﻿using back_end.Entities;
 using back_end.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace back_end.Controller
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
         [HttpGet("GetAll")]
+        [Authorize(Roles = "MB")]
         public IActionResult GetAll()
         {
             var studioList = _context.TblStudios.ToList();
@@ -20,6 +22,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetStudioByID/{studioID}")]
+        [Authorize(Roles = "MB")]
         public async Task<IActionResult> GetStudioByIDAsync([FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);
@@ -31,6 +34,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetLogoNameByID/{studioID}")]
+        [Authorize(Roles = "MB")]
         public async Task<IActionResult> GetLogoNameByIDAsync([FromRoute] int studioID)
         {
             var result = await _context.TblStudios.Select(studio => new
