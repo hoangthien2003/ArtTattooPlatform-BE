@@ -5,11 +5,11 @@ namespace back_end.Entities;
 
 public partial class TblPayment
 {
-    public int PaymentId { get; set; }
+    public int PaymentID { get; set; }
 
-    public int? ServiceId { get; set; }
+    public int? ServiceID { get; set; }
 
-    public int? MemberId { get; set; }
+    public int? MemberID { get; set; }
 
     public decimal? PaymentAmount { get; set; }
 

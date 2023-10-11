@@ -5,13 +5,13 @@ namespace back_end.Entities;
 
 public partial class TblBooking
 {
-    public int BookingId { get; set; }
+    public int BookingID { get; set; }
 
-    public int? MemberId { get; set; }
+    public int? MemberID { get; set; }
 
-    public int? StudioId { get; set; }
+    public int? StudioID { get; set; }
 
-    public int? ServiceId { get; set; }
+    public int? ServiceID { get; set; }
 
     public DateTime? BookingDate { get; set; }
 

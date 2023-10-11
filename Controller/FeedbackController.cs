@@ -1,8 +1,10 @@
 ﻿using back_end.Entities;
 using back_end.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace back_end.Controller
 {
@@ -12,20 +14,22 @@ namespace back_end.Controller
     {
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
         [HttpGet("GetALL_Feedback")]
+        [Authorize(Roles = "MB, MN")]
         public IActionResult GetAll()
         {
             var feedBackList = _context.TblFeedbacks.ToList();
             return Ok(feedBackList);
         }
         [HttpPost("AddFeedback")]
+        [Authorize(Roles = "MB")]
         public async Task<IActionResult> AddFeedbackAsync([FromForm] Feedback feedbackRequest)
         {
 
             var FeedBacK = new TblFeedback
             {
                 FeedbackDetail = feedbackRequest.FeedbackDetail,
-                MemberId = feedbackRequest.MemberId,
-                ServiceId = feedbackRequest.ServiceId,
+                MemberID = feedbackRequest.MemberID,
+                ServiceID = feedbackRequest.ServiceID,
                 FeedbackDate = feedbackRequest.FeedbackDate,
             };
             _context.TblFeedbacks.Add(FeedBacK);
@@ -33,6 +37,7 @@ namespace back_end.Controller
             return Ok(FeedBacK);
         }
         [HttpDelete("DeleteFeedback")]
+        [Authorize(Roles = "MB")]
         public async Task<IActionResult> DeleteFeedbackAsync(int feedbackID)
         {
             var feedback = await _context.TblFeedbacks.FindAsync(feedbackID);
@@ -45,6 +50,7 @@ namespace back_end.Controller
             return Ok(feedback);
         }
         [HttpPut("UpdateFeedBack/{FeedBackID}")]
+        [Authorize(Roles = "MB")]
         public async Task<IActionResult> UpdateFeedBackAsync(int feedbackID, [FromForm] Feedback feedBackRequest)
         {
             var feedback = await _context.TblFeedbacks.FindAsync(feedbackID);
@@ -55,14 +61,15 @@ namespace back_end.Controller
 
             // Cập nhật feedBack
             feedback.FeedbackDetail = feedBackRequest.FeedbackDetail;
-            feedback.MemberId = feedBackRequest?.MemberId;
-            feedback.ServiceId = feedBackRequest?.ServiceId;
+            feedback.MemberID = feedBackRequest?.MemberID;
+            feedback.ServiceID = feedBackRequest?.ServiceID;
             feedback.FeedbackDate = feedBackRequest?.FeedbackDate;
 
             await _context.SaveChangesAsync();
             return Ok(feedback);
         }
         [HttpGet("GetFeedbackByID/{FeedbackID}")]
+        [Authorize(Roles = "MB, MN")]
         public async Task<IActionResult> GetFeedBackByIDAsync(int FeedbackID)
         {
             var feedback = await _context.TblFeedbacks.FindAsync(FeedbackID);

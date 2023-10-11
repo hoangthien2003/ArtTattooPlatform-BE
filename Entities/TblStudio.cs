@@ -5,7 +5,7 @@ namespace back_end.Entities;
 
 public partial class TblStudio
 {
-    public int StudioId { get; set; }
+    public int StudioID { get; set; }
 
     public string? StudioName { get; set; }
 
@@ -15,7 +15,7 @@ public partial class TblStudio
 
     public string? StudioEmail { get; set; }
 
-    public int? ManagerId { get; set; }
+    public int? ManagerID { get; set; }
 
     public string? Description { get; set; }
 
