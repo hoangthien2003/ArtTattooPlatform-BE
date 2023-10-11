@@ -14,7 +14,7 @@ namespace back_end.Controller
         private TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
         [HttpGet("GetAll")]
-        [Authorize(Roles = "MN,MB")]
+        [Authorize(Roles = "MN, MB")]
         public IActionResult GetAllService()
         {
             var serviceList = _context.TblServices.ToList();
@@ -22,7 +22,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetServiceByID/{serviceID}")]
-        [Authorize(Roles = "MB, MN")]
+        [Authorize(Roles = "MN, MB")]
         public async Task<IActionResult> GetServiceByIDAsync([FromRoute] int serviceID)
         {
             var service = await _context.TblServices.FindAsync(serviceID);
@@ -34,7 +34,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetServicesByName/{serviceName}")]
-        [Authorize(Roles = "MB, MN")]
+        [Authorize(Roles = "MN, MB")]
         public IActionResult GetServiceByName([FromRoute] string serviceName)
         {
             var service = _context.TblServices.Where(service => service.ServiceName == serviceName).Take(5).ToList();
@@ -46,7 +46,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetServiceByCategory/{categoryID}")]
-        [Authorize(Roles = "MB, MN")]
+        [Authorize(Roles = "MN, MB")]
         public IActionResult GetServiceByCategory([FromRoute] string categoryID)
         {
             var service = _context.TblServices.Where(service => service.CategoryID == categoryID).ToList();

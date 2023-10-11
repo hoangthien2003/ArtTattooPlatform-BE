@@ -13,13 +13,15 @@ namespace back_end.Controller
     public class FeedbackController : ControllerBase
     {
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
+        
         [HttpGet("GetALL_Feedback")]
-        [Authorize(Roles = "MB, MN")]
+        [Authorize(Roles = "MN, AT, MB")]
         public IActionResult GetAll()
         {
             var feedBackList = _context.TblFeedbacks.ToList();
             return Ok(feedBackList);
         }
+        
         [HttpPost("AddFeedback")]
         [Authorize(Roles = "MB")]
         public async Task<IActionResult> AddFeedbackAsync([FromForm] Feedback feedbackRequest)
@@ -36,6 +38,7 @@ namespace back_end.Controller
             await _context.SaveChangesAsync();
             return Ok(FeedBacK);
         }
+        
         [HttpDelete("DeleteFeedback")]
         [Authorize(Roles = "MB")]
         public async Task<IActionResult> DeleteFeedbackAsync(int feedbackID)
@@ -49,6 +52,7 @@ namespace back_end.Controller
             await _context.SaveChangesAsync();
             return Ok(feedback);
         }
+        
         [HttpPut("UpdateFeedBack/{FeedBackID}")]
         [Authorize(Roles = "MB")]
         public async Task<IActionResult> UpdateFeedBackAsync(int feedbackID, [FromForm] Feedback feedBackRequest)
@@ -68,8 +72,9 @@ namespace back_end.Controller
             await _context.SaveChangesAsync();
             return Ok(feedback);
         }
+        
         [HttpGet("GetFeedbackByID/{FeedbackID}")]
-        [Authorize(Roles = "MB, MN")]
+        [Authorize(Roles = "MN, AT, MB")]
         public async Task<IActionResult> GetFeedBackByIDAsync(int FeedbackID)
         {
             var feedback = await _context.TblFeedbacks.FindAsync(FeedbackID);
