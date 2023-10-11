@@ -19,9 +19,11 @@ public partial class TblStudio
 
     public string? Description { get; set; }
 
-    public string? Avatar { get; set; }
+    public string? Logo { get; set; }
 
     public virtual TblManager? Manager { get; set; }
+
+    public virtual ICollection<TblBooking> TblBookings { get; set; } = new List<TblBooking>();
 
     public virtual ICollection<TblService> TblServices { get; set; } = new List<TblService>();
 }

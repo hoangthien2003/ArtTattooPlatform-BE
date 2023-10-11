@@ -21,7 +21,6 @@ namespace back_end.Controller
             return Ok(serviceList);
         }
 
-
         [HttpGet("GetServiceByID/{serviceID}")]
         [Authorize(Roles = "MN, MB")]
         public async Task<IActionResult> GetServiceByIDAsync([FromRoute] int serviceID)
@@ -58,7 +57,6 @@ namespace back_end.Controller
             return Ok(service);
         }
 
-
         [HttpPost("Add")]
         [Authorize(Roles = "MN")]
         public async Task<IActionResult> AddServiceAsync([FromForm] Service serviceRequest)
@@ -85,8 +83,6 @@ namespace back_end.Controller
             return Ok(service);
         }
 
-
-        
         [HttpPut("UpdateService/{serviceID}")]
         [Authorize(Roles = "MN")]
         public async Task<IActionResult> UpdateServiceAsync([FromForm] Service serviceRequest, [FromRoute] int serviceID)
@@ -111,7 +107,6 @@ namespace back_end.Controller
         [HttpDelete("Delete/{serviceID}")]
         [Authorize(Roles = "MN")]
         public async Task<IActionResult> DeleteServiceAsync([FromRoute] int serviceID)
-
         {
             var service = await _context.TblServices.FindAsync(serviceID);
             if (service == null)
@@ -122,6 +117,5 @@ namespace back_end.Controller
             _context.SaveChanges();
             return Ok(service);
         }
-
     }
 }
