@@ -5,7 +5,7 @@ namespace back_end.Entities;
 
 public partial class TblService
 {
-    public int ServiceId { get; set; }
+    public int ServiceID { get; set; }
 
     public string? ServiceName { get; set; }
 
@@ -13,13 +13,13 @@ public partial class TblService
 
     public string? Price { get; set; }
 
-    public string? CategoryId { get; set; }
+    public string? CategoryID { get; set; }
 
     public string? ImageService { get; set; }
 
-    public int? ArtistId { get; set; }
+    public int? ArtistID { get; set; }
 
-    public int? StudioId { get; set; }
+    public int? StudioID { get; set; }
 
     public virtual TblArtist? Artist { get; set; }
 

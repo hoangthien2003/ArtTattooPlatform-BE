@@ -14,7 +14,7 @@ namespace back_end.Controller
     {
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
         [HttpGet("GetALL_Artist")]
-        [Authorize(Roles = "MN")]
+        [Authorize(Roles = "MB, MN")]
         public IActionResult GetAll()
         {
             var artistList = _context.TblArtists.ToList();
@@ -37,7 +37,7 @@ namespace back_end.Controller
                 Gender = artistRequest.Gender,
                 PhoneNumber = artistRequest.NumberPhone,
                 Biography = artistRequest.Biography,
-                UserId = artistRequest.UserId,
+                UserID = artistRequest.UserID,
                 Certificate = artistRequest.Certificate,
             };
             if (artistRequest.AvatarArtist.Length > 0)
@@ -63,7 +63,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdateArtist/{artistID}")]
-        [Authorize(Roles = "MN, AT")]
+        [Authorize(Roles = "AT")]
         public async Task<IActionResult> UpdateArtistAsync(int artistID, [FromForm] Artist artistRequest)
         {
             var artist = await _context.TblArtists.FindAsync(artistID);
@@ -77,7 +77,7 @@ namespace back_end.Controller
             artist.Gender = artistRequest.Gender;
             artist.PhoneNumber = artistRequest.NumberPhone;
             artist.Biography = artistRequest.Biography;
-            artist.UserId = artistRequest.UserId;
+            artist.UserID = artistRequest.UserID;
             artist.Certificate = artistRequest.Certificate;
 
             if (artistRequest.AvatarArtist.Length > 0)
@@ -90,7 +90,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetArtistByID/{artistID}")]
-        [Authorize(Roles = "MN, AT")]
+        [Authorize(Roles = "MN, MB")]
         public async Task<IActionResult> GetArtistByIDAsync(int artistID)
         {
             var artist = await _context.TblArtists.FindAsync(artistID);

@@ -49,7 +49,7 @@ namespace back_end.Controller
         [Authorize(Roles = "MN, MB")]
         public IActionResult GetServiceByCategory([FromRoute] string categoryID)
         {
-            var service = _context.TblServices.Where(service => service.CategoryId == categoryID).ToList();
+            var service = _context.TblServices.Where(service => service.CategoryID == categoryID).ToList();
             if (service == null)
             {
                 return Ok("No any service in this category!");
@@ -68,10 +68,10 @@ namespace back_end.Controller
             }
             var service = new TblService
             {
-                ServiceId = serviceRequest.ServiceID,
+                ServiceID = serviceRequest.ServiceID,
                 ServiceName = serviceRequest.ServiceName,
                 Description = serviceRequest.Description,
-                CategoryId = serviceRequest.CategoryID,
+                CategoryID = serviceRequest.CategoryID,
                 Price = serviceRequest.Price
             };
             if (serviceRequest.Image.Length > 0)
@@ -93,7 +93,7 @@ namespace back_end.Controller
                 return BadRequest("Studio not found!");
             }
             service.ServiceName = serviceRequest.ServiceName;
-            service.CategoryId = serviceRequest.CategoryID;
+            service.CategoryID = serviceRequest.CategoryID;
             service.Description = serviceRequest.Description;
             service.Price = serviceRequest.Price;
             if (serviceRequest.Image.Length > 0)

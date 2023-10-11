@@ -23,14 +23,15 @@ namespace back_end.Controller
         }
         
         [HttpPost("AddFeedback")]
+        [Authorize(Roles = "MB")]
         public async Task<IActionResult> AddFeedbackAsync([FromForm] Feedback feedbackRequest)
         {
 
             var FeedBacK = new TblFeedback
             {
                 FeedbackDetail = feedbackRequest.FeedbackDetail,
-                MemberId = feedbackRequest.MemberId,
-                ServiceId = feedbackRequest.ServiceId,
+                MemberID = feedbackRequest.MemberID,
+                ServiceID = feedbackRequest.ServiceID,
                 FeedbackDate = feedbackRequest.FeedbackDate,
             };
             _context.TblFeedbacks.Add(FeedBacK);
@@ -64,8 +65,8 @@ namespace back_end.Controller
 
             // Cập nhật feedBack
             feedback.FeedbackDetail = feedBackRequest.FeedbackDetail;
-            feedback.MemberId = feedBackRequest?.MemberId;
-            feedback.ServiceId = feedBackRequest?.ServiceId;
+            feedback.MemberID = feedBackRequest?.MemberID;
+            feedback.ServiceID = feedBackRequest?.ServiceID;
             feedback.FeedbackDate = feedBackRequest?.FeedbackDate;
 
             await _context.SaveChangesAsync();
