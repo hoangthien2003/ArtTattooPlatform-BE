@@ -14,5 +14,12 @@ namespace back_end.Utils
             }
             return "http://35.240.234.172:8181/Assets/" + image.FileName;
         }
+
+        public static string HashSaltPassword(string password)
+        {
+            string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
+            string hashedNewPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
+            return hashedNewPassword;
+        }
     }
 }
