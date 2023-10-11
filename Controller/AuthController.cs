@@ -42,7 +42,7 @@ namespace back_end.Controller
                 Email = request.Email,
                 Password = hashedPassword,
                 CreateUser = DateTime.UtcNow,
-                RoleId = "MB"
+                RoleID = "MB"
             };
             _context.TblUsers.Add(user);
             await _context.SaveChangesAsync();
@@ -76,7 +76,7 @@ namespace back_end.Controller
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, user.RoleId),
+                new Claim(ClaimTypes.Role, user.RoleID),
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
                 _configuration.GetSection("Jwt:Key").Value));

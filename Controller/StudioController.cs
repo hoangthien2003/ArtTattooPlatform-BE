@@ -1,8 +1,10 @@
 ﻿using back_end.Entities;
 using back_end.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace back_end.Controller
 {
@@ -13,6 +15,7 @@ namespace back_end.Controller
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
         [HttpGet("GetAll")]
+        [Authorize(Roles = "MN, MB")]
         public IActionResult GetAll()
         {
             var studioList = _context.TblStudios.ToList();
@@ -20,6 +23,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetStudioByID/{studioID}")]
+        [Authorize(Roles = "MN, MB")]
         public async Task<IActionResult> GetStudioByIDAsync([FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);
@@ -31,11 +35,12 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetLogoNameByID/{studioID}")]
+        [Authorize(Roles = "MN, MB")]
         public async Task<IActionResult> GetLogoNameByIDAsync([FromRoute] int studioID)
         {
             var result = await _context.TblStudios.Select(studio => new
             {
-                StudioID = studio.StudioId,
+                StudioID = studio.StudioID,
                 StudioName = studio.StudioName,
                 Logo = studio.Logo
             }).Where(studio => studio.StudioID == studioID).FirstOrDefaultAsync();
@@ -43,6 +48,7 @@ namespace back_end.Controller
         }
 
         [HttpPost("AddStudio")]
+        [Authorize(Roles = "MN")]
         public async Task<IActionResult> AddStudioAsync([FromForm] Studio studioRequest)
         {
             var existedStudio = await _context.TblStudios.
@@ -57,7 +63,7 @@ namespace back_end.Controller
                 Address = studioRequest.Address,
                 StudioPhone = studioRequest.StudioPhone,
                 StudioEmail = studioRequest.StudioEmail,
-                ManagerId = studioRequest.ManagerID,
+                ManagerID = studioRequest.ManagerID,
                 Description = studioRequest.Description
             };
             if (studioRequest.Logo.Length > 0)
@@ -70,6 +76,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdateStudio/{studioID}")]
+        [Authorize(Roles = "MN")]
         public async Task<IActionResult> UpdateStudioAsync([FromForm] Studio studioRequest, [FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);
@@ -91,6 +98,7 @@ namespace back_end.Controller
         }
 
         [HttpDelete("DeleteStudio/{studioID}")]
+        [Authorize(Roles = "MN")]
         public async Task<IActionResult> DeleteStudioAsync([FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);

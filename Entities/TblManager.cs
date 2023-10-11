@@ -5,7 +5,7 @@ namespace back_end.Entities;
 
 public partial class TblManager
 {
-    public int ManagerId { get; set; }
+    public int ManagerID { get; set; }
 
     public string? ManagerName { get; set; }
 
@@ -13,7 +13,7 @@ public partial class TblManager
 
     public string? ManagerPhone { get; set; }
 
-    public int? UserId { get; set; }
+    public int? UserID { get; set; }
 
     public virtual ICollection<TblStudio> TblStudios { get; set; } = new List<TblStudio>();
 

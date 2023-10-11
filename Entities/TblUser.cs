@@ -5,7 +5,7 @@ namespace back_end.Entities;
 
 public partial class TblUser
 {
-    public int UserId { get; set; }
+    public int UserID { get; set; }
 
     public string? UserName { get; set; }
 
@@ -17,7 +17,7 @@ public partial class TblUser
 
     public string? Image { get; set; }
 
-    public string? RoleId { get; set; }
+    public string? RoleID { get; set; }
 
     public virtual TblRole? Role { get; set; }
 
