@@ -4,6 +4,7 @@ using back_end.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace back_end.Controller
 {
@@ -23,6 +24,25 @@ namespace back_end.Controller
                 return BadRequest("Member not found.");
             }
             return Ok(member);
+        }
+
+        [HttpGet("GetMemberByUsername/{username}")]
+        [Authorize("MB")]
+        public async Task<IActionResult> GetMemberByUsernameAsync([FromRoute] string username)
+        {
+            var user = await _context.TblUsers.FirstOrDefaultAsync(user => user.UserName == username);
+            if (user == null)
+            {
+                return BadRequest("User not found.");
+            }
+            var member = await _context.TblMembers.FirstOrDefaultAsync(member => member.UserID == user.UserID);
+            var result = new
+            {
+                user,
+                member.MemberName,
+                member.PhoneNumber
+            };
+            return Ok(result);
         }
 
         [HttpPut("UpdateNamePhoneByID/{memberID}")]
