@@ -15,7 +15,6 @@ namespace back_end.Controller
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
         [HttpGet("GetAll")]
-        [Authorize(Roles = "MN, MB")]
         public IActionResult GetAll()
         {
             var studioList = _context.TblStudios.ToList();
@@ -23,7 +22,6 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetStudioByID/{studioID}")]
-        [Authorize(Roles = "MN, MB")]
         public async Task<IActionResult> GetStudioByIDAsync([FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);
@@ -35,7 +33,6 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetLogoNameByID/{studioID}")]
-        [Authorize(Roles = "MN, MB")]
         public async Task<IActionResult> GetLogoNameByIDAsync([FromRoute] int studioID)
         {
             var result = await _context.TblStudios.Select(studio => new
