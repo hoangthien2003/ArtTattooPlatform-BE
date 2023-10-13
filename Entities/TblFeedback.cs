@@ -5,17 +5,15 @@ namespace back_end.Entities;
 
 public partial class TblFeedback
 {
-    public int FeedbackId { get; set; }
+    public int FeedbackID { get; set; }
 
     public string? FeedbackDetail { get; set; }
 
-    public int? MemberId { get; set; }
+    public int? MemberID { get; set; }
 
-    public int? ServiceId { get; set; }
+    public int? ServiceID { get; set; }
 
     public DateTime? FeedbackDate { get; set; }
-
-    public virtual ICollection<ImageFeedback> ImageFeedbacks { get; set; } = new List<ImageFeedback>();
 
     public virtual TblMember? Member { get; set; }
 

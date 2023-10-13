@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace back_end.Controller
 {
@@ -36,7 +37,7 @@ namespace back_end.Controller
         {
             var result = await _context.TblStudios.Select(studio => new
             {
-                StudioID = studio.StudioId,
+                StudioID = studio.StudioID,
                 StudioName = studio.StudioName,
                 Logo = studio.Logo
             }).Where(studio => studio.StudioID == studioID).FirstOrDefaultAsync();
@@ -44,6 +45,7 @@ namespace back_end.Controller
         }
 
         [HttpPost("AddStudio")]
+        [Authorize(Roles = "MN")]
         public async Task<IActionResult> AddStudioAsync([FromForm] Studio studioRequest)
         {
             var existedStudio = await _context.TblStudios.
@@ -58,7 +60,7 @@ namespace back_end.Controller
                 Address = studioRequest.Address,
                 StudioPhone = studioRequest.StudioPhone,
                 StudioEmail = studioRequest.StudioEmail,
-                ManagerId = studioRequest.ManagerID,
+                ManagerID = studioRequest.ManagerID,
                 Description = studioRequest.Description
             };
             if (studioRequest.Logo.Length > 0)
@@ -71,6 +73,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdateStudio/{studioID}")]
+        [Authorize(Roles = "MN")]
         public async Task<IActionResult> UpdateStudioAsync([FromForm] Studio studioRequest, [FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);
@@ -92,6 +95,7 @@ namespace back_end.Controller
         }
 
         [HttpDelete("DeleteStudio/{studioID}")]
+        [Authorize(Roles = "MN")]
         public async Task<IActionResult> DeleteStudioAsync([FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);

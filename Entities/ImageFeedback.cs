@@ -5,7 +5,7 @@ namespace back_end.Entities;
 
 public partial class ImageFeedback
 {
-    public int ImageFeedbackId { get; set; }
+    public int ImageFeedbackID { get; set; }
 
     public string? Image { get; set; }
 
