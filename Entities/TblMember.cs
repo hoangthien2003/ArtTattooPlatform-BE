@@ -5,13 +5,13 @@ namespace back_end.Entities;
 
 public partial class TblMember
 {
-    public int MemberID { get; set; }
+    public int MemberId { get; set; }
 
     public string? MemberName { get; set; }
 
     public string? PhoneNumber { get; set; }
 
-    public int? UserID { get; set; }
+    public int? UserId { get; set; }
 
     public virtual ICollection<TblBooking> TblBookings { get; set; } = new List<TblBooking>();
 

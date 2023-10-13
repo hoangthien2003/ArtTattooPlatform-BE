@@ -5,21 +5,21 @@ namespace back_end.Entities;
 
 public partial class TblService
 {
-    public int ServiceID { get; set; }
+    public int ServiceId { get; set; }
 
     public string? ServiceName { get; set; }
 
     public string? Description { get; set; }
 
-    public string? Price { get; set; }
+    public decimal? Price { get; set; }
 
-    public string? CategoryID { get; set; }
+    public string? CategoryId { get; set; }
 
     public string? ImageService { get; set; }
 
-    public int? ArtistID { get; set; }
+    public int? ArtistId { get; set; }
 
-    public int? StudioID { get; set; }
+    public int? StudioId { get; set; }
 
     public virtual TblArtist? Artist { get; set; }
 

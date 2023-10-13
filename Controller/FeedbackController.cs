@@ -30,8 +30,8 @@ namespace back_end.Controller
             var FeedBacK = new TblFeedback
             {
                 FeedbackDetail = feedbackRequest.FeedbackDetail,
-                MemberID = feedbackRequest.MemberID,
-                ServiceID = feedbackRequest.ServiceID,
+                MemberId = feedbackRequest.MemberID,
+                ServiceId = feedbackRequest.ServiceID,
                 FeedbackDate = feedbackRequest.FeedbackDate,
             };
             _context.TblFeedbacks.Add(FeedBacK);
@@ -65,8 +65,8 @@ namespace back_end.Controller
 
             // Cập nhật feedBack
             feedback.FeedbackDetail = feedBackRequest.FeedbackDetail;
-            feedback.MemberID = feedBackRequest?.MemberID;
-            feedback.ServiceID = feedBackRequest?.ServiceID;
+            feedback.MemberId = feedBackRequest?.MemberID;
+            feedback.ServiceId = feedBackRequest?.ServiceID;
             feedback.FeedbackDate = feedBackRequest?.FeedbackDate;
 
             await _context.SaveChangesAsync();

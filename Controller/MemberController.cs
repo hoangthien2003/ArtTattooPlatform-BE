@@ -35,7 +35,7 @@ namespace back_end.Controller
             {
                 return BadRequest("User not found.");
             }
-            var member = await _context.TblMembers.FirstOrDefaultAsync(member => member.UserID == user.UserID);
+            var member = await _context.TblMembers.FirstOrDefaultAsync(member => member.UserId == user.UserId);
             var result = new
             {
                 user,

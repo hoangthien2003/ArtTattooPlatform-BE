@@ -37,7 +37,7 @@ namespace back_end.Controller
         {
             var result = await _context.TblStudios.Select(studio => new
             {
-                StudioID = studio.StudioID,
+                StudioID = studio.StudioId,
                 StudioName = studio.StudioName,
                 Logo = studio.Logo
             }).Where(studio => studio.StudioID == studioID).FirstOrDefaultAsync();
@@ -60,7 +60,7 @@ namespace back_end.Controller
                 Address = studioRequest.Address,
                 StudioPhone = studioRequest.StudioPhone,
                 StudioEmail = studioRequest.StudioEmail,
-                ManagerID = studioRequest.ManagerID,
+                ManagerId = studioRequest.ManagerID,
                 Description = studioRequest.Description
             };
             if (studioRequest.Logo.Length > 0)

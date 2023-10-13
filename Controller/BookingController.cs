@@ -31,7 +31,7 @@ namespace back_end.Controllers
         public async Task<IActionResult> GetBooking([FromRoute] int id)
         {
             var booking = await _context.TblBookings
-                .FirstOrDefaultAsync(b => b.BookingID == id);
+                .FirstOrDefaultAsync(b => b.BookingId == id);
 
             if (booking == null)
             {
@@ -47,9 +47,9 @@ namespace back_end.Controllers
         {
             var booking = new TblBooking
             {
-                MemberID = bookingRequest.MemberID,
-                ServiceID = bookingRequest.ServiceID,
-                StudioID = bookingRequest.StudioID,
+                MemberId = bookingRequest.MemberID,
+                ServiceId = bookingRequest.ServiceID,
+                StudioId = bookingRequest.StudioID,
                 BookingDate = bookingRequest.BookingDate,
                 PhoneNumber = bookingRequest.PhoneNumber,
                 Total = bookingRequest.Total
