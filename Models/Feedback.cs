@@ -13,12 +13,11 @@ namespace back_end.Models
 
         public int? ServiceID { get; set; }
 
+        public int? Rating { get; set; }
+
         public DateTime? FeedbackDate { get; set; }
 
-        public virtual ICollection<ImageFeedback> ImageFeedbacks { get; set; } = new List<ImageFeedback>();
+        
 
-        public virtual TblMember? Member { get; set; }
-
-        public virtual TblService? Service { get; set; }
     }
 }
