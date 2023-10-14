@@ -42,7 +42,7 @@ namespace back_end.Controller
                 Email = request.Email,
                 Password = hashedPassword,
                 CreateUser = DateTime.UtcNow,
-                RoleID = "MB"
+                RoleId = "MB"
             };
             _context.TblUsers.Add(user);
             await _context.SaveChangesAsync();
@@ -76,14 +76,14 @@ namespace back_end.Controller
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, user.RoleID),
+                new Claim(ClaimTypes.Role, user.RoleId),
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
                 _configuration.GetSection("Jwt:Key").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(5),
+                expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: creds
                 );
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);

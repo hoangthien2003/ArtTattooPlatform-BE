@@ -5,7 +5,7 @@ namespace back_end.Entities;
 
 public partial class TblSchedule
 {
-    public int ScheduleID { get; set; }
+    public int ScheduleId { get; set; }
 
     public DateTime? FreeTime { get; set; }
 
@@ -13,7 +13,7 @@ public partial class TblSchedule
 
     public bool? Status { get; set; }
 
-    public int? ArtistID { get; set; }
+    public int? ArtistId { get; set; }
 
     public virtual TblArtist? Artist { get; set; }
 }

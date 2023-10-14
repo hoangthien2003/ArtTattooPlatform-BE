@@ -5,15 +5,15 @@ namespace back_end.Entities;
 
 public partial class TblBookingDetail
 {
-    public int BookingDetailID { get; set; }
+    public int BookingDetailId { get; set; }
 
-    public int? BookingID { get; set; }
+    public int? BookingId { get; set; }
 
     public int? Quantity { get; set; }
 
-    public int? ServiceID { get; set; }
+    public int? ServiceId { get; set; }
 
-    public int? ArtistID { get; set; }
+    public int? ArtistId { get; set; }
 
     public decimal? Price { get; set; }
 

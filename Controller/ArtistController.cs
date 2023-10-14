@@ -20,6 +20,17 @@ namespace back_end.Controller
             var artistList = _context.TblArtists.ToList();
             return Ok(artistList);
         }
+        [HttpGet("GetArtistByName/{ArtistName}")]
+        [Authorize(Roles = "MN, MB")]
+        public IActionResult GetServiceByName([FromRoute] string artistName)
+        {
+            var artist = _context.TblArtists.Where(artist => artist.ArtistName == artistName).Take(5).ToList();
+            if (artist == null)
+            {
+                return Ok("No any service matched!");
+            }
+            return Ok(artist);
+        }
 
         [HttpPost("AddArtist")]
         [Authorize(Roles = "MN")]
@@ -37,7 +48,7 @@ namespace back_end.Controller
                 Gender = artistRequest.Gender,
                 PhoneNumber = artistRequest.NumberPhone,
                 Biography = artistRequest.Biography,
-                UserID = artistRequest.UserID,
+                UserId = artistRequest.UserID,
                 Certificate = artistRequest.Certificate,
             };
             if (artistRequest.AvatarArtist.Length > 0)
@@ -77,7 +88,7 @@ namespace back_end.Controller
             artist.Gender = artistRequest.Gender;
             artist.PhoneNumber = artistRequest.NumberPhone;
             artist.Biography = artistRequest.Biography;
-            artist.UserID = artistRequest.UserID;
+            artist.UserId = artistRequest.UserID;
             artist.Certificate = artistRequest.Certificate;
 
             if (artistRequest.AvatarArtist.Length > 0)

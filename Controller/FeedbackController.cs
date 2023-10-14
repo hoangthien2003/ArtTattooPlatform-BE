@@ -24,16 +24,14 @@ namespace back_end.Controller
 
         [HttpPost("AddFeedback")]
         [Authorize(Roles = "MB")]
-
-
         public async Task<IActionResult> AddServiceAsync([FromForm] Feedback feedbackRequest)
         {
             
             var Feedback1 = new TblFeedback
             {  
                 FeedbackDetail = feedbackRequest.FeedbackDetail,
-                MemberID = feedbackRequest.MemberID,
-                ServiceID = feedbackRequest.ServiceID,
+                MemberId = feedbackRequest.MemberID,
+                ServiceId = feedbackRequest.ServiceID,
                 FeedbackDate = feedbackRequest.FeedbackDate,
                 
                 
@@ -70,8 +68,8 @@ namespace back_end.Controller
 
             // Cập nhật feedBack
             feedback.FeedbackDetail = feedBackRequest.FeedbackDetail;
-            feedback.MemberID = feedBackRequest?.MemberID;
-            feedback.ServiceID = feedBackRequest?.ServiceID;
+            feedback.MemberId = feedBackRequest?.MemberID;
+            feedback.ServiceId = feedBackRequest?.ServiceID;
             feedback.FeedbackDate = feedBackRequest?.FeedbackDate;
 
             await _context.SaveChangesAsync();
@@ -123,7 +121,6 @@ namespace back_end.Controller
             var averageRating = _context.TblFeedbacks
             .Where(feedback => feedback.ServiceID == serviceID)
             .Average(feedback => feedback.Rating);
-
             return Ok(averageRating);
         }
     }

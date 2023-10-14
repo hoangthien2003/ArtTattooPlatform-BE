@@ -5,13 +5,15 @@ namespace back_end.Entities;
 
 public partial class TblFeedback
 {
-    public int FeedbackID { get; set; }
+    public int FeedbackId { get; set; }
 
     public string? FeedbackDetail { get; set; }
 
-    public int? MemberID { get; set; }
+    public int? MemberId { get; set; }
 
-    public int? ServiceID { get; set; }
+    public int? ServiceId { get; set; }
+
+    public int? Rating { get; set; }
 
     public int? Rating { get; set; }
 

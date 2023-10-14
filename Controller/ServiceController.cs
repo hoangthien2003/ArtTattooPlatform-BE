@@ -14,7 +14,6 @@ namespace back_end.Controller
         private TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
         [HttpGet("GetAll")]
-        [Authorize(Roles = "MN, MB")]
         public IActionResult GetAllService()
         {
             var serviceList = _context.TblServices.ToList();
@@ -22,7 +21,6 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetServiceByID/{serviceID}")]
-        [Authorize(Roles = "MN, MB")]
         public async Task<IActionResult> GetServiceByIDAsync([FromRoute] int serviceID)
         {
             var service = await _context.TblServices.FindAsync(serviceID);
@@ -34,10 +32,10 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetServicesByName/{serviceName}")]
-        [Authorize(Roles = "MN, MB")]
         public IActionResult GetServiceByName([FromRoute] string serviceName)
         {
-            var service = _context.TblServices.Where(service => service.ServiceName == serviceName).Take(5).ToList();
+            var service = _context.TblServices.Where(service => 
+                service.ServiceName == serviceName).Take(5).ToList();
             if (service == null)
             {
                 return Ok("No any service matched!");
@@ -46,10 +44,10 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetServiceByCategory/{categoryID}")]
-        [Authorize(Roles = "MN, MB")]
         public IActionResult GetServiceByCategory([FromRoute] string categoryID)
         {
-            var service = _context.TblServices.Where(service => service.CategoryID == categoryID).ToList();
+            var service = _context.TblServices.Where(service => 
+                service.CategoryId == categoryID).ToList();
             if (service == null)
             {
                 return Ok("No any service in this category!");
@@ -61,22 +59,18 @@ namespace back_end.Controller
         [Authorize(Roles = "MN")]
         public async Task<IActionResult> AddServiceAsync([FromForm] Service serviceRequest)
         {
-            var isServiceExisted = await _context.TblServices.FindAsync(serviceRequest.ServiceID);
-            if (isServiceExisted != null)
-            {
-                return Ok("Service existed.");
-            }
             var service = new TblService
             {
-                ServiceID = serviceRequest.ServiceID,
                 ServiceName = serviceRequest.ServiceName,
                 Description = serviceRequest.Description,
-                CategoryID = serviceRequest.CategoryID,
+                CategoryId = serviceRequest.CategoryID,
+                StudioId = serviceRequest.StudioID,
                 Price = serviceRequest.Price
             };
             if (serviceRequest.Image.Length > 0)
             {
-                service.ImageService = await Utils.Utils.UploadGetURLImageAsync(serviceRequest.Image);
+                service.ImageService = await Utils.Utils.
+                    UploadGetURLImageAsync(serviceRequest.Image);
             }
             _context.TblServices.Add(service);
             _context.SaveChanges();
@@ -85,20 +79,23 @@ namespace back_end.Controller
 
         [HttpPut("UpdateService/{serviceID}")]
         [Authorize(Roles = "MN")]
-        public async Task<IActionResult> UpdateServiceAsync([FromForm] Service serviceRequest, [FromRoute] int serviceID)
+        public async Task<IActionResult> UpdateServiceAsync([FromForm] Service serviceRequest, 
+            [FromRoute] int serviceID)
         {
             var service = await _context.TblServices.FindAsync(serviceID);
             if (service == null)
             {
-                return BadRequest("Studio not found!");
+                return BadRequest("Service not found!");
             }
             service.ServiceName = serviceRequest.ServiceName;
-            service.CategoryID = serviceRequest.CategoryID;
+            service.CategoryId = serviceRequest.CategoryID;
             service.Description = serviceRequest.Description;
+            service.StudioId = serviceRequest.StudioID;
             service.Price = serviceRequest.Price;
             if (serviceRequest.Image.Length > 0)
             {
-                service.ImageService = await Utils.Utils.UploadGetURLImageAsync(serviceRequest.Image);
+                service.ImageService = await Utils.Utils.
+                    UploadGetURLImageAsync(serviceRequest.Image);
             }
             await _context.SaveChangesAsync();
             return Ok(service);
@@ -117,5 +114,7 @@ namespace back_end.Controller
             _context.SaveChanges();
             return Ok(service);
         }
-    }
-}
+
+        
+     }
+ }

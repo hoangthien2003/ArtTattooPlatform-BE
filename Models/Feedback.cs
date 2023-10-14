@@ -14,9 +14,7 @@ namespace back_end.Models
         public int? ServiceID { get; set; }
 
         public int? Rating { get; set; }
-
+      
         public DateTime? FeedbackDate { get; set; }
-
-        
     }
 }
