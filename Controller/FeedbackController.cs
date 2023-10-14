@@ -23,8 +23,7 @@ namespace back_end.Controller
         }
 
         [HttpPost("AddFeedback")]
-        
-
+        [Authorize(Roles = "MB")]
         public async Task<IActionResult> AddServiceAsync([FromForm] Feedback feedbackRequest)
         {
             
@@ -91,8 +90,8 @@ namespace back_end.Controller
         }
 
         [HttpPost("AddRating")]
-        
-        public async Task<IActionResult> AddReviewAsync([FromBody] Feedback feedbackRequest)
+        [Authorize(Roles = "MB")]
+        public async Task<IActionResult> AddFeedBackAsync([FromBody] Feedback feedbackRequest)
         {
             // Kiểm tra xem dịch vụ có tồn tại hay không
             var feedback = await _context.TblFeedbacks.FindAsync(feedbackRequest.FeedbackID);
@@ -115,12 +114,13 @@ namespace back_end.Controller
         }
         
         [HttpGet("GetAverageRatingForService/{serviceID}")]
-        [Authorize(Roles = "MN, MB, User")]
+        [Authorize(Roles = "MN")]
         public IActionResult GetAverageRatingForService([FromRoute] int serviceID)
         {
             // Lấy trung bình đánh giá sao cho dịch vụ
-            var averageRating = _context.TblFeedbacks.Where(review => review.ServiceID == serviceID)
-                .Average(review => review.Rating);
+            var averageRating = _context.TblFeedbacks
+            .Where(feedback => feedback.ServiceID == serviceID)
+            .Average(feedback => feedback.Rating);
             return Ok(averageRating);
         }
     }

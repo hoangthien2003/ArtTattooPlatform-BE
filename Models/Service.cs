@@ -8,5 +8,7 @@
         public int StudioID {  get; set; }
         public decimal Price { get; set; }
         public IFormFile Image {  get; set; }
+
+        public int Rating { get; set; }
     }
 }
