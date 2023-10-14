@@ -102,7 +102,7 @@ namespace back_end.Controller
             // Tạo đánh giá sao mới
             var feedback1 = new TblFeedback
             {
-                ServiceID = feedbackRequest.ServiceID,
+                ServiceId = feedbackRequest.ServiceID,
                 Rating = feedbackRequest.Rating,
                 // Thêm các thông tin khác liên quan đến đánh giá sao nếu cần
             };
@@ -119,7 +119,7 @@ namespace back_end.Controller
         {
             // Lấy trung bình đánh giá sao cho dịch vụ
             var averageRating = _context.TblFeedbacks
-            .Where(feedback => feedback.ServiceID == serviceID)
+            .Where(feedback => feedback.ServiceId == serviceID)
             .Average(feedback => feedback.Rating);
             return Ok(averageRating);
         }
