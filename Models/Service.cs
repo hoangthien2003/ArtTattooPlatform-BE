@@ -8,5 +8,7 @@
         public string CategoryID { get; set; }
         public string Price { get; set; }
         public IFormFile Image {  get; set; }
+
+        public int Rating { get; set; }
     }
 }

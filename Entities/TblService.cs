@@ -21,6 +21,8 @@ public partial class TblService
 
     public int? StudioID { get; set; }
 
+    public int? Rating { get; set; }
+
     public virtual TblArtist? Artist { get; set; }
 
     public virtual TblStudio? Studio { get; set; }
