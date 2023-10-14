@@ -20,6 +20,17 @@ namespace back_end.Controller
             var artistList = _context.TblArtists.ToList();
             return Ok(artistList);
         }
+        [HttpGet("GetArtistByName/{ArtistName}")]
+        [Authorize(Roles = "MN, MB")]
+        public IActionResult GetServiceByName([FromRoute] string artistName)
+        {
+            var artist = _context.TblArtists.Where(artist => artist.ArtistName == artistName).Take(5).ToList();
+            if (artist == null)
+            {
+                return Ok("No any service matched!");
+            }
+            return Ok(artist);
+        }
 
         [HttpPost("AddArtist")]
         [Authorize(Roles = "MN")]
