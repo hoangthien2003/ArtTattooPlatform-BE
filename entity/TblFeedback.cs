@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace back_end.Entities;
+namespace back_end.entity;
 
 public partial class TblFeedback
 {
@@ -13,11 +13,9 @@ public partial class TblFeedback
 
     public int? ServiceId { get; set; }
 
-    
-
-    public float? Rating { get; set; }
-
     public DateTime? FeedbackDate { get; set; }
+
+    public double? Rating { get; set; }
 
     public virtual TblMember? Member { get; set; }
 

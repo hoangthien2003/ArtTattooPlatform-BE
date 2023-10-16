@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace back_end.Entities;
+namespace back_end.entity;
 
 public partial class TblService
 {
@@ -21,7 +21,7 @@ public partial class TblService
 
     public int? StudioId { get; set; }
 
-    public float Rating { get; set; }
+    public int? Rating { get; set; }
 
     public virtual TblArtist? Artist { get; set; }
 
