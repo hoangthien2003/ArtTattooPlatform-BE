@@ -100,6 +100,34 @@ namespace back_end.Controller
             await _context.SaveChangesAsync();
             return Ok(service);
         }
+        [HttpGet("UpdateAverageRatingForService/{serviceID}")]
+        [Authorize(Roles = "MN,MB")]
+        public IActionResult UpdateAverageRatingForService([FromRoute] int serviceID)
+        {
+            var feedbacks = _context.TblFeedbacks.Where(feedback => feedback.ServiceId == serviceID).ToList();
+
+            if (feedbacks.Count > 0)
+            {
+                double averageRating = (double)feedbacks.Average(feedback => feedback.Rating);
+
+                var service = _context.TblServices.FirstOrDefault(s => s.ServiceId == serviceID);
+
+                if (service != null)
+                {
+                    service.Rating = (int)averageRating;
+                    _context.SaveChanges();
+                    return Ok("Average rating updated successfully.");
+                }
+                else
+                {
+                    return NotFound("Service not found.");
+                }
+            }
+            else
+            {
+                return Ok("No feedback available for this service.");
+            }
+        }
 
         [HttpDelete("Delete/{serviceID}")]
         [Authorize(Roles = "MN")]

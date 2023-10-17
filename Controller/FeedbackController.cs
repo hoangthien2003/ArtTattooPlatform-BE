@@ -1,4 +1,4 @@
-﻿using back_end.entity;
+﻿using back_end.Entities;
 using back_end.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,27 +16,30 @@ namespace back_end.Controller
 
         [HttpGet("GetALL_Feedback")]
         [Authorize(Roles = "MN, AT, MB")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetFeedback()
         {
-            var feedBackList = _context.TblFeedbacks.ToList();
-            return Ok(feedBackList);
+            var feedback = await _context.TblFeedbacks
+                .ToListAsync();
+            return Ok(feedback);
         }
 
+        
+
         [HttpPost("AddFeedback")]
-        //[Authorize(Roles = "MB")]
+        [Authorize(Roles = "MB")]
         public async Task<IActionResult> AddFeedback([FromForm]  Feedback feedbackRequest)
         {
             
-            var Feedback0 = new TblFeedback1
+            var Feedback0 = new TblFeedback
             {  
                
                 FeedbackDetail = feedbackRequest.FeedbackDetail,
-                //MemberId = feedbackRequest.MemberID,
-                //ServiceId = feedbackRequest.ServiceID,
-                
+                MemberId = feedbackRequest.MemberID,
+                ServiceId = feedbackRequest.ServiceID,
+                Rating = feedbackRequest.Rating,
                 FeedbackDate =DateTime.UtcNow
             };
-           _context.TblFeedback1s.Add(Feedback0);
+           _context.TblFeedbacks.Add(Feedback0);
            await _context.SaveChangesAsync();
             return Ok(Feedback0);
         }
