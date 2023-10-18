@@ -15,6 +15,8 @@ public partial class TblFeedback
 
     public DateTime? FeedbackDate { get; set; }
 
+    public int? Rating { get; set; }
+
     public virtual TblMember? Member { get; set; }
 
     public virtual TblService? Service { get; set; }

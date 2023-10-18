@@ -3,6 +3,7 @@ using back_end.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace back_end.Controllers
 {
@@ -26,31 +27,22 @@ namespace back_end.Controllers
             return Ok(bookings);
         }
 
-        [HttpGet("GetBookingByID/{bookingID}")]
+        [HttpPost("AddBooking/{email}")]
         [Authorize(Roles = "MB, MN")]
-        public async Task<IActionResult> GetBooking([FromRoute] int id)
+        public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string email)
         {
-            var booking = await _context.TblBookings
-                .FirstOrDefaultAsync(b => b.BookingId == id);
-
-            if (booking == null)
-            {
-                return NotFound("Booking not found.");
-            }
-
-            return Ok(booking);
-        }
-
-        [HttpPost("AddBooking")]
-        [Authorize(Roles = "MB")]
-        public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest)
-        {
+            var user = await _context.TblUsers.Where(user => user.Email == email).FirstOrDefaultAsync();
+            var member = await _context.TblMembers.
+                Where(member => member.UserId == user.UserId).FirstOrDefaultAsync();
+            DateTime dateTime = DateTime.ParseExact(bookingRequest.BookingDate, 
+                "M/d/yyyy h:mm tt", CultureInfo.InvariantCulture);
             var booking = new TblBooking
             {
-                MemberId = bookingRequest.MemberID,
+                BookingId = System.Guid.NewGuid().ToString(),
+                MemberId = member.MemberId,
                 ServiceId = bookingRequest.ServiceID,
                 StudioId = bookingRequest.StudioID,
-                BookingDate = bookingRequest.BookingDate,
+                BookingDate = dateTime,
                 PhoneNumber = bookingRequest.PhoneNumber,
                 Total = bookingRequest.Total
             };

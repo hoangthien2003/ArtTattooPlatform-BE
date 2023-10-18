@@ -74,9 +74,9 @@ namespace back_end.Controller
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, user.RoleId),
+                new Claim("email", user.Email),
+                new Claim("username", user.UserName),
+                new Claim("role", user.RoleId),
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
                 _configuration.GetSection("Jwt:Key").Value));
