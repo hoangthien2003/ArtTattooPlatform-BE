@@ -122,13 +122,14 @@ public partial class TattooPlatformEndContext : DbContext
 
         modelBuilder.Entity<TblFeedback>(entity =>
         {
-            entity.HasKey(e => e.FeedbackId).HasName("PK__tbl_Feed__6A4BEDF6DF00DDBA");
+            
 
             entity.ToTable("tbl_Feedback");
-
-            entity.Property(e => e.FeedbackId)
-                .ValueGeneratedNever()
-                .HasColumnName("FeedbackID");
+            entity.HasKey(e => e.FeedbackId);
+            //entity.HasKey(e => e.FeedbackId).HasName("PK__tbl_Feed__6A4BEDF6DF00DDBA");
+            //entity.Property(e => e.FeedbackId)
+            //    .ValueGeneratedNever()
+            //    .HasColumnName("FeedbackID");
             entity.Property(e => e.FeedbackDate).HasColumnType("datetime");
             entity.Property(e => e.FeedbackDetail).HasMaxLength(200);
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
