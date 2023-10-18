@@ -144,6 +144,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("TopRatedServices")]
+        [Authorize(Roles = "MN")]
         public IActionResult GetTopRatedServices()
         {
             try
@@ -182,6 +183,7 @@ namespace back_end.Controller
         // }
 
         [HttpGet("NewestServices")]
+        [Authorize(Roles = "MN")]
         public IActionResult GetNewestServices()
         {
             try
