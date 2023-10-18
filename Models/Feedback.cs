@@ -5,7 +5,8 @@ namespace back_end.Models
 {
     public class Feedback
     {
-        public int FeedbackID { get; set; }
+        
+
 
         public string? FeedbackDetail { get; set; }
 
@@ -14,7 +15,7 @@ namespace back_end.Models
         public int? ServiceID { get; set; }
 
         public int? Rating { get; set; }
-      
-        public DateTime? FeedbackDate { get; set; }
+
+        
     }
 }

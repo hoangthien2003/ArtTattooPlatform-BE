@@ -15,31 +15,46 @@ namespace back_end.Controller
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
         [HttpGet("GetALL_Feedback")]
-        [Authorize(Roles = "MN, AT, MB")]
-        public IActionResult GetAll()
+        [Authorize(Roles = "MN, MB")]
+        public async Task<IActionResult> GetFeedback()
         {
-            var feedBackList = _context.TblFeedbacks.ToList();
-            return Ok(feedBackList);
+            var feedback = await _context.TblFeedbacks
+                .ToListAsync();
+            return Ok(feedback);
         }
+
+        [HttpGet("GetFeedbackByID/{FeedbackID}")]
+        [Authorize(Roles = "MN, MB")]
+        public async Task<IActionResult> GetFeedBackByIDAsync(int FeedbackID)
+        {
+            var feedback = await _context.TblFeedbacks.FindAsync(FeedbackID);
+            if (feedback == null)
+            {
+                return NotFound("Feedback not found!");
+            }
+
+            return Ok(feedback);
+        }
+
+
 
         [HttpPost("AddFeedback")]
         [Authorize(Roles = "MB")]
-        public async Task<IActionResult> AddServiceAsync([FromForm] Feedback feedbackRequest)
+        public async Task<IActionResult> AddFeedback([FromForm]  Feedback feedbackRequest)
         {
             
-            var Feedback1 = new TblFeedback
+            var Feedback0 = new TblFeedback
             {  
+               
                 FeedbackDetail = feedbackRequest.FeedbackDetail,
                 MemberId = feedbackRequest.MemberID,
                 ServiceId = feedbackRequest.ServiceID,
-                FeedbackDate = feedbackRequest.FeedbackDate,
-                
-                
+                Rating = feedbackRequest.Rating,
+                FeedbackDate =DateTime.UtcNow
             };
-            
-            _context.TblFeedbacks.Add(Feedback1);
-            _context.SaveChanges();
-            return Ok(Feedback1);
+           _context.TblFeedbacks.Add(Feedback0);
+           await _context.SaveChangesAsync();
+            return Ok(Feedback0);
         }
 
         [HttpDelete("DeleteFeedback")]
@@ -56,63 +71,37 @@ namespace back_end.Controller
             return Ok(feedback);
         }
 
-        [HttpPut("UpdateFeedBack/{FeedBackID}")]
+        [HttpPut("UpdateFeedback/{feedbackID}")]
         [Authorize(Roles = "MB")]
-        public async Task<IActionResult> UpdateFeedBackAsync(int feedbackID, [FromForm] Feedback feedBackRequest)
+        public async Task<IActionResult> UpdateFeedback([FromRoute] int feedbackID, [FromBody] Feedback feedbackRequest)
         {
             var feedback = await _context.TblFeedbacks.FindAsync(feedbackID);
+
             if (feedback == null)
             {
-                return BadRequest("Feedback not found!");
+                return NotFound("Không tìm thấy đánh giá.");
             }
 
-            // Cập nhật feedBack
-            feedback.FeedbackDetail = feedBackRequest.FeedbackDetail;
-            feedback.MemberId = feedBackRequest?.MemberID;
-            feedback.ServiceId = feedBackRequest?.ServiceID;
-            feedback.FeedbackDate = feedBackRequest?.FeedbackDate;
+            // Cập nhật thông tin đánh giá
+            feedback.FeedbackDetail = feedbackRequest.FeedbackDetail;
+            feedback.MemberId = feedbackRequest.MemberID;
+            feedback.ServiceId = feedbackRequest.ServiceID;
+            feedback.Rating = feedbackRequest.Rating;
+            feedback.FeedbackDate = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync();
-            return Ok(feedback);
-        }
-
-        [HttpGet("GetFeedbackByID/{FeedbackID}")]
-        [Authorize(Roles = "MN, AT, MB")]
-        public async Task<IActionResult> GetFeedBackByIDAsync(int FeedbackID)
-        {
-            var feedback = await _context.TblFeedbacks.FindAsync(FeedbackID);
-            if (feedback == null)
+            try
             {
-                return NotFound("Feedback not found!");
+                await _context.SaveChangesAsync();
+                return Ok(feedback);
             }
-
-            return Ok(feedback);
-        }
-
-        [HttpPost("AddRating")]
-        [Authorize(Roles = "MB")]
-        public async Task<IActionResult> AddFeedBackAsync([FromBody] Feedback feedbackRequest)
-        {
-            // Kiểm tra xem dịch vụ có tồn tại hay không
-            var feedback = await _context.TblFeedbacks.FindAsync(feedbackRequest.FeedbackID);
-            if (feedback == null)
+            catch (DbUpdateException ex)
             {
-                return BadRequest("Feedback not found!");
+                return BadRequest("Lỗi trong quá trình cập nhật đánh giá.");
             }
-            // Tạo đánh giá sao mới
-            var feedback1 = new TblFeedback
-            {
-                ServiceId = feedbackRequest.ServiceID,
-                Rating = feedbackRequest.Rating,
-                // Thêm các thông tin khác liên quan đến đánh giá sao nếu cần
-            };
-
-            _context.TblFeedbacks.Add(feedback1);
-            await _context.SaveChangesAsync();
-
-            return Ok(feedback1);
         }
+
         
+
         [HttpGet("GetAverageRatingForService/{serviceID}")]
         [Authorize(Roles = "MN")]
         public IActionResult GetAverageRatingForService([FromRoute] int serviceID)

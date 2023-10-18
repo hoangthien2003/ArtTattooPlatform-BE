@@ -9,6 +9,6 @@
         public decimal Price { get; set; }
         public IFormFile Image {  get; set; }
 
-        public int Rating { get; set; }
+        public int? Rating { get; set; }
     }
 }
