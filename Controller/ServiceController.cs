@@ -199,9 +199,55 @@ namespace back_end.Controller
             {
                 return BadRequest("Lỗi trong quá trình lấy danh sách dịch vụ mới nhất.");
             }
+        }
 
 
+        
+        [HttpGet("FeedbackInfo/{serviceID}")]
+        public IActionResult GetFeedbackInfo([FromRoute] int serviceID)
+        {
+            try
+            {
+                // Lấy tất cả đánh giá cho dịch vụ cụ thể
+                var feedbackList = _context.TblFeedbacks
+                    .Where(feedback => feedback.ServiceId == serviceID)
+                    .ToList();
 
+                // Khởi tạo một dictionary để lưu trữ số lượng đánh giá cho từng xếp hạng
+                var ratingStats = new Dictionary<int, int>();
+
+                // Khởi tạo số lượng đánh giá cho mỗi xếp hạng từ 1 đến 5
+                for (int i = 1; i <= 5; i++)
+                {
+                    ratingStats[i] = 0;
+                }
+
+                // Đếm số lượng đánh giá cho từng xếp hạng
+                foreach (var feedback in feedbackList)
+                {
+                    if (feedback.Rating.HasValue && feedback.Rating >= 1 && feedback.Rating <= 5)
+                    {
+                        int rating = feedback.Rating.Value;
+                        ratingStats[rating]++;
+                    }
+                }
+
+                // Tính tổng số lượng đánh giá
+                var totalFeedbackCount = feedbackList.Count;
+
+                var feedbackInfo = new
+                {
+                    TotalFeedbackCount = totalFeedbackCount,
+                    RatingStats = ratingStats
+                };
+
+                // Trả về kết quả số liệu thống kê (tổng số lượng đánh giá và số lượng đánh giá cho từng xếp hạng)
+                return Ok(feedbackInfo);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Lỗi trong quá trình lấy số liệu thống kê đánh giá.");
+            }
         }
     }
  }
