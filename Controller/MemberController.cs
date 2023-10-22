@@ -15,7 +15,7 @@ namespace back_end.Controller
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
         [HttpGet("GetMemberByID/{memberID}")]
-        [Authorize("MB, AT, MN")]
+        [Authorize(Roles = "MB, AT, MN")]
         public async Task<IActionResult> GetMemberByIDAsync([FromRoute] int memberID)
         {
             var member = await _context.TblMembers.FindAsync(memberID);
@@ -27,7 +27,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetMemberByUsername/{username}")]
-        [Authorize("MB")]
+        [Authorize(Roles = "MB")]
         public async Task<IActionResult> GetMemberByUsernameAsync([FromRoute] string username)
         {
             var user = await _context.TblUsers.FirstOrDefaultAsync(user => user.UserName == username);
@@ -46,7 +46,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdateNamePhoneByID/{memberID}")]
-        [Authorize("MB")]
+        [Authorize(Roles = "MB")]
         public async Task<IActionResult> UpdateProfileAsync([FromRoute] int memberID, [FromForm] Member memberRequest)
         {
             var member = await _context.TblMembers.FindAsync(memberID);
@@ -61,7 +61,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdateUsername/{userID}")]
-        [Authorize("MB")]
+        [Authorize(Roles = "MB")]
         public async Task<IActionResult> UpdateUsernameAsync([FromRoute] int userID, [FromBody] string username)
         {
             var user = await _context.TblUsers.FindAsync(userID);
@@ -75,7 +75,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdatePassword/{userID}")]
-        [Authorize("MB, AT, MN")]
+        [Authorize(Roles = "MB, AT, MN")]
         public async Task<IActionResult> UpdatePasswordAsync([FromRoute] int userID, string oldPassword, string newPassword)
         {
             var user = await _context.TblUsers.FindAsync(userID); 

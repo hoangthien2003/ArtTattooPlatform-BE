@@ -29,6 +29,24 @@ namespace back_end.Controller
             return Ok(service);
         }
 
+        [HttpGet("v2/GetServiceByID/{serviceID}")]
+        public async Task<IActionResult> GetServiceWithLogoNameByIDAsync([FromRoute] int serviceID)
+        {
+            var service = await _context.TblServices.FindAsync(serviceID);
+            var studio = await _context.TblStudios.Select(studio => new
+            {
+                StudioID = studio.StudioId,
+                StudioName = studio.StudioName,
+                Logo = studio.Logo
+            }).Where(studio => studio.StudioID == service.StudioId).FirstOrDefaultAsync();
+            var result = new
+            {
+                service,
+                studio
+            };
+            return Ok(result);
+        }
+
         [HttpGet("GetServicesByName/{serviceName}")]
         public IActionResult GetServiceByName([FromRoute] string serviceName)
         {

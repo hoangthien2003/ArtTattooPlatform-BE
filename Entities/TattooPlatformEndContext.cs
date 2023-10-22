@@ -65,7 +65,8 @@ public partial class TattooPlatformEndContext : DbContext
             entity.ToTable("tbl_Booking");
 
             entity.Property(e => e.BookingId)
-                .ValueGeneratedNever()
+                .HasMaxLength(50)
+                .IsUnicode(false)
                 .HasColumnName("BookingID");
             entity.Property(e => e.BookingDate).HasColumnType("datetime");
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
@@ -99,7 +100,10 @@ public partial class TattooPlatformEndContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("BookingDetailID");
             entity.Property(e => e.ArtistId).HasColumnName("ArtistID");
-            entity.Property(e => e.BookingId).HasColumnName("BookingID");
+            entity.Property(e => e.BookingId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("BookingID");
             entity.Property(e => e.Price).HasColumnType("money");
             entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
 

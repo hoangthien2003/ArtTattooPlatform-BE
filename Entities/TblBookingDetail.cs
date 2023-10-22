@@ -7,7 +7,7 @@ public partial class TblBookingDetail
 {
     public int BookingDetailId { get; set; }
 
-    public int? BookingId { get; set; }
+    public string? BookingId { get; set; }
 
     public int? Quantity { get; set; }
 
