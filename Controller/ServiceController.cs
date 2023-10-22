@@ -70,6 +70,18 @@ namespace back_end.Controller
             }
             return Ok(service);
         }
+        [HttpGet("GetServiceByStudio/{studioID}")]
+        public IActionResult GetServiceByStudio([FromRoute] int studioID)
+        {
+            var services = _context.TblServices.Where(service => service.StudioId == studioID).ToList();
+
+            if (services.Count == 0)
+            {
+                return Ok("No services found for this studio.");
+            }
+
+            return Ok(services);
+        }
         [HttpPost("Add")]
         [Authorize(Roles = "MN")]
         public async Task<IActionResult> AddServiceAsync([FromForm] Service serviceRequest)
