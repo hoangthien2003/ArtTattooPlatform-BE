@@ -73,5 +73,16 @@ namespace back_end.Controller
 
             return Ok(feedback);
         }
+
+        [HttpGet("GetFeedbackBySearchID/{ServiceID}")]
+        public async Task<IActionResult> GetFeedbackByServiceIDAsync([FromRoute] int ServiceID)
+        {
+            var feedBack = await _context.TblFeedbacks.Where(s => s.ServiceId == ServiceID).ToListAsync();
+            if (feedBack == null)
+            {
+                return NotFound("Feed not found!");
+            }
+            return Ok(feedBack);
+        }
     }
 }
