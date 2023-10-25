@@ -113,7 +113,7 @@ namespace back_end.Controller
             return Ok(averageRating);
         }
 
-        [HttpGet("GetFeedbackBySearchID/{ServiceID}")]
+        [HttpGet("GetFeedbackByServiceID/{ServiceID}")]
         public async Task<IActionResult> GetFeedbackByServiceIDAsync([FromRoute] int ServiceID)
         {
             var feedBack = await _context.TblFeedbacks.Where(s => s.ServiceId == ServiceID).ToListAsync();
