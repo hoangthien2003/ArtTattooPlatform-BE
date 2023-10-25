@@ -1,5 +1,6 @@
 ﻿using back_end.Entities;
 using back_end.Models;
+using back_end.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,11 @@ namespace back_end.Controller
     public class ServiceController : ControllerBase
     {
         private TattooPlatformEndContext _context = new TattooPlatformEndContext();
+        private readonly ICloudStorageService _cloudStorageService;
+        public ServiceController(ICloudStorageService cloudStorageService)
+        {
+            _cloudStorageService = cloudStorageService;
+        }
 
         [HttpGet("GetAll")]
         public IActionResult GetAllService()
@@ -97,8 +103,8 @@ namespace back_end.Controller
             };
             if (serviceRequest.Image.Length > 0)
             {
-                service.ImageService = await Utils.Utils.
-                    UploadGetURLImageAsync(serviceRequest.Image);
+                service.ImageService = await _cloudStorageService
+                    .UploadFileAsync(serviceRequest.Image, serviceRequest.Image.FileName);
             }
             _context.TblServices.Add(service);
             _context.SaveChanges();
