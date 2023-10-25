@@ -40,14 +40,39 @@ namespace back_end.Services
                 throw;
             }
         }
-        public Task DeleteFileAsync(string fileNameToDelete)
+        public async Task DeleteFileAsync(string fileNameToDelete)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var storageClient = StorageClient.Create(_googleCredential))
+                {
+                    await storageClient.DeleteObjectAsync(_options.GoogleCloudStorageBucketName, fileNameToDelete);
+                }
+                _logger.LogInformation($"File {fileNameToDelete} deleted");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occured while deleting file {fileNameToDelete}: {ex.Message}");
+                throw;
+            }
         }
 
-        public Task<string> GetSignedUrlAsync(string fileNameToRead, int timeOutInMinutes = 30)
+        public async Task<string> GetSignedUrlAsync(string fileNameToRead, int timeOutInMinutes = 30)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var sac = _googleCredential.UnderlyingCredential as ServiceAccountCredential;
+                var urlSigner = UrlSigner.FromServiceAccountCredential(sac);
+                // provides limited permission and time to make a request: time here is mentioned for 30 minutes.
+                var signedUrl = await urlSigner.SignAsync(_options.GoogleCloudStorageBucketName, fileNameToRead, TimeSpan.FromMinutes(timeOutInMinutes));
+                _logger.LogInformation($"Signed url obtained for file {fileNameToRead}");
+                return signedUrl.ToString();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occured while obtaining signed url for file {fileNameToRead}: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<string> UploadFileAsync(IFormFile fileToUpload, string fileNameToSave)
