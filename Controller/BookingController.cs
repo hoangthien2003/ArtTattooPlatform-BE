@@ -27,22 +27,65 @@ namespace back_end.Controllers
             return Ok(bookings);
         }
 
-        [HttpPost("AddBooking/{email}")]
+        [HttpGet("GetBookingsByStudio/{studioID}")]
+        [Authorize(Roles = " MN")]
+        public IActionResult GetBookingsByStudio([FromRoute] int studioID)
+        {
+            var bookings = _context.TblBookings.Where(booking => booking.StudioId == studioID).ToList();
+
+            if (bookings.Count == 0)
+            {
+                return Ok("No bookings found for this studio.");
+            }
+
+            return Ok(bookings);
+        }
+
+        [HttpGet("GetBookingsByService/{serviceID}")]
+        [Authorize(Roles = " MN")]
+        public IActionResult GetBookingsByService([FromRoute] int serviceID)
+        {
+            var bookings = _context.TblBookings.Where(booking => booking.ServiceId == serviceID).ToList();
+
+            if (bookings.Count == 0)
+            {
+                return Ok("No bookings found for this service.");
+            }
+
+            return Ok(bookings);
+        }
+
+        [HttpGet("GetBookingByID/{bookingID}")]
         [Authorize(Roles = "MB, MN")]
+        public async Task<IActionResult> GetBookingByID([FromRoute] string bookingID)
+        {
+            var booking = await _context.TblBookings.FindAsync(bookingID);
+
+            if (booking == null)
+            {
+                return NotFound("Booking not found.");
+            }
+
+            return Ok(booking);
+        }
+
+        [HttpPost("AddBooking/{email}")]
+        [Authorize(Roles = "MB")]
+
         public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string email)
         {
             var user = await _context.TblUsers.Where(user => user.Email == email).FirstOrDefaultAsync();
             var member = await _context.TblMembers.
                 Where(member => member.UserId == user.UserId).FirstOrDefaultAsync();
-            DateTime dateTime = DateTime.ParseExact(bookingRequest.BookingDate, 
-                "M/d/yyyy h:mm tt", CultureInfo.InvariantCulture);
+            
+                
             var booking = new TblBooking
             {
                 BookingId = System.Guid.NewGuid().ToString(),
                 MemberId = member.MemberId,
                 ServiceId = bookingRequest.ServiceID,
                 StudioId = bookingRequest.StudioID,
-                BookingDate = dateTime,
+                BookingDate = DateTime.UtcNow,
                 PhoneNumber = bookingRequest.PhoneNumber,
                 Total = bookingRequest.Total
             };
