@@ -5,7 +5,7 @@ namespace back_end.Entities;
 
 public partial class TblBooking
 {
-    public string BookingId { get; set; }
+    public string BookingId { get; set; } = null!;
 
     public int? MemberId { get; set; }
 

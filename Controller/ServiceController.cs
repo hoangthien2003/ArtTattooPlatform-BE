@@ -21,7 +21,19 @@ namespace back_end.Controller
         [HttpGet("GetAll")]
         public IActionResult GetAllService()
         {
-            var serviceList = _context.TblServices.ToList();
+            var serviceList = _context.TblServices.Include(s => s.Studio).Select(s => new
+            {
+                s.ServiceId,
+                s.ServiceName,
+                s.Description,
+                s.Price,
+                s.CategoryId,
+                s.ImageService,
+                s.ArtistId,
+                s.StudioId,
+                s.Rating,
+                s.Studio
+            }).ToList();
             return Ok(serviceList);
         }
 
@@ -52,6 +64,29 @@ namespace back_end.Controller
                 studio
             };
             return Ok(result);
+        }
+
+        [HttpGet("v3/GetServiceByID/{serviceID}")]
+        public async Task<IActionResult> GetServiceByIDV3Async([FromRoute] int serviceID)
+        {
+            var existingService = await _context.TblServices.Include(s => s.Studio).Select(s => new
+            {
+                s.ServiceId,
+                s.ServiceName,
+                s.Description,
+                s.Price,
+                s.CategoryId,
+                s.ImageService,
+                s.ArtistId,
+                s.StudioId,
+                s.Rating,
+                s.Studio
+            }).FirstOrDefaultAsync(s => s.ServiceId == serviceID);
+            if (existingService == null)
+            {
+                return BadRequest("Not have anything service with this ID.");
+            }
+            return Ok(existingService);
         }
 
         [HttpGet("GetServicesByName/{serviceName}")]
@@ -103,8 +138,10 @@ namespace back_end.Controller
             };
             if (serviceRequest.Image.Length > 0)
             {
-                service.ImageService = await _cloudStorageService
+                await _cloudStorageService
                     .UploadFileAsync(serviceRequest.Image, serviceRequest.Image.FileName);
+                service.ImageService = await _cloudStorageService
+                    .GetSignedUrlAsync(serviceRequest.Image.FileName);
             }
             _context.TblServices.Add(service);
             _context.SaveChanges();
@@ -183,6 +220,7 @@ namespace back_end.Controller
             await _context.SaveChangesAsync();
             return Ok(service);
         }
+
         [HttpGet("UpdateAverageRatingForService/{serviceID}")]
         [Authorize(Roles = "MN,MB")]
         public IActionResult UpdateAverageRatingForService([FromRoute] int serviceID)
@@ -227,12 +265,11 @@ namespace back_end.Controller
         }
 
         [HttpGet("TopRatedServices")]
-        [Authorize(Roles = "MN")]
         public IActionResult GetTopRatedServices()
         {
             try
             {
-                var topRatedServices = _context.TblServices
+                var topRatedServices = _context.TblServices.Include(s => s.Studio).Select(s => new { s.ServiceId, s.ServiceName, s.Description, s.Price, s.CategoryId, s.ImageService, s.ArtistId, s.StudioId, s.Rating, s.Studio })
                     .OrderByDescending(service => service.Rating) // Sắp xếp theo xếp hạng giảm dần
                     .Take(10) // Lấy 10 dịch vụ có xếp hạng cao nhất (số lượng có thể điều chỉnh)
                     .ToList();
@@ -266,12 +303,25 @@ namespace back_end.Controller
         // }
 
         [HttpGet("NewestServices")]
-        [Authorize(Roles = "MN")]
         public IActionResult GetNewestServices()
         {
             try
             {
                 var newestServices = _context.TblServices
+                    .Include(s => s.Studio)
+                    .Select(s => new
+                    {
+                        s.ServiceId,
+                        s.ServiceName,
+                        s.Description,
+                        s.Price,
+                        s.CategoryId,
+                        s.ImageService,
+                        s.ArtistId,
+                        s.StudioId,
+                        s.Rating,
+                        s.Studio
+                    })
                     .OrderByDescending(service => service.ServiceId) // Sắp xếp giảm dần theo ServiceID
                     .Take(5) // Lấy 5 dịch vụ mới nhất
                     .ToList();
