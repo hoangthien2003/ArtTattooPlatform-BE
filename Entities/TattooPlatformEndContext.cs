@@ -21,6 +21,8 @@ public partial class TattooPlatformEndContext : DbContext
 
     public virtual DbSet<TblBookingDetail> TblBookingDetails { get; set; }
 
+    public virtual DbSet<TblCategory> TblCategories { get; set; }
+
     public virtual DbSet<TblFeedback> TblFeedbacks { get; set; }
 
     public virtual DbSet<TblManager> TblManagers { get; set; }
@@ -120,16 +122,28 @@ public partial class TattooPlatformEndContext : DbContext
                 .HasConstraintName("FK_BookingDetail_Service");
         });
 
+        modelBuilder.Entity<TblCategory>(entity =>
+        {
+            entity.HasKey(e => e.CategoryId);
+
+            entity.ToTable("tbl_Category");
+
+            entity.Property(e => e.CategoryId)
+                .HasMaxLength(3)
+                .IsUnicode(false)
+                .HasColumnName("CategoryID");
+            entity.Property(e => e.CategoryName)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<TblFeedback>(entity =>
         {
-            
+            entity.HasKey(e => e.FeedbackId).HasName("PK__tbl_Feed__6A4BEDF628E8F4ED");
 
             entity.ToTable("tbl_Feedback");
-            entity.HasKey(e => e.FeedbackId);
-            //entity.HasKey(e => e.FeedbackId).HasName("PK__tbl_Feed__6A4BEDF6DF00DDBA");
-            //entity.Property(e => e.FeedbackId)
-            //    .ValueGeneratedNever()
-            //    .HasColumnName("FeedbackID");
+
+            entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
             entity.Property(e => e.FeedbackDate).HasColumnType("datetime");
             entity.Property(e => e.FeedbackDetail).HasMaxLength(200);
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
@@ -241,21 +255,30 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
             entity.Property(e => e.ArtistId).HasColumnName("ArtistID");
             entity.Property(e => e.CategoryId)
-                .HasMaxLength(30)
+                .HasMaxLength(3)
+                .IsUnicode(false)
                 .HasColumnName("CategoryID");
-            entity.Property(e => e.Description).HasMaxLength(200);
-            entity.Property(e => e.ImageService).HasMaxLength(100);
+            entity.Property(e => e.Description)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.ImageService).IsUnicode(false);
             entity.Property(e => e.Price).HasColumnType("money");
-            entity.Property(e => e.ServiceName).HasMaxLength(30);
+            entity.Property(e => e.ServiceName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.StudioId).HasColumnName("StudioID");
 
             entity.HasOne(d => d.Artist).WithMany(p => p.TblServices)
                 .HasForeignKey(d => d.ArtistId)
                 .HasConstraintName("FK_Service_Artist");
 
+            entity.HasOne(d => d.Category).WithMany(p => p.TblServices)
+                .HasForeignKey(d => d.CategoryId)
+                .HasConstraintName("FK_tbl_Service_tbl_Category");
+
             entity.HasOne(d => d.Studio).WithMany(p => p.TblServices)
                 .HasForeignKey(d => d.StudioId)
-                .HasConstraintName("FK_Service_Studio");
+                .HasConstraintName("FK_tbl_Service_tbl_Studio");
         });
 
         modelBuilder.Entity<TblStudio>(entity =>
@@ -267,10 +290,16 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.StudioId).HasColumnName("StudioID");
             entity.Property(e => e.Address).HasMaxLength(30);
             entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.EndTime)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.Logo)
                 .HasMaxLength(255)
                 .IsUnicode(false);
             entity.Property(e => e.ManagerId).HasColumnName("ManagerID");
+            entity.Property(e => e.OpenTime)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.StudioEmail).HasMaxLength(30);
             entity.Property(e => e.StudioName).HasMaxLength(30);
             entity.Property(e => e.StudioPhone).HasMaxLength(20);
