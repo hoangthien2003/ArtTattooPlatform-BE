@@ -146,16 +146,16 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
             entity.Property(e => e.FeedbackDate).HasColumnType("datetime");
             entity.Property(e => e.FeedbackDetail).HasMaxLength(200);
-            entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
-
-            entity.HasOne(d => d.Member).WithMany(p => p.TblFeedbacks)
-                .HasForeignKey(d => d.MemberId)
-                .HasConstraintName("FK_Feedback_Member");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.Service).WithMany(p => p.TblFeedbacks)
                 .HasForeignKey(d => d.ServiceId)
                 .HasConstraintName("FK_Feedback_Service");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblFeedbacks)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tbl_Feedback_tbl_User");
         });
 
         modelBuilder.Entity<TblManager>(entity =>

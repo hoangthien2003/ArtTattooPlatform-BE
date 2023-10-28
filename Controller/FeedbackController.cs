@@ -47,7 +47,7 @@ namespace back_end.Controller
             {  
                
                 FeedbackDetail = feedbackRequest.FeedbackDetail,
-                MemberId = feedbackRequest.MemberID,
+                UserId = feedbackRequest.UserID,
                 ServiceId = feedbackRequest.ServiceID,
                 Rating = feedbackRequest.Rating,
                 FeedbackDate =DateTime.UtcNow
@@ -81,10 +81,9 @@ namespace back_end.Controller
             {
                 return NotFound("Không tìm thấy đánh giá.");
             }
-
             // Cập nhật thông tin đánh giá
             feedback.FeedbackDetail = feedbackRequest.FeedbackDetail;
-            feedback.MemberId = feedbackRequest.MemberID;
+            feedback.UserId = feedbackRequest.UserID;
             feedback.ServiceId = feedbackRequest.ServiceID;
             feedback.Rating = feedbackRequest.Rating;
             feedback.FeedbackDate = DateTime.UtcNow;
@@ -113,10 +112,21 @@ namespace back_end.Controller
             return Ok(averageRating);
         }
 
-        [HttpGet("GetFeedbackBySearchID/{ServiceID}")]
+        [HttpGet("GetFeedbackByServiceID/{ServiceID}")]
         public async Task<IActionResult> GetFeedbackByServiceIDAsync([FromRoute] int ServiceID)
         {
-            var feedBack = await _context.TblFeedbacks.Where(s => s.ServiceId == ServiceID).ToListAsync();
+            var feedBack = await _context.TblFeedbacks
+                .Include(f => f.User)
+                .Select(f => new
+                {
+                    f.FeedbackId,
+                    f.FeedbackDetail,
+                    f.FeedbackDate,
+                    f.ServiceId,
+                    f.Rating,
+                    f.User
+                })
+                .Where(s => s.ServiceId == ServiceID).ToListAsync();
             if (feedBack == null)
             {
                 return NotFound("Feed not found!");
