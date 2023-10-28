@@ -9,13 +9,15 @@ public partial class TblFeedback
 
     public string? FeedbackDetail { get; set; }
 
-    public int? MemberId { get; set; }
-
     public int? ServiceId { get; set; }
 
     public DateTime? FeedbackDate { get; set; }
 
-    public virtual TblMember? Member { get; set; }
+    public int? Rating { get; set; }
+
+    public int? UserId { get; set; }
 
     public virtual TblService? Service { get; set; }
+
+    public virtual TblUser? User { get; set; }
 }

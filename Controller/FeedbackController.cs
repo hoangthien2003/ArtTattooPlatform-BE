@@ -20,11 +20,10 @@ namespace back_end.Controller
         [HttpPost("AddFeedback")]
         public async Task<IActionResult> AddFeedbackAsync([FromForm] Feedback feedbackRequest)
         {
-
             var FeedBacK = new TblFeedback
             {
                 FeedbackDetail = feedbackRequest.FeedbackDetail,
-                MemberId = feedbackRequest.MemberId,
+                UserId = feedbackRequest.UserId,
                 ServiceId = feedbackRequest.ServiceId,
                 FeedbackDate = feedbackRequest.FeedbackDate,
             };
@@ -32,6 +31,7 @@ namespace back_end.Controller
             await _context.SaveChangesAsync();
             return Ok(FeedBacK);
         }
+
         [HttpDelete("DeleteFeedback")]
         public async Task<IActionResult> DeleteFeedbackAsync(int feedbackID)
         {
@@ -55,7 +55,7 @@ namespace back_end.Controller
 
             // Cập nhật feedBack
             feedback.FeedbackDetail = feedBackRequest.FeedbackDetail;
-            feedback.MemberId = feedBackRequest?.MemberId;
+            feedback.UserId = feedBackRequest?.UserId;
             feedback.ServiceId = feedBackRequest?.ServiceId;
             feedback.FeedbackDate = feedBackRequest?.FeedbackDate;
 
@@ -77,7 +77,18 @@ namespace back_end.Controller
         [HttpGet("GetFeedbackByServiceID/{ServiceID}")]
         public async Task<IActionResult> GetFeedbackByServiceIDAsync([FromRoute] int ServiceID)
         {
-            var feedBack = await _context.TblFeedbacks.Where(s => s.ServiceId == ServiceID).ToListAsync();
+            var feedBack = await _context.TblFeedbacks
+                .Include(f => f.User)
+                .Select(f => new
+                {
+                    f.FeedbackId,
+                    f.FeedbackDetail,
+                    f.FeedbackDate,
+                    f.ServiceId,
+                    f.Rating,
+                    f.User
+                })
+                .Where(s => s.ServiceId == ServiceID).ToListAsync();
             if (feedBack == null)
             {
                 return NotFound("Feed not found!");

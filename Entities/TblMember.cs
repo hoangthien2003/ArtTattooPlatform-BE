@@ -15,8 +15,6 @@ public partial class TblMember
 
     public virtual ICollection<TblBooking> TblBookings { get; set; } = new List<TblBooking>();
 
-    public virtual ICollection<TblFeedback> TblFeedbacks { get; set; } = new List<TblFeedback>();
-
     public virtual ICollection<TblPayment> TblPayments { get; set; } = new List<TblPayment>();
 
     public virtual TblUser? User { get; set; }

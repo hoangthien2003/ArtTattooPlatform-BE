@@ -6,7 +6,7 @@
 
         public string? FeedbackDetail { get; set; }
 
-        public int? MemberId { get; set; }
+        public int? UserId { get; set; }
 
         public int? ServiceId { get; set; }
 

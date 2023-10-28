@@ -21,6 +21,8 @@ public partial class TattooPlatformEndContext : DbContext
 
     public virtual DbSet<TblBookingDetail> TblBookingDetails { get; set; }
 
+    public virtual DbSet<TblCategory> TblCategories { get; set; }
+
     public virtual DbSet<TblFeedback> TblFeedbacks { get; set; }
 
     public virtual DbSet<TblManager> TblManagers { get; set; }
@@ -40,6 +42,7 @@ public partial class TattooPlatformEndContext : DbContext
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=35.240.234.172;Initial Catalog=TattooPlatformEND;User ID=sa;Password=ArtTattoo123@;TrustServerCertificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,7 +67,8 @@ public partial class TattooPlatformEndContext : DbContext
             entity.ToTable("tbl_Booking");
 
             entity.Property(e => e.BookingId)
-                .ValueGeneratedNever()
+                .HasMaxLength(50)
+                .IsUnicode(false)
                 .HasColumnName("BookingID");
             entity.Property(e => e.BookingDate).HasColumnType("datetime");
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
@@ -98,7 +102,10 @@ public partial class TattooPlatformEndContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("BookingDetailID");
             entity.Property(e => e.ArtistId).HasColumnName("ArtistID");
-            entity.Property(e => e.BookingId).HasColumnName("BookingID");
+            entity.Property(e => e.BookingId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("BookingID");
             entity.Property(e => e.Price).HasColumnType("money");
             entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
 
@@ -115,27 +122,40 @@ public partial class TattooPlatformEndContext : DbContext
                 .HasConstraintName("FK_BookingDetail_Service");
         });
 
+        modelBuilder.Entity<TblCategory>(entity =>
+        {
+            entity.HasKey(e => e.CategoryId);
+
+            entity.ToTable("tbl_Category");
+
+            entity.Property(e => e.CategoryId)
+                .HasMaxLength(3)
+                .IsUnicode(false)
+                .HasColumnName("CategoryID");
+            entity.Property(e => e.CategoryName)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<TblFeedback>(entity =>
         {
-            entity.HasKey(e => e.FeedbackId).HasName("PK__tbl_Feed__6A4BEDF6DF00DDBA");
+            entity.HasKey(e => e.FeedbackId).HasName("PK__tbl_Feed__6A4BEDF628E8F4ED");
 
             entity.ToTable("tbl_Feedback");
 
-            entity.Property(e => e.FeedbackId)
-                .ValueGeneratedNever()
-                .HasColumnName("FeedbackID");
+            entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
             entity.Property(e => e.FeedbackDate).HasColumnType("datetime");
             entity.Property(e => e.FeedbackDetail).HasMaxLength(200);
-            entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
-
-            entity.HasOne(d => d.Member).WithMany(p => p.TblFeedbacks)
-                .HasForeignKey(d => d.MemberId)
-                .HasConstraintName("FK_Feedback_Member");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.Service).WithMany(p => p.TblFeedbacks)
                 .HasForeignKey(d => d.ServiceId)
                 .HasConstraintName("FK_Feedback_Service");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblFeedbacks)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tbl_Feedback_tbl_User");
         });
 
         modelBuilder.Entity<TblManager>(entity =>
@@ -235,21 +255,30 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
             entity.Property(e => e.ArtistId).HasColumnName("ArtistID");
             entity.Property(e => e.CategoryId)
-                .HasMaxLength(30)
+                .HasMaxLength(3)
+                .IsUnicode(false)
                 .HasColumnName("CategoryID");
-            entity.Property(e => e.Description).HasMaxLength(200);
-            entity.Property(e => e.ImageService).HasMaxLength(100);
-            entity.Property(e => e.Price).HasMaxLength(10);
-            entity.Property(e => e.ServiceName).HasMaxLength(30);
+            entity.Property(e => e.Description)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.ImageService).IsUnicode(false);
+            entity.Property(e => e.Price).HasColumnType("money");
+            entity.Property(e => e.ServiceName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.StudioId).HasColumnName("StudioID");
 
             entity.HasOne(d => d.Artist).WithMany(p => p.TblServices)
                 .HasForeignKey(d => d.ArtistId)
                 .HasConstraintName("FK_Service_Artist");
 
+            entity.HasOne(d => d.Category).WithMany(p => p.TblServices)
+                .HasForeignKey(d => d.CategoryId)
+                .HasConstraintName("FK_tbl_Service_tbl_Category");
+
             entity.HasOne(d => d.Studio).WithMany(p => p.TblServices)
                 .HasForeignKey(d => d.StudioId)
-                .HasConstraintName("FK_Service_Studio");
+                .HasConstraintName("FK_tbl_Service_tbl_Studio");
         });
 
         modelBuilder.Entity<TblStudio>(entity =>
@@ -261,10 +290,16 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.StudioId).HasColumnName("StudioID");
             entity.Property(e => e.Address).HasMaxLength(30);
             entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.EndTime)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.Logo)
                 .HasMaxLength(255)
                 .IsUnicode(false);
             entity.Property(e => e.ManagerId).HasColumnName("ManagerID");
+            entity.Property(e => e.OpenTime)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.StudioEmail).HasMaxLength(30);
             entity.Property(e => e.StudioName).HasMaxLength(30);
             entity.Property(e => e.StudioPhone).HasMaxLength(20);

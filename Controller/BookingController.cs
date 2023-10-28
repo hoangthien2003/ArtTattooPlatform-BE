@@ -28,7 +28,7 @@ namespace back_end.Controllers
 
         [HttpGet("GetBookingByID/{bookingID}")]
         [Authorize(Roles = "MB, MN")]
-        public async Task<IActionResult> GetBooking([FromRoute] int id)
+        public async Task<IActionResult> GetBooking([FromRoute] string id)
         {
             var booking = await _context.TblBookings
                 .FirstOrDefaultAsync(b => b.BookingId == id);

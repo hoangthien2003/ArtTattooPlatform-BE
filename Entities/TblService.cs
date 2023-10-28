@@ -11,7 +11,7 @@ public partial class TblService
 
     public string? Description { get; set; }
 
-    public string? Price { get; set; }
+    public decimal? Price { get; set; }
 
     public string? CategoryId { get; set; }
 
@@ -21,7 +21,11 @@ public partial class TblService
 
     public int? StudioId { get; set; }
 
+    public int? Rating { get; set; }
+
     public virtual TblArtist? Artist { get; set; }
+
+    public virtual TblCategory? Category { get; set; }
 
     public virtual TblStudio? Studio { get; set; }
 
