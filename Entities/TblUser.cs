@@ -21,6 +21,8 @@ public partial class TblUser
 
     public virtual TblRole? Role { get; set; }
 
+    public virtual ICollection<TblFeedback> TblFeedbacks { get; set; } = new List<TblFeedback>();
+
     public virtual ICollection<TblManager> TblManagers { get; set; } = new List<TblManager>();
 
     public virtual ICollection<TblMember> TblMembers { get; set; } = new List<TblMember>();
