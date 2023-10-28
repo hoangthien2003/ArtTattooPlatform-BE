@@ -12,12 +12,6 @@ namespace back_end.Controller
     public class ServiceController : ControllerBase
     {
         private TattooPlatformEndContext _context = new TattooPlatformEndContext();
-        private readonly ICloudStorageService _cloudStorageService;
-        public ServiceController(ICloudStorageService cloudStorageService)
-        {
-            _cloudStorageService = cloudStorageService;
-        }
-
         [HttpGet("GetAll")]
         public IActionResult GetAllService()
         {

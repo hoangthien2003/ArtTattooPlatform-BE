@@ -83,7 +83,7 @@ namespace back_end.Controller
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(1440),
                 signingCredentials: creds
                 );
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
