@@ -16,8 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.Configure<GCSConfigOptions>(builder.Configuration);
-builder.Services.AddSingleton<ICloudStorageService, CloudStorageService>();
+//builder.Services.Configure<GCSConfigOptions>(builder.Configuration);
+//builder.Services.AddSingleton<ICloudStorageService, CloudStorageService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 

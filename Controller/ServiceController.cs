@@ -138,10 +138,11 @@ namespace back_end.Controller
             };
             if (serviceRequest.Image.Length > 0)
             {
-                await _cloudStorageService
-                    .UploadFileAsync(serviceRequest.Image, serviceRequest.Image.FileName);
-                service.ImageService = await _cloudStorageService
-                    .GetSignedUrlAsync(serviceRequest.Image.FileName);
+                //await _cloudStorageService
+                //    .UploadFileAsync(serviceRequest.Image, serviceRequest.Image.FileName);
+                //service.ImageService = await _cloudStorageService
+                //    .GetSignedUrlAsync(serviceRequest.Image.FileName);
+                service.ImageService = await Utils.Utils.UploadGetURLImageAsync(serviceRequest.Image);
             }
             _context.TblServices.Add(service);
             _context.SaveChanges();
