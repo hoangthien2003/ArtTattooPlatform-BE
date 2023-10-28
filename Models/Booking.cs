@@ -6,9 +6,6 @@ namespace back_end.Models
 {
     public class Booking
     {
-        public int? BookingID { get; set; }
-
-        public int MemberID { get; set; }
 
         public int StudioID { get; set; }
 

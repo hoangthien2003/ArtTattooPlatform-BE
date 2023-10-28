@@ -3,6 +3,7 @@ using back_end.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace back_end.Controllers
 {
@@ -26,12 +27,40 @@ namespace back_end.Controllers
             return Ok(bookings);
         }
 
+        [HttpGet("GetBookingsByStudio/{studioID}")]
+        [Authorize(Roles = " MN")]
+        public IActionResult GetBookingsByStudio([FromRoute] int studioID)
+        {
+            var bookings = _context.TblBookings.Where(booking => booking.StudioId == studioID).ToList();
+
+            if (bookings.Count == 0)
+            {
+                return Ok("No bookings found for this studio.");
+            }
+
+            return Ok(bookings);
+        }
+
+        [HttpGet("GetBookingsByService/{serviceID}")]
+        [Authorize(Roles = " MN")]
+        public IActionResult GetBookingsByService([FromRoute] int serviceID)
+        {
+            var bookings = _context.TblBookings.Where(booking => booking.ServiceId == serviceID).ToList();
+
+            if (bookings.Count == 0)
+            {
+                return Ok("No bookings found for this service.");
+            }
+
+            return Ok(bookings);
+        }
+
         [HttpGet("GetBookingByID/{bookingID}")]
         [Authorize(Roles = "MB, MN")]
-        public async Task<IActionResult> GetBooking([FromRoute] string id)
+        public async Task<IActionResult> GetBookingByID([FromRoute] string bookingID)
+
         {
-            var booking = await _context.TblBookings
-                .FirstOrDefaultAsync(b => b.BookingId == id);
+            var booking = await _context.TblBookings.FindAsync(bookingID);
 
             if (booking == null)
             {
@@ -41,16 +70,23 @@ namespace back_end.Controllers
             return Ok(booking);
         }
 
-        [HttpPost("AddBooking")]
+        [HttpPost("AddBooking/{email}")]
         [Authorize(Roles = "MB")]
-        public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest)
+
+        public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string email)
         {
+            var user = await _context.TblUsers.Where(user => user.Email == email).FirstOrDefaultAsync();
+            var member = await _context.TblMembers.
+                Where(member => member.UserId == user.UserId).FirstOrDefaultAsync();
+            
+                
             var booking = new TblBooking
             {
-                MemberId = bookingRequest.MemberID,
+                BookingId = System.Guid.NewGuid().ToString(),
+                MemberId = member.MemberId,
                 ServiceId = bookingRequest.ServiceID,
                 StudioId = bookingRequest.StudioID,
-                BookingDate = bookingRequest.BookingDate,
+                BookingDate = DateTime.UtcNow,
                 PhoneNumber = bookingRequest.PhoneNumber,
                 Total = bookingRequest.Total
             };
