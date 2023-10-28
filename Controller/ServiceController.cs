@@ -1,4 +1,5 @@
-﻿using back_end.Entities;
+﻿using Azure.Core;
+using back_end.Entities;
 using back_end.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -84,7 +85,7 @@ namespace back_end.Controller
             return Ok(services);
         }
         [HttpPost("Add")]
-        [Authorize(Roles = "MN")]
+        
         public async Task<IActionResult> AddServiceAsync([FromForm] Service serviceRequest)
         {
             var service = new TblService
@@ -99,6 +100,18 @@ namespace back_end.Controller
             {
                 service.ImageService = await Utils.Utils.
                     UploadGetURLImageAsync(serviceRequest.Image);
+            }
+
+            if (serviceRequest.Images != null )
+            {
+                // Xử lý và lưu trữ các hình ảnh
+                foreach (var image in serviceRequest.Images)
+
+                {
+                    string imagePath = await Utils.Utils.UploadGetURLImageAsync(image);
+                    // Lưu đường dẫn hình ảnh vào cơ sở dữ liệu hoặc bất kỳ cách nào bạn muốn.
+                    // Ví dụ: tạo bản ghi trong bảng Images với ServiceID và đường dẫn ảnh.
+                }
             }
             _context.TblServices.Add(service);
             _context.SaveChanges();

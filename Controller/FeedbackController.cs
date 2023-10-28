@@ -15,7 +15,7 @@ namespace back_end.Controller
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
         [HttpGet("GetALL_Feedback")]
-        [Authorize(Roles = "MN, MB")]
+        
         public async Task<IActionResult> GetFeedback()
         {
             var feedback = await _context.TblFeedbacks
