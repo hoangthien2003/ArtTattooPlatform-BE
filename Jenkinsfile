@@ -4,11 +4,6 @@ pipeline {
 
     
     stages {
-        stage('Check path') {
-            steps {
-                echo $PATH
-            }
-        }
 
         stage('Packaging') {
 
