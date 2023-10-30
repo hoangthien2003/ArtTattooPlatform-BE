@@ -65,6 +65,26 @@ namespace back_end.Controller
             return Ok(token);
         }
 
+        [HttpPost("LoginGoogle")]
+        public async Task<IActionResult> LoginGoogleAsync(GoogleRequest request)
+        {
+            TblUser? user = await _context.TblUsers.FirstOrDefaultAsync(row => row.Email == request.Email);
+            if (user == null)
+            {
+                var userGoogle = new TblUser
+                {
+                    Email = request.Email,
+                    UserName = request.Email,
+                    Image = request.Image,
+                    RoleId = "MB"
+                };
+                _context.TblUsers.Add(userGoogle);
+                await _context.SaveChangesAsync();
+            }
+            string token = CreateToken(user);
+            return Ok(token);
+        }
+
         private static bool VerifyPasswordHash(string password, string passwordHash)
         {
             return BCrypt.Net.BCrypt.Verify(password, passwordHash);

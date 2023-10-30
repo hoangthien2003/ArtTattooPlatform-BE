@@ -9,5 +9,5 @@ public partial class TblRole
 
     public string? RoleName { get; set; }
 
-    public virtual ICollection<TblUserRole> TblUserRoles { get; set; } = new List<TblUserRole>();
+    public virtual ICollection<TblUser> TblUsers { get; set; } = new List<TblUser>();
 }
