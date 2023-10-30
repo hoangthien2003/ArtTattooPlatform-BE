@@ -32,8 +32,4 @@
     <Folder Include="wwwroot\Assets\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include=".circleci\config.yml" />
-  </ItemGroup>
-
 </Project>
