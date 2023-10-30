@@ -1,8 +1,6 @@
 pipeline {
 
-    agent {
-        docker { image 'baothien01/art_tattoo_api:latest' }
-    }
+    agent any
 
     
     stages {
