@@ -23,7 +23,11 @@ public partial class TattooPlatformEndContext : DbContext
 
     public virtual DbSet<TblCategory> TblCategories { get; set; }
 
+    public virtual DbSet<TblComment> TblComments { get; set; }
+
     public virtual DbSet<TblFeedback> TblFeedbacks { get; set; }
+
+    public virtual DbSet<TblImageService> TblImageServices { get; set; }
 
     public virtual DbSet<TblManager> TblManagers { get; set; }
 
@@ -40,6 +44,8 @@ public partial class TattooPlatformEndContext : DbContext
     public virtual DbSet<TblStudio> TblStudios { get; set; }
 
     public virtual DbSet<TblUser> TblUsers { get; set; }
+
+    public virtual DbSet<TblUserRole> TblUserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -72,6 +78,9 @@ public partial class TattooPlatformEndContext : DbContext
                 .HasColumnName("BookingID");
             entity.Property(e => e.BookingDate).HasColumnType("datetime");
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.MemberName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(10)
                 .IsUnicode(false);
@@ -137,6 +146,23 @@ public partial class TattooPlatformEndContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<TblComment>(entity =>
+        {
+            entity.HasKey(e => e.CommentId).HasName("PK__tbl_Comm__C3B4DFAAAC75BC7B");
+
+            entity.ToTable("tbl_Comment");
+
+            entity.Property(e => e.CommentId).HasColumnName("CommentID");
+            entity.Property(e => e.CommentText)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
+
+            entity.HasOne(d => d.Feedback).WithMany(p => p.TblComments)
+                .HasForeignKey(d => d.FeedbackId)
+                .HasConstraintName("FK_Feedback");
+        });
+
         modelBuilder.Entity<TblFeedback>(entity =>
         {
             entity.HasKey(e => e.FeedbackId).HasName("PK__tbl_Feed__6A4BEDF628E8F4ED");
@@ -156,6 +182,23 @@ public partial class TattooPlatformEndContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.TblFeedbacks)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_tbl_Feedback_tbl_User");
+        });
+
+        modelBuilder.Entity<TblImageService>(entity =>
+        {
+            entity.HasKey(e => e.ImageId).HasName("PK__tbl_Imag__7516F4EC7FB6C100");
+
+            entity.ToTable("tbl_ImageService");
+
+            entity.Property(e => e.ImageId)
+                .ValueGeneratedNever()
+                .HasColumnName("ImageID");
+            entity.Property(e => e.ImagePath).HasMaxLength(255);
+            entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+
+            entity.HasOne(d => d.Service).WithMany(p => p.TblImageServices)
+                .HasForeignKey(d => d.ServiceId)
+                .HasConstraintName("FK__tbl_Image__Servi__59904A2C");
         });
 
         modelBuilder.Entity<TblManager>(entity =>
@@ -224,7 +267,8 @@ public partial class TattooPlatformEndContext : DbContext
             entity.ToTable("tbl_Role");
 
             entity.Property(e => e.RoleId)
-                .HasMaxLength(20)
+                .HasMaxLength(2)
+                .IsUnicode(false)
                 .HasColumnName("RoleID");
             entity.Property(e => e.RoleName).HasMaxLength(20);
         });
@@ -324,10 +368,30 @@ public partial class TattooPlatformEndContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("RoleID");
             entity.Property(e => e.UserName).HasMaxLength(30);
+        });
 
-            entity.HasOne(d => d.Role).WithMany(p => p.TblUsers)
+        modelBuilder.Entity<TblUserRole>(entity =>
+        {
+            entity.HasKey(e => e.UserRoleId);
+
+            entity.ToTable("tbl_UserRole");
+
+            entity.Property(e => e.UserRoleId)
+                .ValueGeneratedNever()
+                .HasColumnName("UserRoleID");
+            entity.Property(e => e.RoleId)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasColumnName("RoleID");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.TblUserRoles)
                 .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK_Role");
+                .HasConstraintName("FK_tbl_UserRole_tbl_Role");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblUserRoles)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tbl_UserRole_tbl_User");
         });
 
         OnModelCreatingPartial(modelBuilder);

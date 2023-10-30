@@ -19,6 +19,8 @@ public partial class TblBooking
 
     public decimal? Total { get; set; }
 
+    public string? MemberName { get; set; }
+
     public virtual TblMember? Member { get; set; }
 
     public virtual TblService? Service { get; set; }
