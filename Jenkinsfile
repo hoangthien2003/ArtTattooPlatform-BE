@@ -7,7 +7,9 @@ pipeline {
     
     stages {
         stage('Check path') {
-            sh 'echo $PATH'
+            steps {
+                sh 'echo $PATH'
+            }
         }
 
         stage('Packaging') {
