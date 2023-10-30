@@ -365,9 +365,14 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.Image).HasMaxLength(200);
             entity.Property(e => e.Password).HasMaxLength(60);
             entity.Property(e => e.RoleId)
-                .HasMaxLength(20)
+                .HasMaxLength(2)
+                .IsUnicode(false)
                 .HasColumnName("RoleID");
             entity.Property(e => e.UserName).HasMaxLength(30);
+
+            entity.HasOne(d => d.Role).WithMany(p => p.TblUsers)
+                .HasForeignKey(d => d.RoleId)
+                .HasConstraintName("FK_tbl_User_tbl_Role");
         });
 
         modelBuilder.Entity<TblUserRole>(entity =>
@@ -376,22 +381,12 @@ public partial class TattooPlatformEndContext : DbContext
 
             entity.ToTable("tbl_UserRole");
 
-            entity.Property(e => e.UserRoleId)
-                .ValueGeneratedNever()
-                .HasColumnName("UserRoleID");
+            entity.Property(e => e.UserRoleId).HasColumnName("UserRoleID");
             entity.Property(e => e.RoleId)
                 .HasMaxLength(2)
                 .IsUnicode(false)
                 .HasColumnName("RoleID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.TblUserRoles)
-                .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK_tbl_UserRole_tbl_Role");
-
-            entity.HasOne(d => d.User).WithMany(p => p.TblUserRoles)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_tbl_UserRole_tbl_User");
         });
 
         OnModelCreatingPartial(modelBuilder);

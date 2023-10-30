@@ -10,8 +10,4 @@ public partial class TblUserRole
     public int? UserId { get; set; }
 
     public string? RoleId { get; set; }
-
-    public virtual TblRole? Role { get; set; }
-
-    public virtual TblUser? User { get; set; }
 }
