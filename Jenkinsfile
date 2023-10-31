@@ -24,11 +24,11 @@ pipeline {
             }
         }
 
-        stage('Deploy Spring Boot to DEV') {
+        stage('Deploy ArtTattooAPI to DEV') {
             steps {
                 echo 'Deploying and cleaning'
                 sh 'docker image pull baothien01/art_tattoo_api:latest'
-                sh 'docker container stop convocation2023 || echo "this container does not exist" '
+                sh 'docker container stop ArtTattooAPI || echo "this container does not exist" '
                 sh 'echo y | docker container prune '
                 sh 'docker container run -d --rm --name ArtTattooAPI -p 8181:80 -p 8004:443  baothien01/art_tattoo_api '
             }
