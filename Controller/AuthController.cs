@@ -74,12 +74,15 @@ namespace back_end.Controller
                 var userGoogle = new TblUser
                 {
                     Email = request.Email,
-                    UserName = request.Email,
+                    UserName = request.Name,
+                    CreateUser = DateTime.UtcNow,
                     Image = request.Image,
                     RoleId = "MB"
                 };
                 _context.TblUsers.Add(userGoogle);
                 await _context.SaveChangesAsync();
+                string tokenGoogle = CreateToken(userGoogle);
+                return Ok(tokenGoogle);
             }
             string token = CreateToken(user);
             return Ok(token);
@@ -92,10 +95,11 @@ namespace back_end.Controller
 
         private string CreateToken(TblUser user)
         {
+            Console.WriteLine(user.Email, user.UserName);
             List<Claim> claims = new List<Claim>
             {
-                new Claim("email", user.Email),
-                new Claim("username", user.UserName),
+                new Claim("Email", user.Email),
+                new Claim("UserName", user.UserName),
                 new Claim("role", user.RoleId),
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

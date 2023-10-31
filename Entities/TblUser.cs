@@ -19,6 +19,10 @@ public partial class TblUser
 
     public string? RoleId { get; set; }
 
+    public string? FullName { get; set; }
+
+    public string? PhoneNumber { get; set; }
+
     public virtual TblRole? Role { get; set; }
 
     public virtual ICollection<TblFeedback> TblFeedbacks { get; set; } = new List<TblFeedback>();
