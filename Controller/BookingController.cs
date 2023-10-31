@@ -18,6 +18,12 @@ namespace back_end.Controllers
             _context = context;
         }
 
+        [HttpGet("TestJenkins")]
+        public IActionResult TestJenkins()
+        {
+            return Ok("CICD successfully!");
+        }
+
         [HttpGet("GetAll")]
         [Authorize(Roles = "MB, MN")]
         public async Task<IActionResult> GetBookings()
