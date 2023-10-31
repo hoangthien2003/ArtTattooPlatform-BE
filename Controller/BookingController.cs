@@ -21,7 +21,7 @@ namespace back_end.Controllers
         [HttpGet("TestJenkins")]
         public IActionResult TestJenkins()
         {
-            return Ok("CICD successfully!");
+            return Ok("CICD successfully 1!");
         }
 
         [HttpGet("GetAll")]
