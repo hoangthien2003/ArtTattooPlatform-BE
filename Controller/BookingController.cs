@@ -18,12 +18,6 @@ namespace back_end.Controllers
             _context = context;
         }
 
-        [HttpGet("TestJenkins")]
-        public IActionResult TestJenkins()
-        {
-            return Ok("CICD successfully 1!");
-        }
-
         [HttpGet("GetAll")]
         [Authorize(Roles = "MB, MN")]
         public async Task<IActionResult> GetBookings()
@@ -118,14 +112,24 @@ namespace back_end.Controllers
             return Ok(booking);
         }
 
-        [HttpGet("GetAllByMemberID/{memberID}")]
-        [Authorize(Roles = "MB, MN")]
-        public async Task<IActionResult> GetAllByMemberIDAsync([FromRoute] int memberID)
+        [HttpGet("GetAllByUserID/{userID}")]
+        [Authorize(Roles = "MB")]
+        public async Task<IActionResult> GetAllByMemberIDAsync([FromRoute] int userID)
         {
             var bookingList = await _context.TblBookings
                 .Include(booking => booking.Service)
                 .Include(booking => booking.Studio)
-                .Where(booking => booking.MemberId == memberID)
+                .Select(booking => new
+                {
+                    booking.Member.User.UserName,
+                    booking.Member.User.PhoneNumber,
+                    booking.BookingDate,
+                    booking.Service.ServiceName,
+                    booking.Studio.StudioName,
+                    booking.Total,
+                    booking.Member
+                })
+                .Where(booking => booking.Member.User.UserId == userID)
                 .ToListAsync();
             if (bookingList.Count == 0)
             {
