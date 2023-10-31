@@ -111,5 +111,21 @@ namespace back_end.Controllers
 
             return Ok(booking);
         }
+
+        [HttpGet("GetAllByMemberID/{memberID}")]
+        [Authorize(Roles = "MB, MN")]
+        public async Task<IActionResult> GetAllByMemberIDAsync([FromRoute] int memberID)
+        {
+            var bookingList = await _context.TblBookings
+                .Include(booking => booking.Service)
+                .Include(booking => booking.Studio)
+                .Where(booking => booking.MemberId == memberID)
+                .ToListAsync();
+            if (bookingList.Count == 0)
+            {
+                return Ok("List is empty");
+            }
+            return Ok(bookingList);
+        }
     }
 }
