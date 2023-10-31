@@ -45,8 +45,6 @@ public partial class TattooPlatformEndContext : DbContext
 
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
-    public virtual DbSet<TblUserRole> TblUserRoles { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=35.240.234.172;Initial Catalog=TattooPlatformEND;User ID=sa;Password=ArtTattoo123@;TrustServerCertificate=true");
@@ -362,8 +360,12 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.CreateUser).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(50);
+            entity.Property(e => e.FullName).HasMaxLength(50);
             entity.Property(e => e.Image).HasMaxLength(200);
             entity.Property(e => e.Password).HasMaxLength(60);
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.RoleId)
                 .HasMaxLength(2)
                 .IsUnicode(false)
@@ -373,20 +375,6 @@ public partial class TattooPlatformEndContext : DbContext
             entity.HasOne(d => d.Role).WithMany(p => p.TblUsers)
                 .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK_tbl_User_tbl_Role");
-        });
-
-        modelBuilder.Entity<TblUserRole>(entity =>
-        {
-            entity.HasKey(e => e.UserRoleId);
-
-            entity.ToTable("tbl_UserRole");
-
-            entity.Property(e => e.UserRoleId).HasColumnName("UserRoleID");
-            entity.Property(e => e.RoleId)
-                .HasMaxLength(2)
-                .IsUnicode(false)
-                .HasColumnName("RoleID");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
         });
 
         OnModelCreatingPartial(modelBuilder);
