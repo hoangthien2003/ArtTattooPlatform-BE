@@ -32,6 +32,18 @@ namespace back_end.Controller
             return Ok(studio);
         }
 
+        [HttpGet("GetStudioByName/{studioName}")]
+        public IActionResult GetServiceByName([FromRoute] string studioName)
+        {
+            var studio = _context.TblStudios.Where(studio =>
+                studio.StudioName == studioName).Take(5).ToList();
+            if (studio == null)
+            {
+                return Ok("No any service matched!");
+            }
+            return Ok(studio);
+        }
+
         [HttpGet("GetLogoNameByID/{studioID}")]
         public async Task<IActionResult> GetLogoNameByIDAsync([FromRoute] int studioID)
         {
@@ -116,7 +128,7 @@ namespace back_end.Controller
 
             var topRatedStudios = _context.TblStudios
                 .OrderByDescending(studio => studio.RatingStb)
-                .Take(10) // Thay đổi số lượng studio bạn muốn hiển thị ở đây
+                .Take(5) // Thay đổi số lượng studio bạn muốn hiển thị ở đây
                 .ToList();
 
             return Ok(topRatedStudios);

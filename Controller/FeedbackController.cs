@@ -135,7 +135,7 @@ namespace back_end.Controller
         }
 
         [HttpPost("CommentFeedback/{feedbackId}")]
-        [Authorize(Roles = "MB")]
+       
         public async Task<IActionResult> CommentFeedback([FromRoute] int feedbackId, [FromBody] Comment comment)
         {
             var feedback = await _context.TblFeedbacks.FindAsync(feedbackId);
@@ -158,7 +158,7 @@ namespace back_end.Controller
         }
 
         [HttpDelete("DeleteComment/{commentId}")]
-        [Authorize(Roles = "MB")]
+        
         public async Task<IActionResult> DeleteComment([FromRoute] int commentId)
         {
             var comment = await _context.TblComments.FindAsync(commentId);
@@ -174,7 +174,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdateComment/{commentId}")]
-        [Authorize(Roles = "MB")]
+      
         public async Task<IActionResult> UpdateComment([FromRoute] int commentId, [FromBody] Comment comment)
         {
             var existingComment = await _context.TblComments.FindAsync(commentId);
