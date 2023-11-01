@@ -133,5 +133,62 @@ namespace back_end.Controller
             }
             return Ok(feedBack);
         }
+
+        [HttpPost("CommentFeedback/{feedbackId}")]
+        [Authorize(Roles = "MB")]
+        public async Task<IActionResult> CommentFeedback([FromRoute] int feedbackId, [FromBody] Comment comment)
+        {
+            var feedback = await _context.TblFeedbacks.FindAsync(feedbackId);
+            if (feedback == null)
+            {
+                return BadRequest("Feedback not found!");
+            }
+
+            // Thêm comment vào bảng Comments hoặc bất kỳ cơ chế lưu trữ nào bạn đang sử dụng
+            var newComment = new TblComment
+            {
+                FeedbackId = feedbackId,
+                CommentText = comment.CommentText
+            };
+
+            _context.TblComments.Add(newComment);
+            await _context.SaveChangesAsync();
+
+            return Ok(newComment);
+        }
+
+        [HttpDelete("DeleteComment/{commentId}")]
+        [Authorize(Roles = "MB")]
+        public async Task<IActionResult> DeleteComment([FromRoute] int commentId)
+        {
+            var comment = await _context.TblComments.FindAsync(commentId);
+            if (comment == null)
+            {
+                return NotFound("Comment not found.");
+            }
+
+            _context.TblComments.Remove(comment);
+            await _context.SaveChangesAsync();
+
+            return Ok(comment);
+        }
+
+        [HttpPut("UpdateComment/{commentId}")]
+        [Authorize(Roles = "MB")]
+        public async Task<IActionResult> UpdateComment([FromRoute] int commentId, [FromBody] Comment comment)
+        {
+            var existingComment = await _context.TblComments.FindAsync(commentId);
+            if (existingComment == null)
+            {
+                return NotFound("Comment not found.");
+            }
+
+            // Cập nhật comment
+            existingComment.CommentText = comment.CommentText;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(existingComment);
+        }
     }
 }
