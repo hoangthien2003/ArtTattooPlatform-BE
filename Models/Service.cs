@@ -10,5 +10,7 @@
         public IFormFile Image {  get; set; }
 
         public int? Rating { get; set; }
+
+        
     }
 }

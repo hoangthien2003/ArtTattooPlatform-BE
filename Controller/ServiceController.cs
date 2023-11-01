@@ -94,6 +94,8 @@ namespace back_end.Controller
             }
             return Ok(service);
         }
+        
+
 
         [HttpGet("GetServiceByCategory/{categoryID}")]
         public IActionResult GetServiceByCategory([FromRoute] string categoryID)
