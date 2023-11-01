@@ -98,6 +98,7 @@ namespace back_end.Controller
             Console.WriteLine(user.Email, user.UserName);
             List<Claim> claims = new List<Claim>
             {
+                new Claim("UserID", user.UserId.ToString()),
                 new Claim("Email", user.Email),
                 new Claim("UserName", user.UserName),
                 new Claim("role", user.RoleId),
