@@ -107,5 +107,19 @@ namespace back_end.Controller
             await _context.SaveChangesAsync();
             return Ok(studio);
         }
+
+        [HttpGet("TopRatedStudios/{studioID}")]
+        public IActionResult GetTopRatedStudios()
+        {
+            // Đây là nơi bạn sẽ truy vấn cơ sở dữ liệu để lấy danh sách các studio có top rating.
+            // Sắp xếp và chọn studio dựa trên rating và lựa chọn số lượng studio bạn muốn hiển thị.
+
+            var topRatedStudios = _context.TblStudios
+                .OrderByDescending(studio => studio.RatingStb)
+                .Take(10) // Thay đổi số lượng studio bạn muốn hiển thị ở đây
+                .ToList();
+
+            return Ok(topRatedStudios);
+        }
     }
 }
