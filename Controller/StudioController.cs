@@ -22,7 +22,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetStudioByID/{studioID}")]
-        [Authorize(Roles = "MN,MB")]
+        
         public async Task<IActionResult> GetStudioByIDAsync([FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);
@@ -34,7 +34,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetStudioByName/{studioName}")]
-        [Authorize(Roles = "MN,MB")]
+        
         public IActionResult GetServiceByName([FromRoute] string studioName)
         {
             var studio = _context.TblStudios.Where(studio =>
@@ -47,7 +47,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetStudioByManager/{managerID}")]
-        [Authorize(Roles = "MN,MB")]
+        
         public IActionResult GetStudioByManager([FromRoute] int managerID)
         {
             var studios = _context.TblStudios
@@ -58,7 +58,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetLogoNameByID/{studioID}")]
-        [Authorize(Roles = "MN,MB")]
+       
         public async Task<IActionResult> GetLogoNameByIDAsync([FromRoute] int studioID)
         {
             var result = await _context.TblStudios.Select(studio => new
