@@ -22,7 +22,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetMemberByID/{userID}")]
-        [Authorize(Roles = "MB, AT, MN")]
+        
         public async Task<IActionResult> GetMemberByIDAsync([FromRoute] int userID)
         {
             var member = await _context.TblMembers.Include(member => member.User).FirstOrDefaultAsync(
@@ -36,7 +36,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetMemberByUsername/{username}")]
-        [Authorize(Roles = "MB")]
+        
         public async Task<IActionResult> GetMemberByUsernameAsync([FromRoute] string username)
         {
             var user = await _context.TblUsers.FirstOrDefaultAsync(user => user.UserName == username);
