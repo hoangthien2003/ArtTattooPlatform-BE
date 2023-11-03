@@ -114,5 +114,11 @@ namespace back_end.Controller
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
         }
+
+        [HttpGet("TestJenkins")]
+        public IActionResult TestJenkins()
+        {
+            return Ok("CICD successfully!");
+        }
     }
 }
