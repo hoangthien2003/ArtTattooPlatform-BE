@@ -47,7 +47,7 @@ public partial class TattooPlatformEndContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=35.240.234.172;Initial Catalog=TattooPlatformEND;User ID=sa;Password=ArtTattoo123@;TrustServerCertificate=true");
+        => optionsBuilder.UseSqlServer("Data Source=34.124.177.59;Initial Catalog=TattooPlatformEND;User ID=sa;Password=ArtTattoo123@;TrustServerCertificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -146,7 +146,7 @@ public partial class TattooPlatformEndContext : DbContext
 
         modelBuilder.Entity<TblComment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__tbl_Comm__C3B4DFAAAC75BC7B");
+            entity.HasKey(e => e.CommentId).HasName("PK__tbl_Comm__C3B4DFAA4F90B1FD");
 
             entity.ToTable("tbl_Comment");
 
@@ -163,7 +163,7 @@ public partial class TattooPlatformEndContext : DbContext
 
         modelBuilder.Entity<TblFeedback>(entity =>
         {
-            entity.HasKey(e => e.FeedbackId).HasName("PK__tbl_Feed__6A4BEDF628E8F4ED");
+            entity.HasKey(e => e.FeedbackId).HasName("PK__tbl_Feed__6A4BEDF6590185D6");
 
             entity.ToTable("tbl_Feedback");
 
@@ -184,7 +184,7 @@ public partial class TattooPlatformEndContext : DbContext
 
         modelBuilder.Entity<TblImageService>(entity =>
         {
-            entity.HasKey(e => e.ImageId).HasName("PK__tbl_Imag__7516F4EC7FB6C100");
+            entity.HasKey(e => e.ImageId).HasName("PK__tbl_Imag__7516F4EC72754279");
 
             entity.ToTable("tbl_ImageService");
 
@@ -196,7 +196,7 @@ public partial class TattooPlatformEndContext : DbContext
 
             entity.HasOne(d => d.Service).WithMany(p => p.TblImageServices)
                 .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__tbl_Image__Servi__59904A2C");
+                .HasConstraintName("FK__tbl_Image__Servi__49C3F6B7");
         });
 
         modelBuilder.Entity<TblManager>(entity =>
@@ -234,7 +234,7 @@ public partial class TattooPlatformEndContext : DbContext
 
         modelBuilder.Entity<TblPayment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__tbl_Paym__9B556A582576E420");
+            entity.HasKey(e => e.PaymentId).HasName("PK__tbl_Paym__9B556A58A3BA4C59");
 
             entity.ToTable("tbl_Payment");
 
@@ -273,7 +273,7 @@ public partial class TattooPlatformEndContext : DbContext
 
         modelBuilder.Entity<TblSchedule>(entity =>
         {
-            entity.HasKey(e => e.ScheduleId).HasName("PK__tbl_Sche__9C8A5B4980845A92");
+            entity.HasKey(e => e.ScheduleId).HasName("PK__tbl_Sche__9C8A5B49E160657F");
 
             entity.ToTable("tbl_Schedule");
 
@@ -355,7 +355,7 @@ public partial class TattooPlatformEndContext : DbContext
         {
             entity.HasKey(e => e.UserId).HasName("PK__tbl_User__1788CC4CF5BC973D");
 
-            entity.ToTable("tbl_User", tb => tb.HasTrigger("Trig_Add_User_By_Role"));
+            entity.ToTable("tbl_User");
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.CreateUser).HasColumnType("datetime");
