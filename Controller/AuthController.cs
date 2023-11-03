@@ -118,7 +118,7 @@ namespace back_end.Controller
         [HttpGet("TestJenkins")]
         public IActionResult TestJenkins()
         {
-            return Ok("CICD successfully!");
+            return Ok("CICD successfully 2!");
         }
     }
 }
