@@ -70,23 +70,19 @@ namespace back_end.Controllers
             return Ok(booking);
         }
 
-        [HttpPost("AddBooking/{email}")]
+        [HttpPost("AddBooking/{phoneNumber}")]
         [Authorize(Roles = "MB")]
 
-        public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string email)
+        public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string phoneNumber)
         {
-            var user = await _context.TblUsers.Where(user => user.Email == email).FirstOrDefaultAsync();
-            var member = await _context.TblMembers.
-                Where(member => member.UserId == user.UserId).FirstOrDefaultAsync();
-            
-                
+            var member = _context.TblMembers.FirstOrDefault(m => m.PhoneNumber == phoneNumber);
             var booking = new TblBooking
             {
                 BookingId = System.Guid.NewGuid().ToString(),
                 MemberId = member.MemberId,
                 ServiceId = bookingRequest.ServiceID,
                 StudioId = bookingRequest.StudioID,
-                BookingDate = DateTime.UtcNow,
+                BookingDate = Utils.Utils.ConvertToDateTime(bookingRequest.BookingDate),
                 PhoneNumber = bookingRequest.PhoneNumber,
                 Total = bookingRequest.Total
             };
