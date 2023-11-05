@@ -206,7 +206,6 @@ public partial class TattooPlatformEndContext : DbContext
             entity.ToTable("tbl_Manager");
 
             entity.Property(e => e.ManagerId).HasColumnName("ManagerID");
-            entity.Property(e => e.Gender).HasMaxLength(20);
             entity.Property(e => e.ManagerName).HasMaxLength(50);
             entity.Property(e => e.ManagerPhone).HasMaxLength(20);
             entity.Property(e => e.UserId).HasColumnName("UserID");
@@ -330,8 +329,8 @@ public partial class TattooPlatformEndContext : DbContext
             entity.ToTable("tbl_Studio");
 
             entity.Property(e => e.StudioId).HasColumnName("StudioID");
-            entity.Property(e => e.Address).HasMaxLength(30);
-            entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.Address).HasMaxLength(100);
+            entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.EndTime)
                 .HasMaxLength(10)
                 .IsUnicode(false);
@@ -355,7 +354,7 @@ public partial class TattooPlatformEndContext : DbContext
         {
             entity.HasKey(e => e.UserId).HasName("PK__tbl_User__1788CC4CF5BC973D");
 
-            entity.ToTable("tbl_User");
+            entity.ToTable("tbl_User", tb => tb.HasTrigger("trg_AddUserToRoleTable"));
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.CreateUser).HasColumnType("datetime");
