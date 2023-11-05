@@ -83,6 +83,9 @@ public partial class TattooPlatformEndContext : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false);
             entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
+            entity.Property(e => e.Status)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.StudioId).HasColumnName("StudioID");
             entity.Property(e => e.Total).HasColumnType("money");
 

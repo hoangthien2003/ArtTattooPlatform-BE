@@ -85,7 +85,8 @@ namespace back_end.Controllers
                     StudioId = bookingRequest.StudioID,
                     BookingDate = Utils.Utils.ConvertToDateTime(bookingRequest.BookingDate),
                     PhoneNumber = bookingRequest.PhoneNumber,
-                    Total = bookingRequest.Total
+                    Total = bookingRequest.Total,
+                    Status = "Pending"
                 };
             }
             else booking = new TblBooking
@@ -96,7 +97,8 @@ namespace back_end.Controllers
                 StudioId = bookingRequest.StudioID,
                 BookingDate = Utils.Utils.ConvertToDateTime(bookingRequest.BookingDate),
                 PhoneNumber = bookingRequest.PhoneNumber,
-                Total = bookingRequest.Total
+                Total = bookingRequest.Total,
+                Status = "Pending"
             };
 
             _context.TblBookings.Add(booking);

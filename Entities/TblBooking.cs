@@ -21,6 +21,8 @@ public partial class TblBooking
 
     public string? MemberName { get; set; }
 
+    public string? Status { get; set; }
+
     public virtual TblMember? Member { get; set; }
 
     public virtual TblService? Service { get; set; }
