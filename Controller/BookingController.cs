@@ -131,13 +131,13 @@ namespace back_end.Controllers
                 .Include(booking => booking.Studio)
                 .Select(booking => new
                 {
-                    booking.Member.User.UserName,
-                    booking.Member.User.PhoneNumber,
                     booking.BookingDate,
                     booking.Service.ServiceName,
                     booking.Studio.StudioName,
                     booking.Total,
-                    booking.Member
+                    booking.Member,
+                    booking.Status,
+                    booking.Service.ImageService
                 })
                 .Where(booking => booking.Member.User.UserId == userID)
                 .ToListAsync();
