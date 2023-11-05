@@ -74,7 +74,7 @@ namespace back_end.Controllers
 
         public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string phoneNumber)
         {
-            var member = _context.TblMembers.FirstOrDefault(m => m.PhoneNumber == phoneNumber);
+            var member = _context.TblUsers.FirstOrDefault(m => m.PhoneNumber == phoneNumber);
             var booking = new TblBooking();
             if (member == null)
             {
@@ -92,7 +92,7 @@ namespace back_end.Controllers
             else booking = new TblBooking
             {
                 BookingId = System.Guid.NewGuid().ToString(),
-                MemberId = member.MemberId,
+                UserId = member.UserId,
                 ServiceId = bookingRequest.ServiceID,
                 StudioId = bookingRequest.StudioID,
                 BookingDate = Utils.Utils.ConvertToDateTime(bookingRequest.BookingDate),
@@ -135,11 +135,11 @@ namespace back_end.Controllers
                     booking.Service.ServiceName,
                     booking.Studio.StudioName,
                     booking.Total,
-                    booking.Member,
+                    booking.UserId,
                     booking.Status,
-                    booking.Service.ImageService
+                    booking.Service.ImageService,
                 })
-                .Where(booking => booking.Member.User.UserId == userID)
+                .Where(booking => booking.UserId == userID)
                 .ToListAsync();
             if (bookingList.Count == 0)
             {
