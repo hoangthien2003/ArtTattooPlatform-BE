@@ -75,7 +75,6 @@ public partial class TattooPlatformEndContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("BookingID");
             entity.Property(e => e.BookingDate).HasColumnType("datetime");
-            entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(10)
                 .IsUnicode(false);
@@ -85,10 +84,7 @@ public partial class TattooPlatformEndContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.StudioId).HasColumnName("StudioID");
             entity.Property(e => e.Total).HasColumnType("money");
-
-            entity.HasOne(d => d.Member).WithMany(p => p.TblBookings)
-                .HasForeignKey(d => d.MemberId)
-                .HasConstraintName("FK_Booking_Member");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.Service).WithMany(p => p.TblBookings)
                 .HasForeignKey(d => d.ServiceId)
@@ -97,6 +93,14 @@ public partial class TattooPlatformEndContext : DbContext
             entity.HasOne(d => d.Studio).WithMany(p => p.TblBookings)
                 .HasForeignKey(d => d.StudioId)
                 .HasConstraintName("FK_tbl_Booking_tbl_Studio");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblBookings)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tbl_Booking_tbl_Member");
+
+            entity.HasOne(d => d.UserNavigation).WithMany(p => p.TblBookings)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tbl_Booking_tbl_User");
         });
 
         modelBuilder.Entity<TblBookingDetail>(entity =>
