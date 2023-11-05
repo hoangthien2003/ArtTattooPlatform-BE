@@ -71,12 +71,24 @@ namespace back_end.Controllers
         }
 
         [HttpPost("AddBooking/{phoneNumber}")]
-        [Authorize(Roles = "MB")]
 
         public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string phoneNumber)
         {
             var member = _context.TblMembers.FirstOrDefault(m => m.PhoneNumber == phoneNumber);
-            var booking = new TblBooking
+            var booking = new TblBooking();
+            if (member == null)
+            {
+                booking = new TblBooking
+                {
+                    BookingId = System.Guid.NewGuid().ToString(),
+                    ServiceId = bookingRequest.ServiceID,
+                    StudioId = bookingRequest.StudioID,
+                    BookingDate = Utils.Utils.ConvertToDateTime(bookingRequest.BookingDate),
+                    PhoneNumber = bookingRequest.PhoneNumber,
+                    Total = bookingRequest.Total
+                };
+            }
+            else booking = new TblBooking
             {
                 BookingId = System.Guid.NewGuid().ToString(),
                 MemberId = member.MemberId,
