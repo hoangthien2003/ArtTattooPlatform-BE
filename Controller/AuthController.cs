@@ -100,7 +100,7 @@ namespace back_end.Controller
                 new Claim("UserID", user.UserId.ToString()),
                 new Claim("Email", user.Email),
                 new Claim("UserName", user.UserName),
-                new Claim("Role", user.RoleId)
+                new Claim("role", user.RoleId)
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
                 _configuration.GetSection("Jwt:Key").Value));
