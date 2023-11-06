@@ -212,7 +212,12 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.ManagerId).HasColumnName("ManagerID");
             entity.Property(e => e.ManagerName).HasMaxLength(50);
             entity.Property(e => e.ManagerPhone).HasMaxLength(20);
+            entity.Property(e => e.StudioId).HasColumnName("StudioID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.Studio).WithMany(p => p.TblManagers)
+                .HasForeignKey(d => d.StudioId)
+                .HasConstraintName("FK_tbl_Manager_tbl_Studio");
 
             entity.HasOne(d => d.User).WithMany(p => p.TblManagers)
                 .HasForeignKey(d => d.UserId)
@@ -313,10 +318,6 @@ public partial class TattooPlatformEndContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.StudioId).HasColumnName("StudioID");
 
-            entity.HasOne(d => d.Artist).WithMany(p => p.TblServices)
-                .HasForeignKey(d => d.ArtistId)
-                .HasConstraintName("FK_Service_Artist");
-
             entity.HasOne(d => d.Category).WithMany(p => p.TblServices)
                 .HasForeignKey(d => d.CategoryId)
                 .HasConstraintName("FK_tbl_Service_tbl_Category");
@@ -341,17 +342,12 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.Logo)
                 .HasMaxLength(255)
                 .IsUnicode(false);
-            entity.Property(e => e.ManagerId).HasColumnName("ManagerID");
             entity.Property(e => e.OpenTime)
                 .HasMaxLength(10)
                 .IsUnicode(false);
             entity.Property(e => e.StudioEmail).HasMaxLength(30);
             entity.Property(e => e.StudioName).HasMaxLength(30);
             entity.Property(e => e.StudioPhone).HasMaxLength(20);
-
-            entity.HasOne(d => d.Manager).WithMany(p => p.TblStudios)
-                .HasForeignKey(d => d.ManagerId)
-                .HasConstraintName("FK_Studio_Manager");
         });
 
         modelBuilder.Entity<TblUser>(entity =>
