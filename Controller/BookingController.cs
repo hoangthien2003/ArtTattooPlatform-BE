@@ -1,9 +1,9 @@
 ﻿using back_end.Entities;
+using back_end.Hubs;
 using back_end.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 namespace back_end.Controllers
 {
@@ -12,10 +12,12 @@ namespace back_end.Controllers
     public class BookingController : ControllerBase
     {
         private readonly TattooPlatformEndContext _context;
+        private readonly MessageHub _messageHub;
 
-        public BookingController(TattooPlatformEndContext context)
+        public BookingController()
         {
-            _context = context;
+            _context = new TattooPlatformEndContext();
+            _messageHub = new MessageHub();
         }
 
         [HttpGet("GetAll")]
@@ -99,9 +101,11 @@ namespace back_end.Controllers
                 Total = bookingRequest.Total,
                 Status = "Pending"
             };
-
+            
             _context.TblBookings.Add(booking);
             await _context.SaveChangesAsync();
+
+            await _messageHub.SendMessage("RetrieveBooking", booking);
             return Ok(booking);
         }
 
