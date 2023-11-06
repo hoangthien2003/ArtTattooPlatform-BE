@@ -21,6 +21,8 @@ public partial class TblBooking
 
     public string? Status { get; set; }
 
+    public string? FullName { get; set; }
+
     public virtual TblService? Service { get; set; }
 
     public virtual TblStudio? Studio { get; set; }

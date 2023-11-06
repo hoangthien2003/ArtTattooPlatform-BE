@@ -75,6 +75,7 @@ public partial class TattooPlatformEndContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("BookingID");
             entity.Property(e => e.BookingDate).HasColumnType("datetime");
+            entity.Property(e => e.FullName).HasMaxLength(50);
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(10)
                 .IsUnicode(false);
