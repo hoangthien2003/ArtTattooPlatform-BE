@@ -44,16 +44,12 @@ namespace back_end.Controller
             return Ok(studio);
         }
 
-        [HttpGet("GetStudioByManager/{managerID}")]
-        public async Task<IActionResult> GetStudioByManagerAsync([FromRoute] int managerID)
+        [HttpGet("GetStudioByManager/{userID}")]
+        public async Task<IActionResult> GetStudioByManagerAsync([FromRoute] int userID)
         {
-            var studios = await _context.TblStudios
-                .Where(studios => studios.ManagerId == managerID)
-                .ToListAsync();
-            if (studios.Count == 0)
-                return BadRequest("The manager not have any studio!");
-
-            return Ok(studios);
+            var studio = _context.TblManagers.Include(m => m.Studio)
+                .FirstOrDefaultAsync(m => m.UserId == userID);
+            return Ok(studio);
         }
 
         [HttpGet("GetLogoNameByID/{studioID}")]
@@ -84,7 +80,6 @@ namespace back_end.Controller
                 Address = studioRequest.Address,
                 StudioPhone = studioRequest.StudioPhone,
                 StudioEmail = studioRequest.StudioEmail,
-                ManagerId = studioRequest.ManagerID,
                 Description = studioRequest.Description
             };
             if (studioRequest.Logo.Length > 0)
