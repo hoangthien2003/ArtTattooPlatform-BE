@@ -47,7 +47,7 @@ namespace back_end.Controller
         [HttpGet("GetStudioByManager/{userID}")]
         public async Task<IActionResult> GetStudioByManagerAsync([FromRoute] int userID)
         {
-            var studio = _context.TblManagers.Include(m => m.Studio)
+            var studio = await _context.TblManagers.Include(m => m.Studio)
                 .FirstOrDefaultAsync(m => m.UserId == userID);
             return Ok(studio);
         }
