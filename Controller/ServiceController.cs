@@ -121,7 +121,7 @@ namespace back_end.Controller
             return Ok(services);
         }
         [HttpPost("Add")]
-        [Authorize(Roles = "MN")]
+        
         public async Task<IActionResult> AddServiceAsync([FromForm] Service serviceRequest)
         {
             var service = new TblService
@@ -195,7 +195,7 @@ namespace back_end.Controller
 
 
         [HttpPut("UpdateService/{serviceID}")]
-        [Authorize(Roles = "MN")]
+        
         public async Task<IActionResult> UpdateServiceAsync([FromForm] Service serviceRequest,
             [FromRoute] int serviceID)
         {
@@ -219,7 +219,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("UpdateAverageRatingForService/{serviceID}")]
-        [Authorize(Roles = "MN,MB")]
+     
         public IActionResult UpdateAverageRatingForService([FromRoute] int serviceID)
         {
             var feedbacks = _context.TblFeedbacks.Where(feedback => feedback.ServiceId == serviceID).ToList();
@@ -248,7 +248,7 @@ namespace back_end.Controller
         }
 
         [HttpDelete("Delete/{serviceID}")]
-        [Authorize(Roles = "MN")]
+        
         public async Task<IActionResult> DeleteServiceAsync([FromRoute] int serviceID)
         {
             var service = await _context.TblServices.FindAsync(serviceID);

@@ -19,7 +19,7 @@ namespace back_end.Controllers
         }
 
         [HttpGet("GetAll")]
-        [Authorize(Roles = "MB, MN")]
+        
         public async Task<IActionResult> GetBookings()
         {
             var bookings = await _context.TblBookings
@@ -28,7 +28,7 @@ namespace back_end.Controllers
         }
 
         [HttpGet("GetBookingsByStudio/{studioID}")]
-        [Authorize(Roles = " MN")]
+      
         public IActionResult GetBookingsByStudio([FromRoute] int studioID)
         {
             var bookings = _context.TblBookings.Where(booking => booking.StudioId == studioID).ToList();
@@ -42,7 +42,7 @@ namespace back_end.Controllers
         }
 
         [HttpGet("GetBookingsByService/{serviceID}")]
-        [Authorize(Roles = " MN")]
+        
         public IActionResult GetBookingsByService([FromRoute] int serviceID)
         {
             var bookings = _context.TblBookings.Where(booking => booking.ServiceId == serviceID).ToList();
@@ -56,7 +56,7 @@ namespace back_end.Controllers
         }
 
         [HttpGet("GetBookingByID/{bookingID}")]
-        [Authorize(Roles = "MB, MN")]
+        
         public async Task<IActionResult> GetBookingByID([FromRoute] string bookingID)
 
         {
@@ -71,7 +71,6 @@ namespace back_end.Controllers
         }
 
         [HttpPost("AddBooking/{phoneNumber}")]
-
         public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string phoneNumber)
         {
             var member = _context.TblUsers.FirstOrDefault(m => m.PhoneNumber == phoneNumber);
@@ -107,7 +106,7 @@ namespace back_end.Controllers
         }
 
         [HttpDelete("DeleteBooking/{deleteID}")]
-        [Authorize(Roles = "MB")]
+       
         public async Task<IActionResult> DeleteBooking([FromRoute] int id)
         {
             var booking = await _context.TblBookings.FindAsync(id);
@@ -123,7 +122,7 @@ namespace back_end.Controllers
         }
 
         [HttpGet("GetAllByUserID/{userID}")]
-        [Authorize(Roles = "MB")]
+       
         public async Task<IActionResult> GetAllByMemberIDAsync([FromRoute] int userID)
         {
             var bookingList = await _context.TblBookings
