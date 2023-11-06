@@ -4,6 +4,7 @@ using back_end.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
 
 namespace back_end.Controllers
 {
@@ -12,12 +13,12 @@ namespace back_end.Controllers
     public class BookingController : ControllerBase
     {
         private readonly TattooPlatformEndContext _context;
-        private readonly MessageHub _messageHub;
+        private readonly IHubContext<MessageHub> _hubContext;
 
-        public BookingController()
+        public BookingController(IHubContext<MessageHub> hubContext)
         {
             _context = new TattooPlatformEndContext();
-            _messageHub = new MessageHub();
+            _hubContext = hubContext;
         }
 
         [HttpGet("GetAll")]
@@ -105,7 +106,7 @@ namespace back_end.Controllers
             _context.TblBookings.Add(booking);
             await _context.SaveChangesAsync();
 
-            await _messageHub.SendMessage("RetrieveBooking", booking);
+            await _hubContext.Clients.All.SendAsync("BookingService", booking);
             return Ok(booking);
         }
 
