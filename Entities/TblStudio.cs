@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace back_end.Entities;
 
@@ -27,6 +28,7 @@ public partial class TblStudio
 
     public virtual ICollection<TblBooking> TblBookings { get; set; } = new List<TblBooking>();
 
+    [JsonIgnore]
     public virtual ICollection<TblManager> TblManagers { get; set; } = new List<TblManager>();
 
     public virtual ICollection<TblService> TblServices { get; set; } = new List<TblService>();
