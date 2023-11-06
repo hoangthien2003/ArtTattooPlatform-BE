@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace back_end.Controller
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "MB, AT, MN")]
+    [Authorize]
     [ApiController]
     public class UserController : ControllerBase
     {
