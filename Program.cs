@@ -1,5 +1,6 @@
 using back_end;
 using back_end.Entities;
+using back_end.Hubs;
 using back_end.Models;
 using back_end.Services;
 using back_end.Utils.ConfigOptions;
@@ -25,6 +26,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<TattooPlatformEndContext>(options =>
 {
@@ -46,8 +48,8 @@ builder.Services.AddCors(p =>
 {
     p.AddPolicy("corsapp", builder =>
     {
-        builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-    });
+        builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed((hosts) => true);
+});
 });
 
 builder.Services.AddAuthentication(options =>
@@ -82,6 +84,8 @@ app.UseCors("corsapp");
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapHub<MessageHub>("chat-hub");
 
 app.MapControllers();
 
