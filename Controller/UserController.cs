@@ -20,6 +20,7 @@ namespace back_end.Controller
             var userInfo = await _context.TblUsers.Select(user => new
             {
                 user.UserId,
+                user.Password,
                 user.UserName,
                 user.Email,
                 user.Image,
@@ -43,6 +44,7 @@ namespace back_end.Controller
             user.Email = userUpdate.Email;
             user.FullName = userUpdate.FullName;
             user.PhoneNumber = userUpdate.PhoneNumber;
+            user.Password = userUpdate.Password;
 
             // Kiểm tra xem userUpdate.Image có giá trị mới hay không và cập nhật ảnh nếu có
             if (!string.IsNullOrEmpty(userUpdate.Image))
