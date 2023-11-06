@@ -22,7 +22,6 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetStudioByID/{studioID}")]
-        
         public async Task<IActionResult> GetStudioByIDAsync([FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);
@@ -34,7 +33,6 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetStudioByName/{studioName}")]
-        
         public IActionResult GetServiceByName([FromRoute] string studioName)
         {
             var studio = _context.TblStudios.Where(studio =>
@@ -47,18 +45,18 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetStudioByManager/{managerID}")]
-        
-        public IActionResult GetStudioByManager([FromRoute] int managerID)
+        public async Task<IActionResult> GetStudioByManagerAsync([FromRoute] int managerID)
         {
-            var studios = _context.TblStudios
+            var studios = await _context.TblStudios
                 .Where(studios => studios.ManagerId == managerID)
-                .ToList();
+                .ToListAsync();
+            if (studios.Count == 0)
+                return BadRequest("The manager not have any studio!");
 
             return Ok(studios);
         }
 
         [HttpGet("GetLogoNameByID/{studioID}")]
-       
         public async Task<IActionResult> GetLogoNameByIDAsync([FromRoute] int studioID)
         {
             var result = await _context.TblStudios.Select(studio => new
@@ -134,8 +132,7 @@ namespace back_end.Controller
             return Ok(studio);
         }
 
-        [HttpGet("TopRatedStudios/{studioID}")]
-        
+        [HttpGet("TopRatedStudios")]
         public IActionResult GetTopRatedStudios()
         {
             // Đây là nơi bạn sẽ truy vấn cơ sở dữ liệu để lấy danh sách các studio có top rating.

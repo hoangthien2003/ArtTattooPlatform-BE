@@ -9,8 +9,6 @@ public partial class TblManager
 
     public string? ManagerName { get; set; }
 
-    public string? Gender { get; set; }
-
     public string? ManagerPhone { get; set; }
 
     public int? UserId { get; set; }

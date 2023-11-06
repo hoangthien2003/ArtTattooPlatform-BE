@@ -9,8 +9,6 @@ public partial class TblArtist
 
     public string? ArtistName { get; set; }
 
-    
-
     public string? PhoneNumber { get; set; }
 
     public string? Biography { get; set; }

@@ -84,7 +84,6 @@ namespace back_end.Controller
 
             // Cập nhật thông tin của Artist
             artist.ArtistName = artistRequest.ArtistName;
-            
             artist.PhoneNumber = artistRequest.NumberPhone;
             artist.Biography = artistRequest.Biography;
             artist.UserId = artistRequest.UserID;

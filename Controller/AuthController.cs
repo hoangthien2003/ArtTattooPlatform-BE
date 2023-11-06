@@ -95,12 +95,12 @@ namespace back_end.Controller
 
         private string CreateToken(TblUser user)
         {
-            Console.WriteLine(user.Email, user.UserName);
             List<Claim> claims = new List<Claim>
             {
+                new Claim("UserID", user.UserId.ToString()),
                 new Claim("Email", user.Email),
                 new Claim("UserName", user.UserName),
-                new Claim("role", user.RoleId),
+                new Claim("role", user.RoleId)
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
                 _configuration.GetSection("Jwt:Key").Value));
