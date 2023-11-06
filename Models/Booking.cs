@@ -12,9 +12,8 @@ namespace back_end.Models
         public int ServiceID { get; set; }
 
         public string BookingDate { get; set; }
-
+        public string FullName {  get; set; }
         public string PhoneNumber { get; set; }
-
         public decimal Total { get; set; }
     }
 
