@@ -9,7 +9,7 @@ public partial class TblArtist
 
     public string? ArtistName { get; set; }
 
-    public bool? Gender { get; set; }
+    
 
     public string? PhoneNumber { get; set; }
 

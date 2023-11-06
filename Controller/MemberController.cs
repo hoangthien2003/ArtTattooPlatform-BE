@@ -102,5 +102,21 @@ namespace back_end.Controller
             await _context.SaveChangesAsync();
             return Ok("Update password successfully!");
         }
+
+        [HttpDelete("DeleteMember/{userID}")]
+        
+        public async Task<IActionResult> DeleteMemberAsync([FromRoute] int userID)
+        {
+            var member = await _context.TblMembers.FirstOrDefaultAsync(m => m.UserId == userID);
+            if (member == null)
+            {
+                return BadRequest("Cannot find member account.");
+            }
+
+            _context.TblMembers.Remove(member);
+            await _context.SaveChangesAsync();
+
+            return Ok(member);
+        }
     }
 }

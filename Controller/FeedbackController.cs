@@ -24,7 +24,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetFeedbackByID/{FeedbackID}")]
-        [Authorize(Roles = "MN, MB")]
+        
         public async Task<IActionResult> GetFeedBackByIDAsync(int FeedbackID)
         {
             var feedback = await _context.TblFeedbacks.FindAsync(FeedbackID);
@@ -39,7 +39,7 @@ namespace back_end.Controller
 
 
         [HttpPost("AddFeedback")]
-        [Authorize(Roles = "MB")]
+        
         public async Task<IActionResult> AddFeedback([FromForm]  Feedback feedbackRequest)
         {
             
@@ -58,7 +58,7 @@ namespace back_end.Controller
         }
 
         [HttpDelete("DeleteFeedback")]
-        [Authorize(Roles = "MB")]
+        
         public async Task<IActionResult> DeleteFeedbackAsync(int feedbackID)
         {
             var feedback = await _context.TblFeedbacks.FindAsync(feedbackID);
@@ -72,7 +72,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdateFeedback/{feedbackID}")]
-        [Authorize(Roles = "MB")]
+       
         public async Task<IActionResult> UpdateFeedback([FromRoute] int feedbackID, [FromBody] Feedback feedbackRequest)
         {
             var feedback = await _context.TblFeedbacks.FindAsync(feedbackID);
@@ -102,7 +102,7 @@ namespace back_end.Controller
         
 
         [HttpGet("GetAverageRatingForService/{serviceID}")]
-        [Authorize(Roles = "MN")]
+       
         public IActionResult GetAverageRatingForService([FromRoute] int serviceID)
         {
             // Lấy trung bình đánh giá sao cho dịch vụ

@@ -39,6 +39,9 @@ namespace back_end.Controller
             }
 
             // Cập nhật thông tin người dùng
+
+            // Không được đổi email
+
             user.UserName = userUpdate.UserName;
             user.Email = userUpdate.Email;
             user.FullName = userUpdate.FullName;

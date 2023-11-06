@@ -71,7 +71,7 @@ namespace back_end.Controller
         }
 
         [HttpPost("AddStudio")]
-        [Authorize(Roles = "MN")]
+       
         public async Task<IActionResult> AddStudioAsync([FromForm] Studio studioRequest)
         {
             var existedStudio = await _context.TblStudios.
@@ -99,7 +99,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdateStudio/{studioID}")]
-        [Authorize(Roles = "MN")]
+        
         public async Task<IActionResult> UpdateStudioAsync([FromForm] Studio studioRequest, [FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);
@@ -121,7 +121,7 @@ namespace back_end.Controller
         }
 
         [HttpDelete("DeleteStudio/{studioID}")]
-        [Authorize(Roles = "MN")]
+        
         public async Task<IActionResult> DeleteStudioAsync([FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);
@@ -135,7 +135,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("TopRatedStudios/{studioID}")]
-        [Authorize(Roles = "MN,MB")]
+        
         public IActionResult GetTopRatedStudios()
         {
             // Đây là nơi bạn sẽ truy vấn cơ sở dữ liệu để lấy danh sách các studio có top rating.
