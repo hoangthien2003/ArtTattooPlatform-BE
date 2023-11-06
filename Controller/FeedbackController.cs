@@ -15,7 +15,7 @@ namespace back_end.Controller
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
         [HttpGet("GetALL_Feedback")]
-        [Authorize(Roles = "MN, MB")]
+        
         public async Task<IActionResult> GetFeedback()
         {
             var feedback = await _context.TblFeedbacks
@@ -47,7 +47,7 @@ namespace back_end.Controller
             {  
                
                 FeedbackDetail = feedbackRequest.FeedbackDetail,
-                MemberId = feedbackRequest.MemberID,
+                UserId = feedbackRequest.UserID,
                 ServiceId = feedbackRequest.ServiceID,
                 Rating = feedbackRequest.Rating,
                 FeedbackDate =DateTime.UtcNow
@@ -81,10 +81,9 @@ namespace back_end.Controller
             {
                 return NotFound("Không tìm thấy đánh giá.");
             }
-
             // Cập nhật thông tin đánh giá
             feedback.FeedbackDetail = feedbackRequest.FeedbackDetail;
-            feedback.MemberId = feedbackRequest.MemberID;
+            feedback.UserId = feedbackRequest.UserID;
             feedback.ServiceId = feedbackRequest.ServiceID;
             feedback.Rating = feedbackRequest.Rating;
             feedback.FeedbackDate = DateTime.UtcNow;
@@ -111,6 +110,85 @@ namespace back_end.Controller
             .Where(feedback => feedback.ServiceId == serviceID)
             .Average(feedback => feedback.Rating);
             return Ok(averageRating);
+        }
+
+        [HttpGet("GetFeedbackByServiceID/{ServiceID}")]
+        public async Task<IActionResult> GetFeedbackByServiceIDAsync([FromRoute] int ServiceID)
+        {
+            var feedBack = await _context.TblFeedbacks
+                .Include(f => f.User)
+                .Select(f => new
+                {
+                    f.FeedbackId,
+                    f.FeedbackDetail,
+                    f.FeedbackDate,
+                    f.ServiceId,
+                    f.Rating,
+                    f.User
+                })
+                .Where(s => s.ServiceId == ServiceID).ToListAsync();
+            if (feedBack == null)
+            {
+                return NotFound("Feed not found!");
+            }
+            return Ok(feedBack);
+        }
+
+        [HttpPost("CommentFeedback/{feedbackId}")]
+       
+        public async Task<IActionResult> CommentFeedback([FromRoute] int feedbackId, [FromBody] Comment comment)
+        {
+            var feedback = await _context.TblFeedbacks.FindAsync(feedbackId);
+            if (feedback == null)
+            {
+                return BadRequest("Feedback not found!");
+            }
+
+            // Thêm comment vào bảng Comments hoặc bất kỳ cơ chế lưu trữ nào bạn đang sử dụng
+            var newComment = new TblComment
+            {
+                FeedbackId = feedbackId,
+                CommentText = comment.CommentText
+            };
+
+            _context.TblComments.Add(newComment);
+            await _context.SaveChangesAsync();
+
+            return Ok(newComment);
+        }
+
+        [HttpDelete("DeleteComment/{commentId}")]
+        
+        public async Task<IActionResult> DeleteComment([FromRoute] int commentId)
+        {
+            var comment = await _context.TblComments.FindAsync(commentId);
+            if (comment == null)
+            {
+                return NotFound("Comment not found.");
+            }
+
+            _context.TblComments.Remove(comment);
+            await _context.SaveChangesAsync();
+
+            return Ok(comment);
+        }
+
+        [HttpPut("UpdateComment/{commentId}")]
+      
+        public async Task<IActionResult> UpdateComment([FromRoute] int commentId, [FromBody] Comment comment)
+        {
+            var existingComment = await _context.TblComments.FindAsync(commentId);
+            if (existingComment == null)
+            {
+                return NotFound("Comment not found.");
+            }
+
+            // Cập nhật comment
+            existingComment.CommentText = comment.CommentText;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(existingComment);
         }
     }
 }

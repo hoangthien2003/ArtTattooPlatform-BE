@@ -32,6 +32,30 @@ namespace back_end.Controller
             return Ok(studio);
         }
 
+        [HttpGet("GetStudioByName/{studioName}")]
+        public IActionResult GetServiceByName([FromRoute] string studioName)
+        {
+            var studio = _context.TblStudios.Where(studio =>
+                studio.StudioName == studioName).Take(5).ToList();
+            if (studio == null)
+            {
+                return Ok("No any service matched!");
+            }
+            return Ok(studio);
+        }
+
+        [HttpGet("GetStudioByManager/{managerID}")]
+        public async Task<IActionResult> GetStudioByManagerAsync([FromRoute] int managerID)
+        {
+            var studios = await _context.TblStudios
+                .Where(studios => studios.ManagerId == managerID)
+                .ToListAsync();
+            if (studios.Count == 0)
+                return BadRequest("The manager not have any studio!");
+
+            return Ok(studios);
+        }
+
         [HttpGet("GetLogoNameByID/{studioID}")]
         public async Task<IActionResult> GetLogoNameByIDAsync([FromRoute] int studioID)
         {
@@ -106,6 +130,20 @@ namespace back_end.Controller
             _context.TblStudios.Remove(studio);
             await _context.SaveChangesAsync();
             return Ok(studio);
+        }
+
+        [HttpGet("TopRatedStudios")]
+        public IActionResult GetTopRatedStudios()
+        {
+            // Đây là nơi bạn sẽ truy vấn cơ sở dữ liệu để lấy danh sách các studio có top rating.
+            // Sắp xếp và chọn studio dựa trên rating và lựa chọn số lượng studio bạn muốn hiển thị.
+
+            var topRatedStudios = _context.TblStudios
+                .OrderByDescending(studio => studio.RatingStb)
+                .Take(5) // Thay đổi số lượng studio bạn muốn hiển thị ở đây
+                .ToList();
+
+            return Ok(topRatedStudios);
         }
     }
 }

@@ -45,7 +45,6 @@ namespace back_end.Controller
             var Artist = new TblArtist
             {
                 ArtistName = artistRequest.ArtistName,
-                Gender = artistRequest.Gender,
                 PhoneNumber = artistRequest.NumberPhone,
                 Biography = artistRequest.Biography,
                 UserId = artistRequest.UserID,
@@ -85,7 +84,6 @@ namespace back_end.Controller
 
             // Cập nhật thông tin của Artist
             artist.ArtistName = artistRequest.ArtistName;
-            artist.Gender = artistRequest.Gender;
             artist.PhoneNumber = artistRequest.NumberPhone;
             artist.Biography = artistRequest.Biography;
             artist.UserId = artistRequest.UserID;

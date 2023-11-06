@@ -26,6 +26,8 @@ public partial class TblService
 
     public virtual TblArtist? Artist { get; set; }
 
+    public virtual TblCategory? Category { get; set; }
+
     public virtual TblStudio? Studio { get; set; }
 
     public virtual ICollection<TblBookingDetail> TblBookingDetails { get; set; } = new List<TblBookingDetail>();
@@ -33,6 +35,8 @@ public partial class TblService
     public virtual ICollection<TblBooking> TblBookings { get; set; } = new List<TblBooking>();
 
     public virtual ICollection<TblFeedback> TblFeedbacks { get; set; } = new List<TblFeedback>();
+
+    public virtual ICollection<TblImageService> TblImageServices { get; set; } = new List<TblImageService>();
 
     public virtual ICollection<TblPayment> TblPayments { get; set; } = new List<TblPayment>();
 }

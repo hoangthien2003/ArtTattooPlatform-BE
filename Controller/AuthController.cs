@@ -65,6 +65,29 @@ namespace back_end.Controller
             return Ok(token);
         }
 
+        [HttpPost("LoginGoogle")]
+        public async Task<IActionResult> LoginGoogleAsync(GoogleRequest request)
+        {
+            TblUser? user = await _context.TblUsers.FirstOrDefaultAsync(row => row.Email == request.Email);
+            if (user == null)
+            {
+                var userGoogle = new TblUser
+                {
+                    Email = request.Email,
+                    UserName = request.Name,
+                    CreateUser = DateTime.UtcNow,
+                    Image = request.Image,
+                    RoleId = "MB"
+                };
+                _context.TblUsers.Add(userGoogle);
+                await _context.SaveChangesAsync();
+                string tokenGoogle = CreateToken(userGoogle);
+                return Ok(tokenGoogle);
+            }
+            string token = CreateToken(user);
+            return Ok(token);
+        }
+
         private static bool VerifyPasswordHash(string password, string passwordHash)
         {
             return BCrypt.Net.BCrypt.Verify(password, passwordHash);
@@ -74,16 +97,17 @@ namespace back_end.Controller
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim("email", user.Email),
-                new Claim("username", user.UserName),
-                new Claim("role", user.RoleId),
+                new Claim("UserID", user.UserId.ToString()),
+                new Claim("Email", user.Email),
+                new Claim("UserName", user.UserName),
+                new Claim("role", user.RoleId)
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
                 _configuration.GetSection("Jwt:Key").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(1440),
                 signingCredentials: creds
                 );
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);

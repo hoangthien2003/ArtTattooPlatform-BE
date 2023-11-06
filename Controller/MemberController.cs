@@ -14,11 +14,20 @@ namespace back_end.Controller
     {
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
 
-        [HttpGet("GetMemberByID/{memberID}")]
-        [Authorize(Roles = "MB, AT, MN")]
-        public async Task<IActionResult> GetMemberByIDAsync([FromRoute] int memberID)
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAllAsync()
         {
-            var member = await _context.TblMembers.FindAsync(memberID);
+            var members = await _context.TblMembers.ToListAsync();
+            return Ok(members);
+        }
+
+        [HttpGet("GetMemberByID/{userID}")]
+        
+        public async Task<IActionResult> GetMemberByIDAsync([FromRoute] int userID)
+        {
+            var member = await _context.TblMembers.Include(member => member.User).FirstOrDefaultAsync(
+                member => member.UserId == userID
+            );
             if (member == null)
             {
                 return BadRequest("Member not found.");
@@ -27,7 +36,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetMemberByUsername/{username}")]
-        [Authorize(Roles = "MB")]
+        
         public async Task<IActionResult> GetMemberByUsernameAsync([FromRoute] string username)
         {
             var user = await _context.TblUsers.FirstOrDefaultAsync(user => user.UserName == username);

@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using back_end.Entities;
 using back_end.Models;
+using back_end.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +13,22 @@ namespace back_end.Controller
     public class ServiceController : ControllerBase
     {
         private TattooPlatformEndContext _context = new TattooPlatformEndContext();
-
         [HttpGet("GetAll")]
         public IActionResult GetAllService()
         {
-            var serviceList = _context.TblServices.ToList();
+            var serviceList = _context.TblServices.Include(s => s.Studio).Select(s => new
+            {
+                s.ServiceId,
+                s.ServiceName,
+                s.Description,
+                s.Price,
+                s.CategoryId,
+                s.ImageService,
+                s.ArtistId,
+                s.StudioId,
+                s.Rating,
+                s.Studio
+            }).ToList();
             return Ok(serviceList);
         }
 
@@ -49,6 +61,29 @@ namespace back_end.Controller
             return Ok(result);
         }
 
+        [HttpGet("v3/GetServiceByID/{serviceID}")]
+        public async Task<IActionResult> GetServiceByIDV3Async([FromRoute] int serviceID)
+        {
+            var existingService = await _context.TblServices.Include(s => s.Studio).Select(s => new
+            {
+                s.ServiceId,
+                s.ServiceName,
+                s.Description,
+                s.Price,
+                s.CategoryId,
+                s.ImageService,
+                s.ArtistId,
+                s.StudioId,
+                s.Rating,
+                s.Studio
+            }).FirstOrDefaultAsync(s => s.ServiceId == serviceID);
+            if (existingService == null)
+            {
+                return BadRequest("Not have anything service with this ID.");
+            }
+            return Ok(existingService);
+        }
+
         [HttpGet("GetServicesByName/{serviceName}")]
         public IActionResult GetServiceByName([FromRoute] string serviceName)
         {
@@ -60,6 +95,8 @@ namespace back_end.Controller
             }
             return Ok(service);
         }
+        
+
 
         [HttpGet("GetServiceByCategory/{categoryID}")]
         public IActionResult GetServiceByCategory([FromRoute] string categoryID)
@@ -98,8 +135,11 @@ namespace back_end.Controller
             };
             if (serviceRequest.Image.Length > 0)
             {
-                service.ImageService = await Utils.Utils.
-                    UploadGetURLImageAsync(serviceRequest.Image);
+                //await _cloudStorageService
+                //    .UploadFileAsync(serviceRequest.Image, serviceRequest.Image.FileName);
+                //service.ImageService = await _cloudStorageService
+                //    .GetSignedUrlAsync(serviceRequest.Image.FileName);
+                service.ImageService = await Utils.Utils.UploadGetURLImageAsync(serviceRequest.Image);
             }
 
             if (serviceRequest.Images != null )
@@ -190,6 +230,7 @@ namespace back_end.Controller
             await _context.SaveChangesAsync();
             return Ok(service);
         }
+
         [HttpGet("UpdateAverageRatingForService/{serviceID}")]
         [Authorize(Roles = "MN,MB")]
         public IActionResult UpdateAverageRatingForService([FromRoute] int serviceID)
@@ -234,12 +275,11 @@ namespace back_end.Controller
         }
 
         [HttpGet("TopRatedServices")]
-        [Authorize(Roles = "MN")]
         public IActionResult GetTopRatedServices()
         {
             try
             {
-                var topRatedServices = _context.TblServices
+                var topRatedServices = _context.TblServices.Include(s => s.Studio).Select(s => new { s.ServiceId, s.ServiceName, s.Description, s.Price, s.CategoryId, s.ImageService, s.ArtistId, s.StudioId, s.Rating, s.Studio })
                     .OrderByDescending(service => service.Rating) // Sắp xếp theo xếp hạng giảm dần
                     .Take(10) // Lấy 10 dịch vụ có xếp hạng cao nhất (số lượng có thể điều chỉnh)
                     .ToList();
@@ -273,12 +313,25 @@ namespace back_end.Controller
         // }
 
         [HttpGet("NewestServices")]
-        [Authorize(Roles = "MN")]
         public IActionResult GetNewestServices()
         {
             try
             {
                 var newestServices = _context.TblServices
+                    .Include(s => s.Studio)
+                    .Select(s => new
+                    {
+                        s.ServiceId,
+                        s.ServiceName,
+                        s.Description,
+                        s.Price,
+                        s.CategoryId,
+                        s.ImageService,
+                        s.ArtistId,
+                        s.StudioId,
+                        s.Rating,
+                        s.Studio
+                    })
                     .OrderByDescending(service => service.ServiceId) // Sắp xếp giảm dần theo ServiceID
                     .Take(5) // Lấy 5 dịch vụ mới nhất
                     .ToList();

@@ -10,7 +10,7 @@ namespace back_end.Models
 
         public string? FeedbackDetail { get; set; }
 
-        public int? MemberID { get; set; }
+        public int? UserID { get; set; }
 
         public int? ServiceID { get; set; }
 
