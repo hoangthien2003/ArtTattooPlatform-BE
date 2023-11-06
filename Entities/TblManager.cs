@@ -13,7 +13,9 @@ public partial class TblManager
 
     public int? UserId { get; set; }
 
-    public virtual ICollection<TblStudio> TblStudios { get; set; } = new List<TblStudio>();
+    public int? StudioId { get; set; }
+
+    public virtual TblStudio? Studio { get; set; }
 
     public virtual TblUser? User { get; set; }
 }

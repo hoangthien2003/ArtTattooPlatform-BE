@@ -23,8 +23,6 @@ public partial class TblService
 
     public int? Rating { get; set; }
 
-    public virtual TblArtist? Artist { get; set; }
-
     public virtual TblCategory? Category { get; set; }
 
     public virtual TblStudio? Studio { get; set; }

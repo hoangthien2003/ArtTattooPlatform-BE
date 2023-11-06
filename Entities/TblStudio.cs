@@ -15,8 +15,6 @@ public partial class TblStudio
 
     public string? StudioEmail { get; set; }
 
-    public int? ManagerId { get; set; }
-
     public string? Description { get; set; }
 
     public string? Logo { get; set; }
@@ -27,9 +25,9 @@ public partial class TblStudio
 
     public double? RatingStb { get; set; }
 
-    public virtual TblManager? Manager { get; set; }
-
     public virtual ICollection<TblBooking> TblBookings { get; set; } = new List<TblBooking>();
+
+    public virtual ICollection<TblManager> TblManagers { get; set; } = new List<TblManager>();
 
     public virtual ICollection<TblService> TblServices { get; set; } = new List<TblService>();
 }

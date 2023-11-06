@@ -22,6 +22,4 @@ public partial class TblArtist
     public virtual ICollection<TblBookingDetail> TblBookingDetails { get; set; } = new List<TblBookingDetail>();
 
     public virtual ICollection<TblSchedule> TblSchedules { get; set; } = new List<TblSchedule>();
-
-    public virtual ICollection<TblService> TblServices { get; set; } = new List<TblService>();
 }
