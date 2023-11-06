@@ -95,7 +95,6 @@ namespace back_end.Controller
 
         private string CreateToken(TblUser user)
         {
-            Console.WriteLine(user.Email, user.UserName);
             List<Claim> claims = new List<Claim>
             {
                 new Claim("UserID", user.UserId.ToString()),
