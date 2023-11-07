@@ -113,7 +113,7 @@ namespace back_end.Controllers
 
 
         [HttpDelete("DeleteBooking/{bookingID}")]
-        public async Task<IActionResult> DeleteBooking([FromRoute] int bookingID)
+        public async Task<IActionResult> DeleteBooking([FromRoute] string bookingID)
         {
             var booking = await _context.TblBookings.FindAsync(bookingID);
             if (booking == null)
