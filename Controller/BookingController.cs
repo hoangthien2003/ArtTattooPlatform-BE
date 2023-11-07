@@ -70,25 +70,34 @@ namespace back_end.Controllers
             return Ok(booking);
         }
 
-        [HttpPost("AddBooking/{email}")]
-       
-
-        public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string email)
+        [HttpPost("AddBooking/{phoneNumber}")]
+        public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string phoneNumber)
         {
-            var user = await _context.TblUsers.Where(user => user.Email == email).FirstOrDefaultAsync();
-            var member = await _context.TblMembers.
-                Where(member => member.UserId == user.UserId).FirstOrDefaultAsync();
-            
-                
-            var booking = new TblBooking
+            var member = _context.TblUsers.FirstOrDefault(m => m.PhoneNumber == phoneNumber);
+            var booking = new TblBooking();
+            if (member == null)
+            {
+                booking = new TblBooking
+                {
+                    BookingId = System.Guid.NewGuid().ToString(),
+                    ServiceId = bookingRequest.ServiceID,
+                    StudioId = bookingRequest.StudioID,
+                    BookingDate = Utils.Utils.ConvertToDateTime(bookingRequest.BookingDate),
+                    PhoneNumber = bookingRequest.PhoneNumber,
+                    Total = bookingRequest.Total,
+                    Status = "Pending"
+                };
+            }
+            else booking = new TblBooking
             {
                 BookingId = System.Guid.NewGuid().ToString(),
-                MemberId = member.MemberId,
+                UserId = member.UserId,
                 ServiceId = bookingRequest.ServiceID,
                 StudioId = bookingRequest.StudioID,
-                BookingDate = DateTime.UtcNow,
+                BookingDate = Utils.Utils.ConvertToDateTime(bookingRequest.BookingDate),
                 PhoneNumber = bookingRequest.PhoneNumber,
-                Total = bookingRequest.Total
+                Total = bookingRequest.Total,
+                Status = "Pending"
             };
 
             _context.TblBookings.Add(booking);
@@ -121,15 +130,15 @@ namespace back_end.Controllers
                 .Include(booking => booking.Studio)
                 .Select(booking => new
                 {
-                    booking.Member.User.UserName,
-                    booking.Member.User.PhoneNumber,
                     booking.BookingDate,
                     booking.Service.ServiceName,
                     booking.Studio.StudioName,
                     booking.Total,
-                    booking.Member
+                    booking.UserId,
+                    booking.Status,
+                    booking.Service.ImageService,
                 })
-                .Where(booking => booking.Member.User.UserId == userID)
+                .Where(booking => booking.UserId == userID)
                 .ToListAsync();
             if (bookingList.Count == 0)
             {

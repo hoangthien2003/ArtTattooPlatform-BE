@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace back_end.Controller
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "MB, AT, MN")]
+    [Authorize]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -20,6 +20,7 @@ namespace back_end.Controller
             var userInfo = await _context.TblUsers.Select(user => new
             {
                 user.UserId,
+                user.Password,
                 user.UserName,
                 user.Email,
                 user.Image,
@@ -45,7 +46,11 @@ namespace back_end.Controller
             user.UserName = userUpdate.UserName;
             user.FullName = userUpdate.FullName;
             user.PhoneNumber = userUpdate.PhoneNumber;
+
             
+
+           
+
 
             // Kiểm tra xem userUpdate.Image có giá trị mới hay không và cập nhật ảnh nếu có
             if (!string.IsNullOrEmpty(userUpdate.Image))

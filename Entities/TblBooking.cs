@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace back_end.Entities;
 
@@ -8,7 +7,7 @@ public partial class TblBooking
 {
     public string BookingId { get; set; } = null!;
 
-    public int? MemberId { get; set; }
+    public int? UserId { get; set; }
 
     public int? StudioId { get; set; }
 
@@ -20,13 +19,15 @@ public partial class TblBooking
 
     public decimal? Total { get; set; }
 
-    public string? MemberName { get; set; }
-
-    public virtual TblMember? Member { get; set; }
+    public string? Status { get; set; }
 
     public virtual TblService? Service { get; set; }
 
     public virtual TblStudio? Studio { get; set; }
 
     public virtual ICollection<TblBookingDetail> TblBookingDetails { get; set; } = new List<TblBookingDetail>();
+
+    public virtual TblMember? User { get; set; }
+
+    public virtual TblUser? UserNavigation { get; set; }
 }
