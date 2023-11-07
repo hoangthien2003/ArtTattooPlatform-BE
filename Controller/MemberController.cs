@@ -83,26 +83,6 @@ namespace back_end.Controller
             return Ok(user);
         }
 
-        [HttpPut("UpdatePassword/{userID}")]
-        
-        public async Task<IActionResult> UpdatePasswordAsync([FromRoute] int userID, string oldPassword, string newPassword)
-        {
-            var user = await _context.TblUsers.FindAsync(userID); 
-            if (user == null)
-            {
-                return BadRequest("User not found.");
-            }
-            string unhashPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password);
-            
-            if (!oldPassword.Equals(unhashPassword))
-            {
-                return BadRequest("Old password incorrect!");
-            }
-            string hashedNewPassword = Utils.Utils.HashSaltPassword(newPassword);
-            user.Password = hashedNewPassword;
-            await _context.SaveChangesAsync();
-            return Ok("Update password successfully!");
-        }
 
         [HttpPut("UpdatePasswordd/{userID}")]
         [Authorize(Roles = "MB, AT,MN")]
