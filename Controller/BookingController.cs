@@ -73,29 +73,15 @@ namespace back_end.Controllers
             return Ok(booking);
         }
 
-        [HttpPost("AddBooking/{phoneNumber}")]
-        public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string phoneNumber)
+        [HttpPost("AddBooking/{email}")]
+        [Authorize]
+        public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string email)
         {
-            var member = _context.TblUsers.FirstOrDefault(m => m.PhoneNumber == phoneNumber);
-            var booking = new TblBooking();
-            if (member == null)
-            {
-                booking = new TblBooking
-                {
-                    BookingId = System.Guid.NewGuid().ToString(),
-                    ServiceId = bookingRequest.ServiceID,
-                    StudioId = bookingRequest.StudioID,
-                    FullName = bookingRequest.FullName,
-                    BookingDate = Utils.Utils.ConvertToDateTime(bookingRequest.BookingDate),
-                    PhoneNumber = bookingRequest.PhoneNumber,
-                    Total = bookingRequest.Total,
-                    Status = "Pending"
-                };
-            }
-            else booking = new TblBooking
+            var user = await _context.TblUsers.FirstOrDefaultAsync(user => user.Email == email);
+            var  booking = new TblBooking
             {
                 BookingId = System.Guid.NewGuid().ToString(),
-                UserId = member.UserId,
+                UserId = user.UserId,
                 ServiceId = bookingRequest.ServiceID,
                 StudioId = bookingRequest.StudioID,
                 FullName = bookingRequest.FullName,
@@ -104,10 +90,23 @@ namespace back_end.Controllers
                 Total = bookingRequest.Total,
                 Status = "Pending"
             };
-            
             _context.TblBookings.Add(booking);
             await _context.SaveChangesAsync();
 
+            var bookingSignalR = await _context.TblBookings
+                .Include(b => b.Service)
+                .Select(b => new
+                {
+                    b.BookingId,
+                    b.Service.ServiceName,
+                    b.FullName,
+                    b.PhoneNumber,
+                    b.BookingDate,
+                    b.Total
+                })
+                .FirstOrDefaultAsync(b => b.BookingId == booking.BookingId);
+            TblManager manager = await _context.TblManagers.FirstOrDefaultAsync(m => m.StudioId == booking.StudioId);
+            int userID = (int)manager.UserId;
             await _hubContext.Clients.All.SendAsync("BookingService", booking);
             return Ok(booking);
         }

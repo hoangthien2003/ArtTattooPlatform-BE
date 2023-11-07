@@ -13,5 +13,12 @@ namespace back_end.Hubs
         {
             await Clients.All.SendAsync(methodName, data);
         }
+
+        public string GetConnectionId() => Context.ConnectionId;
+
+        public async Task SendBookingToManager(string user, string receiverConnectionId, object data)
+        {
+            await Clients.Client(receiverConnectionId).SendAsync("BookingService", user, data);
+        }
     }
 }
