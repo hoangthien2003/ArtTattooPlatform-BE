@@ -111,11 +111,11 @@ namespace back_end.Controllers
             return Ok(booking);
         }
 
-        [HttpDelete("DeleteBooking/{deleteID}")]
-       
-        public async Task<IActionResult> DeleteBooking([FromRoute] int id)
+
+        [HttpDelete("DeleteBooking/{bookingID}")]
+        public async Task<IActionResult> DeleteBooking([FromRoute] int bookingID)
         {
-            var booking = await _context.TblBookings.FindAsync(id);
+            var booking = await _context.TblBookings.FindAsync(bookingID);
             if (booking == null)
             {
                 return NotFound("Booking not found.");
