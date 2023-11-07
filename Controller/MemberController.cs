@@ -84,7 +84,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdatePassword/{userID}")]
-        
+        [Authorize(Roles = "MB, AT, MN")]
         public async Task<IActionResult> UpdatePasswordAsync([FromRoute] int userID,  string oldPassword,  string newPassword)
         {
             var user = await _context.TblUsers.FindAsync(userID); 
