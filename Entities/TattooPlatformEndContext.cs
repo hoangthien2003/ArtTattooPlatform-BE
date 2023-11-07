@@ -97,10 +97,6 @@ public partial class TattooPlatformEndContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.TblBookings)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_tbl_Booking_tbl_Member");
-
-            entity.HasOne(d => d.UserNavigation).WithMany(p => p.TblBookings)
-                .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_tbl_Booking_tbl_User");
         });
 

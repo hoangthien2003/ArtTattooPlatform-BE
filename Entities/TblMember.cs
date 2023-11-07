@@ -13,8 +13,6 @@ public partial class TblMember
 
     public int? UserId { get; set; }
 
-    public virtual ICollection<TblBooking> TblBookings { get; set; } = new List<TblBooking>();
-
     public virtual ICollection<TblPayment> TblPayments { get; set; } = new List<TblPayment>();
 
     public virtual TblUser? User { get; set; }
