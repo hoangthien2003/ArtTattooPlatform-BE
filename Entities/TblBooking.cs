@@ -29,7 +29,5 @@ public partial class TblBooking
 
     public virtual ICollection<TblBookingDetail> TblBookingDetails { get; set; } = new List<TblBookingDetail>();
 
-    public virtual TblMember? User { get; set; }
-
-    public virtual TblUser? UserNavigation { get; set; }
+    public virtual TblUser? User { get; set; }
 }

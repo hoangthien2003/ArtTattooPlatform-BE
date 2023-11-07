@@ -74,7 +74,7 @@ namespace back_end.Controllers
         }
 
         [HttpPost("AddBooking/{email}")]
-        [Authorize(Roles = "MB, AT, MN")]
+        [Authorize]
         public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string email)
         {
             var user = await _context.TblUsers.FirstOrDefaultAsync(user => user.Email == email);
