@@ -80,7 +80,7 @@ namespace back_end.Controllers
             var user = await _context.TblUsers.FirstOrDefaultAsync(user => user.Email == email);
             var  booking = new TblBooking
             {
-                BookingId = System.Guid.NewGuid().ToString(),
+               
                 UserId = user.UserId,
                 ServiceId = bookingRequest.ServiceID,
                 StudioId = bookingRequest.StudioID,
@@ -113,7 +113,7 @@ namespace back_end.Controllers
 
 
         [HttpDelete("DeleteBooking/{bookingID}")]
-        public async Task<IActionResult> DeleteBooking([FromRoute] string bookingID)
+        public async Task<IActionResult> DeleteBooking([FromRoute] int bookingID)
         {
             var booking = await _context.TblBookings.FindAsync(bookingID);
             if (booking == null)
