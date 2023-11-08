@@ -1,5 +1,4 @@
 ﻿using back_end.Entities;
-using back_end.Hubs;
 using back_end.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +12,10 @@ namespace back_end.Controllers
     public class BookingController : ControllerBase
     {
         private readonly TattooPlatformEndContext _context;
-        private readonly IHubContext<MessageHub> _hubContext;
 
-        public BookingController(IHubContext<MessageHub> hubContext)
+        public BookingController()
         {
             _context = new TattooPlatformEndContext();
-            _hubContext = hubContext;
         }
 
         [HttpGet("GetAll")]
@@ -80,7 +77,6 @@ namespace back_end.Controllers
             var user = await _context.TblUsers.FirstOrDefaultAsync(user => user.Email == email);
             var  booking = new TblBooking
             {
-                BookingId = System.Guid.NewGuid().ToString(),
                 UserId = user.UserId,
                 ServiceId = bookingRequest.ServiceID,
                 StudioId = bookingRequest.StudioID,
@@ -92,22 +88,6 @@ namespace back_end.Controllers
             };
             _context.TblBookings.Add(booking);
             await _context.SaveChangesAsync();
-
-            var bookingSignalR = await _context.TblBookings
-                .Include(b => b.Service)
-                .Select(b => new
-                {
-                    b.BookingId,
-                    b.Service.ServiceName,
-                    b.FullName,
-                    b.PhoneNumber,
-                    b.BookingDate,
-                    b.Total
-                })
-                .FirstOrDefaultAsync(b => b.BookingId == booking.BookingId);
-            TblManager manager = await _context.TblManagers.FirstOrDefaultAsync(m => m.StudioId == booking.StudioId);
-            int userID = (int)manager.UserId;
-            await _hubContext.Clients.All.SendAsync("BookingService", booking);
             return Ok(booking);
         }
 

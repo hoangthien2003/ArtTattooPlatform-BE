@@ -19,15 +19,9 @@ public partial class TattooPlatformEndContext : DbContext
 
     public virtual DbSet<TblBooking> TblBookings { get; set; }
 
-    public virtual DbSet<TblBookingDetail> TblBookingDetails { get; set; }
-
     public virtual DbSet<TblCategory> TblCategories { get; set; }
 
-    public virtual DbSet<TblComment> TblComments { get; set; }
-
     public virtual DbSet<TblFeedback> TblFeedbacks { get; set; }
-
-    public virtual DbSet<TblImageService> TblImageServices { get; set; }
 
     public virtual DbSet<TblManager> TblManagers { get; set; }
 
@@ -66,14 +60,11 @@ public partial class TattooPlatformEndContext : DbContext
 
         modelBuilder.Entity<TblBooking>(entity =>
         {
-            entity.HasKey(e => e.BookingId).HasName("PK__tbl_Book__73951ACDD0CFC33D");
+            entity.HasKey(e => e.BookingId).HasName("PK__tbl_Book__73951ACD60201975");
 
             entity.ToTable("tbl_Booking");
 
-            entity.Property(e => e.BookingId)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("BookingID");
+            entity.Property(e => e.BookingId).HasColumnName("BookingID");
             entity.Property(e => e.BookingDate).HasColumnType("datetime");
             entity.Property(e => e.FullName).HasMaxLength(50);
             entity.Property(e => e.PhoneNumber)
@@ -97,37 +88,7 @@ public partial class TattooPlatformEndContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.TblBookings)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_tbl_Booking_tbl_User");
-        });
-
-        modelBuilder.Entity<TblBookingDetail>(entity =>
-        {
-            entity.HasKey(e => e.BookingDetailId).HasName("PK__tbl_Book__8136D47AEB50265B");
-
-            entity.ToTable("tbl_BookingDetail");
-
-            entity.Property(e => e.BookingDetailId)
-                .ValueGeneratedNever()
-                .HasColumnName("BookingDetailID");
-            entity.Property(e => e.ArtistId).HasColumnName("ArtistID");
-            entity.Property(e => e.BookingId)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("BookingID");
-            entity.Property(e => e.Price).HasColumnType("money");
-            entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
-
-            entity.HasOne(d => d.Artist).WithMany(p => p.TblBookingDetails)
-                .HasForeignKey(d => d.ArtistId)
-                .HasConstraintName("FK_BookingDetail_Artist");
-
-            entity.HasOne(d => d.Booking).WithMany(p => p.TblBookingDetails)
-                .HasForeignKey(d => d.BookingId)
-                .HasConstraintName("FK_BookingDetail_Booking");
-
-            entity.HasOne(d => d.Service).WithMany(p => p.TblBookingDetails)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK_BookingDetail_Service");
+                .HasConstraintName("FK_Booking_Member");
         });
 
         modelBuilder.Entity<TblCategory>(entity =>
@@ -143,23 +104,6 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.CategoryName)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<TblComment>(entity =>
-        {
-            entity.HasKey(e => e.CommentId).HasName("PK__tbl_Comm__C3B4DFAA4F90B1FD");
-
-            entity.ToTable("tbl_Comment");
-
-            entity.Property(e => e.CommentId).HasColumnName("CommentID");
-            entity.Property(e => e.CommentText)
-                .HasMaxLength(200)
-                .IsUnicode(false);
-            entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
-
-            entity.HasOne(d => d.Feedback).WithMany(p => p.TblComments)
-                .HasForeignKey(d => d.FeedbackId)
-                .HasConstraintName("FK_Feedback");
         });
 
         modelBuilder.Entity<TblFeedback>(entity =>
@@ -181,23 +125,6 @@ public partial class TattooPlatformEndContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.TblFeedbacks)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_tbl_Feedback_tbl_User");
-        });
-
-        modelBuilder.Entity<TblImageService>(entity =>
-        {
-            entity.HasKey(e => e.ImageId).HasName("PK__tbl_Imag__7516F4EC72754279");
-
-            entity.ToTable("tbl_ImageService");
-
-            entity.Property(e => e.ImageId)
-                .ValueGeneratedNever()
-                .HasColumnName("ImageID");
-            entity.Property(e => e.ImagePath).HasMaxLength(255);
-            entity.Property(e => e.ServiceId).HasColumnName("ServiceID");
-
-            entity.HasOne(d => d.Service).WithMany(p => p.TblImageServices)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__tbl_Image__Servi__49C3F6B7");
         });
 
         modelBuilder.Entity<TblManager>(entity =>

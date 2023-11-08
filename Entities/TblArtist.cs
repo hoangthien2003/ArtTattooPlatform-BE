@@ -19,7 +19,5 @@ public partial class TblArtist
 
     public string? AvatarArtist { get; set; }
 
-    public virtual ICollection<TblBookingDetail> TblBookingDetails { get; set; } = new List<TblBookingDetail>();
-
     public virtual ICollection<TblSchedule> TblSchedules { get; set; } = new List<TblSchedule>();
 }
