@@ -1,6 +1,5 @@
 using back_end;
 using back_end.Entities;
-using back_end.Hubs;
 using back_end.Models;
 using back_end.Services;
 using back_end.Utils.ConfigOptions;
@@ -84,8 +83,6 @@ app.UseCors("corsapp");
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-app.MapHub<MessageHub>("chat-hub");
 
 app.MapControllers();
 

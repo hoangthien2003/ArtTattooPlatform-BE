@@ -19,7 +19,5 @@ public partial class TblFeedback
 
     public virtual TblService? Service { get; set; }
 
-    public virtual ICollection<TblComment> TblComments { get; set; } = new List<TblComment>();
-
     public virtual TblUser? User { get; set; }
 }
