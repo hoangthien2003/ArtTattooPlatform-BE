@@ -20,6 +20,7 @@ namespace back_end.Controller
             var userInfo = await _context.TblUsers.Select(user => new
             {
                 user.UserId,
+                user.Password,
                 user.UserName,
                 user.Email,
                 user.Image,
@@ -29,7 +30,7 @@ namespace back_end.Controller
             return Ok(userInfo);
         }
 
-        [HttpPut("UpdateUser/{userID}")]
+        [HttpPut("UpdateProfileUser/{userID}")]
         public async Task<IActionResult> UpdateUser([FromRoute] int userID, [FromBody] UserUpdateModel userUpdate)
         {
             var user = await _context.TblUsers.FirstOrDefaultAsync(u => u.UserId == userID);
@@ -39,10 +40,17 @@ namespace back_end.Controller
             }
 
             // Cập nhật thông tin người dùng
+
+            // Không được đổi email
+
             user.UserName = userUpdate.UserName;
-            user.Email = userUpdate.Email;
             user.FullName = userUpdate.FullName;
             user.PhoneNumber = userUpdate.PhoneNumber;
+
+            
+
+           
+
 
             // Kiểm tra xem userUpdate.Image có giá trị mới hay không và cập nhật ảnh nếu có
             if (!string.IsNullOrEmpty(userUpdate.Image))

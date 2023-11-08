@@ -3,7 +3,7 @@
     public class Artist
     {
         public string ArtistName { get; set; }
-        public bool Gender { get; set; }
+        
         public string NumberPhone { get; set; }
         public string Biography { get; set; }
         public int UserID { get; set; }
