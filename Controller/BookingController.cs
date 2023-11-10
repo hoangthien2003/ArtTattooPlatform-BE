@@ -115,7 +115,8 @@ namespace back_end.Controllers
                 .Include(booking => booking.Service)
                 .Include(booking => booking.Studio)
                 .Select(booking => new
-                {
+                {   
+                    booking.BookingId,
                     booking.BookingDate,
                     booking.Service.ServiceName,
                     booking.Studio.StudioName,
@@ -123,6 +124,7 @@ namespace back_end.Controllers
                     booking.UserId,
                     booking.Status,
                     booking.Service.ImageService,
+                    booking.Studio.Address
                 })
                 .Where(booking => booking.UserId == userID)
                 .ToListAsync();
