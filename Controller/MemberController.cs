@@ -83,24 +83,50 @@ namespace back_end.Controller
             return Ok(user);
         }
 
-        [HttpPut("UpdatePassword/{userID}")]
-        [Authorize(Roles = "MB, AT, MN")]
-        public async Task<IActionResult> UpdatePasswordAsync([FromRoute] int userID, string oldPassword, string newPassword)
+
+        [HttpPut("UpdatePasswordd/{userID}")]
+        [Authorize(Roles = "MB, AT,MN")]
+        public async Task<IActionResult> UpdateePasswordAsync([FromRoute] int userID, string oldPassword, string newPassword)
         {
-            var user = await _context.TblUsers.FindAsync(userID); 
-            if (user != null)
+            var user = await _context.TblUsers.FindAsync(userID);
+            if (user == null)
             {
                 return BadRequest("User not found.");
             }
-            string unhashPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(user.Password);
-            if (!oldPassword.Equals(unhashPassword))
+
+            // Lấy mật khẩu đã lưu trong cơ sở dữ liệu
+            string savedPassword = user.Password;
+
+            // Băm oldPassword và so sánh với savedPassword
+            bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(oldPassword, savedPassword);
+
+            if (!isPasswordCorrect)
             {
                 return BadRequest("Old password incorrect!");
             }
+
+            // Tiếp tục cập nhật mật khẩu nếu oldPassword là hợp lệ
             string hashedNewPassword = Utils.Utils.HashSaltPassword(newPassword);
             user.Password = hashedNewPassword;
             await _context.SaveChangesAsync();
             return Ok("Update password successfully!");
+        }
+
+
+        [HttpDelete("DeleteMember/{userID}")]
+        
+        public async Task<IActionResult> DeleteMemberAsync([FromRoute] int userID)
+        {
+            var member = await _context.TblMembers.FirstOrDefaultAsync(m => m.UserId == userID);
+            if (member == null)
+            {
+                return BadRequest("Cannot find member account.");
+            }
+
+            _context.TblMembers.Remove(member);
+            await _context.SaveChangesAsync();
+
+            return Ok(member);
         }
     }
 }

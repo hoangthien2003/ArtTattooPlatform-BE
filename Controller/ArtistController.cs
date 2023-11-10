@@ -14,7 +14,7 @@ namespace back_end.Controller
     {
         private readonly TattooPlatformEndContext _context = new TattooPlatformEndContext();
         [HttpGet("GetALL_Artist")]
-        [Authorize(Roles = "MB, MN")]
+        
         public IActionResult GetAll()
         {
             var artistList = _context.TblArtists.ToList();
@@ -33,7 +33,7 @@ namespace back_end.Controller
         }
 
         [HttpPost("AddArtist")]
-        [Authorize(Roles = "MN")]
+       
         public async Task<IActionResult> AddArtistAsync([FromForm] Artist artistRequest)
         {
             var existedArtist = await _context.TblArtists.
@@ -59,7 +59,7 @@ namespace back_end.Controller
             return Ok(Artist);
         }
         [HttpDelete("DeleteArtist")]
-        [Authorize(Roles = "MN")]
+        
         public async Task<IActionResult> DeleteArtistAsync(int artistID)
         {
             var artist = await _context.TblArtists.FindAsync(artistID);
@@ -73,7 +73,7 @@ namespace back_end.Controller
         }
 
         [HttpPut("UpdateArtist/{artistID}")]
-        [Authorize(Roles = "AT")]
+        
         public async Task<IActionResult> UpdateArtistAsync(int artistID, [FromForm] Artist artistRequest)
         {
             var artist = await _context.TblArtists.FindAsync(artistID);
@@ -99,7 +99,7 @@ namespace back_end.Controller
         }
 
         [HttpGet("GetArtistByID/{artistID}")]
-        [Authorize(Roles = "MN, MB")]
+       
         public async Task<IActionResult> GetArtistByIDAsync(int artistID)
         {
             var artist = await _context.TblArtists.FindAsync(artistID);
