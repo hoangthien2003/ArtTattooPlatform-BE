@@ -132,5 +132,18 @@ namespace back_end.Controllers
             }
             return Ok(bookingList);
         }
+
+        [HttpGet("GetBookingByManager/{userID}")]
+        [Authorize(Roles = "MN")]
+        public IActionResult GetBookingByManager([FromRoute] int userID)
+        {
+            var manager = _context.TblManagers.FirstOrDefault(m => m.UserId == userID);
+            var booking = _context.TblBookings.Where(b => b.StudioId == manager.StudioId).ToList();
+            if (booking.Count == 0)
+            {
+                return BadRequest("Booking empty list.");
+            }
+            return Ok(booking);
+        }
     }
 }
