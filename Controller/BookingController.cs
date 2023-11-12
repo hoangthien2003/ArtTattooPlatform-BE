@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
+using System.Globalization;
 
 namespace back_end.Controllers
 {
@@ -150,6 +151,7 @@ namespace back_end.Controllers
                     b.User.UserName,
                     b.Service.ServiceName,
                     b.Status,
+                    BookingDate = DateTime.Parse(b.BookingDate.ToString()).ToString("dd/MM/yyyy hh:mm tt"),
                     b.Total
                 })
                 .Where(b => b.StudioId == manager.StudioId).ToList();
