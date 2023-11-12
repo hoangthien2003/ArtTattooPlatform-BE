@@ -120,8 +120,9 @@ namespace back_end.Controller
 
             return Ok(services);
         }
+
         [HttpPost("Add")]
-        
+        [Authorize(Roles = "MN")]
         public async Task<IActionResult> AddServiceAsync([FromForm] Service serviceRequest)
         {
             var service = new TblService
@@ -188,6 +189,7 @@ namespace back_end.Controller
 
 
         [HttpPut("UpdateService/{serviceID}")]
+        [Authorize(Roles = "MN")]
         
         public async Task<IActionResult> UpdateServiceAsync([FromForm] Service serviceRequest,
             [FromRoute] int serviceID)
