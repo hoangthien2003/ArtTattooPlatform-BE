@@ -140,7 +140,20 @@ namespace back_end.Controllers
         public IActionResult GetBookingByManager([FromRoute] int userID)
         {
             var manager = _context.TblManagers.FirstOrDefault(m => m.UserId == userID);
-            var booking = _context.TblBookings.Where(b => b.StudioId == manager.StudioId).ToList();
+            var booking = _context.TblBookings
+                .Include(b => b.Service)
+                .Include(b => b.User)
+                .Select(b => new
+                {
+                    b.StudioId,
+                    b.PhoneNumber,
+                    b.User.UserName,
+                    b.Service.ServiceName,
+                    b.Status,
+                    b.Total
+                })
+                .Where(b => b.StudioId == manager.StudioId).ToList();
+            // sửa lại lấy ServiceName, Username, làm thêm api update status confirm cancel
             if (booking.Count == 0)
             {
                 return BadRequest("Booking empty list.");
