@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace back_end.Controller
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "MB")]
     [ApiController]
     public class MemberController : ControllerBase
     {
