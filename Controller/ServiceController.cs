@@ -128,18 +128,11 @@ namespace back_end.Controller
             {
                 ServiceName = serviceRequest.ServiceName,
                 Description = serviceRequest.Description,
-                CategoryId = serviceRequest.CategoryID,
                 StudioId = serviceRequest.StudioID,
-                Price = serviceRequest.Price
+                Price = serviceRequest.Price,
+                ImageService = serviceRequest.Image,
+                Rating = 0
             };
-            if (serviceRequest.Image.Length > 0)
-            {
-                //await _cloudStorageService
-                //    .UploadFileAsync(serviceRequest.Image, serviceRequest.Image.FileName);
-                //service.ImageService = await _cloudStorageService
-                //    .GetSignedUrlAsync(serviceRequest.Image.FileName);
-                service.ImageService = await Utils.Utils.UploadGetURLImageAsync(serviceRequest.Image);
-            }
             _context.TblServices.Add(service);
             _context.SaveChanges();
             return Ok(service);
@@ -205,15 +198,11 @@ namespace back_end.Controller
                 return BadRequest("Service not found!");
             }
             service.ServiceName = serviceRequest.ServiceName;
-            service.CategoryId = serviceRequest.CategoryID;
             service.Description = serviceRequest.Description;
             service.StudioId = serviceRequest.StudioID;
             service.Price = serviceRequest.Price;
-            if (serviceRequest.Image.Length > 0)
-            {
-                service.ImageService = await Utils.Utils.
-                    UploadGetURLImageAsync(serviceRequest.Image);
-            }
+            service.ImageService = serviceRequest.Image;
+            _context.TblServices.Update(service);
             await _context.SaveChangesAsync();
             return Ok(service);
         }
