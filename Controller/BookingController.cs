@@ -145,6 +145,7 @@ namespace back_end.Controllers
                 .Include(b => b.User)
                 .Select(b => new
                 {
+                    b.BookingId,
                     b.StudioId,
                     b.PhoneNumber,
                     b.User.UserName,
@@ -160,6 +161,21 @@ namespace back_end.Controllers
             {
                 return BadRequest("Booking empty list.");
             }
+            return Ok(booking);
+        }
+
+        [HttpPut("UpdateStatus/{bookingID}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateStatusAsync([FromRoute] int bookingID, string status)
+        {
+            var booking = await _context.TblBookings.FirstOrDefaultAsync(b => b.BookingId == bookingID);
+            if (booking == null)
+            {
+                return BadRequest("Not have this booking!");
+            }
+            booking.Status = status;
+            _context.TblBookings.Update(booking);
+            _context.SaveChanges();
             return Ok(booking);
         }
     }
