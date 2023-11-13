@@ -29,7 +29,7 @@ namespace back_end.Utils
             DateTime dateTime = new DateTime();
             try
             {
-                dateTime = DateTime.ParseExact(date, "MM/dd/yyyy, HH:mm tt", CultureInfo.InvariantCulture);
+                dateTime = DateTime.ParseExact(date, "MM/dd/yyyy, h:mm tt", CultureInfo.InvariantCulture);
             } catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());
