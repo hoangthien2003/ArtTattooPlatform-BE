@@ -23,6 +23,8 @@ public partial class TblBooking
 
     public string? FullName { get; set; }
 
+    public int? Quantity { get; set; }
+
     public virtual TblService? Service { get; set; }
 
     public virtual TblStudio? Studio { get; set; }

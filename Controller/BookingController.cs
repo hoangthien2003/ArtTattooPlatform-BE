@@ -85,7 +85,8 @@ namespace back_end.Controllers
                 BookingDate = Utils.Utils.ConvertToDateTime(bookingRequest.BookingDate),
                 PhoneNumber = bookingRequest.PhoneNumber,
                 Total = bookingRequest.Total,
-                Status = "Pending"
+                Status = "Pending",
+                Quantity = bookingRequest.Quantity
             };
             _context.TblBookings.Add(booking);
             await _context.SaveChangesAsync();
@@ -150,7 +151,8 @@ namespace back_end.Controllers
                     b.Service.ServiceName,
                     b.Status,
                     BookingDate = DateTime.Parse(b.BookingDate.ToString()).ToString("dd/MM/yyyy hh:mm tt"),
-                    b.Total
+                    b.Total,
+                    b.Quantity
                 })
                 .Where(b => b.StudioId == manager.StudioId).ToList();
             // sửa lại lấy ServiceName, Username, làm thêm api update status confirm cancel
