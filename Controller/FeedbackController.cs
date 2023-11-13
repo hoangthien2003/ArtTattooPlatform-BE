@@ -9,6 +9,7 @@ using System.Data;
 namespace back_end.Controller
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class FeedbackController : ControllerBase
     {
