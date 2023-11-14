@@ -123,7 +123,7 @@ namespace back_end.Controller
 
         [HttpPost("Add")]
         [Authorize(Roles = "MN")]
-        public async Task<IActionResult> AddServiceAsync([FromForm] Service serviceRequest)
+        public async Task<IActionResult> AddServiceAsync(Service serviceRequest)
         {
             var service = new TblService
             {
