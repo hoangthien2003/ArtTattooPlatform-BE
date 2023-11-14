@@ -166,16 +166,22 @@ namespace back_end.Controllers
             return Ok(booking);
         }
 
+        public class UpdateStatusRequest
+        {
+            public string status { get; set; }
+            public string notes { get; set; }
+        }
         [HttpPut("UpdateStatus/{bookingID}")]
         [Authorize]
-        public async Task<IActionResult> UpdateStatusAsync([FromRoute] int bookingID, [FromBody] string status)
+        public async Task<IActionResult> UpdateStatusAsync([FromRoute] int bookingID, [FromBody] UpdateStatusRequest request)
         {
             var booking = await _context.TblBookings.FirstOrDefaultAsync(b => b.BookingId == bookingID);
             if (booking == null)
             {
                 return BadRequest("Not have this booking!");
             }
-            booking.Status = status;
+            booking.Status = request.status;
+            booking.Notes = request.notes;
             _context.TblBookings.Update(booking);
             _context.SaveChanges();
             return Ok(booking);

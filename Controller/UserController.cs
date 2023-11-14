@@ -77,9 +77,15 @@ namespace back_end.Controller
             return Ok(user);
         }
 
+        public class UpdatePasswordReq
+        {
+            public string oldPassword { get; set; }
+            public string newPassword { get; set; }
+        }
+
         [HttpPut("UpdatePassword/{userID}")]
         [Authorize]
-        public async Task<IActionResult> UpdatePasswordAsync([FromRoute] int userID, string oldPassword, string newPassword)
+        public async Task<IActionResult> UpdatePasswordAsync([FromRoute] int userID, [FromBody] UpdatePasswordReq request)
         {
             var user = await _context.TblUsers.FindAsync(userID);
             if (user == null)
@@ -91,7 +97,7 @@ namespace back_end.Controller
             string savedPassword = user.Password;
 
             // Băm oldPassword và so sánh với savedPassword
-            bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(oldPassword, savedPassword);
+            bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(request.oldPassword, savedPassword);
 
             if (!isPasswordCorrect)
             {
@@ -99,7 +105,7 @@ namespace back_end.Controller
             }
 
             // Tiếp tục cập nhật mật khẩu nếu oldPassword là hợp lệ
-            string hashedNewPassword = Utils.Utils.HashSaltPassword(newPassword);
+            string hashedNewPassword = Utils.Utils.HashSaltPassword(request.newPassword);
             user.Password = hashedNewPassword;
             await _context.SaveChangesAsync();
             return Ok("Update password successfully!");
