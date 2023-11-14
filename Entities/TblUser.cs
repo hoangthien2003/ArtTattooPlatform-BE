@@ -25,6 +25,8 @@ public partial class TblUser
 
     public virtual TblRole? Role { get; set; }
 
+    public virtual ICollection<TblArtist> TblArtists { get; set; } = new List<TblArtist>();
+
     public virtual ICollection<TblBooking> TblBookings { get; set; } = new List<TblBooking>();
 
     public virtual ICollection<TblFeedback> TblFeedbacks { get; set; } = new List<TblFeedback>();
