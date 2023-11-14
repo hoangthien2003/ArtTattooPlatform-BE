@@ -164,7 +164,7 @@ namespace back_end.Controllers
             return Ok(booking);
         }
 
-        [HttpPut("UpdateStatus/{bookingID}")]
+        [HttpPut("UpdateStatus")]
         [Authorize]
         public async Task<IActionResult> UpdateStatusAsync(int bookingID, string status)
         {
