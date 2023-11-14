@@ -25,6 +25,8 @@ public partial class TblBooking
 
     public int? Quantity { get; set; }
 
+    public string? Notes { get; set; }
+
     public virtual TblService? Service { get; set; }
 
     public virtual TblStudio? Studio { get; set; }
