@@ -80,12 +80,9 @@ namespace back_end.Controller
                 Address = studioRequest.Address,
                 StudioPhone = studioRequest.StudioPhone,
                 StudioEmail = studioRequest.StudioEmail,
-                Description = studioRequest.Description
+                Description = studioRequest.Description,
+                Logo = studioRequest.Logo
             };
-            if (studioRequest.Logo.Length > 0)
-            {
-                studio.Logo = await Utils.Utils.UploadGetURLImageAsync(studioRequest.Logo);
-            }
             _context.TblStudios.Add(studio);
             await _context.SaveChangesAsync();
             return Ok(studio);
@@ -105,10 +102,7 @@ namespace back_end.Controller
             studio.StudioPhone = studioRequest.StudioPhone;
             studio.StudioEmail = studioRequest.StudioEmail;
             studio.Description = studioRequest.Description;
-            if (studioRequest.Logo.Length > 0)
-            {
-                studio.Logo = await Utils.Utils.UploadGetURLImageAsync(studioRequest.Logo);
-            }
+            studio.Logo = studioRequest.Logo;
             await _context.SaveChangesAsync();
             return Ok(studio);
         }
