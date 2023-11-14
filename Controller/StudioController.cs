@@ -66,7 +66,7 @@ namespace back_end.Controller
 
         [HttpPost("AddStudio")]
        
-        public async Task<IActionResult> AddStudioAsync([FromForm] Studio studioRequest)
+        public async Task<IActionResult> AddStudioAsync([FromBody] Studio studioRequest)
         {
             var existedStudio = await _context.TblStudios.
                 FirstOrDefaultAsync(studio => studio.Address == studioRequest.Address);
@@ -93,7 +93,7 @@ namespace back_end.Controller
 
         [HttpPut("UpdateStudio/{studioID}")]
         
-        public async Task<IActionResult> UpdateStudioAsync([FromForm] Studio studioRequest, [FromRoute] int studioID)
+        public async Task<IActionResult> UpdateStudioAsync([FromBody] Studio studioRequest, [FromRoute] int studioID)
         {
             var studio = await _context.TblStudios.FindAsync(studioID);
             if (studio == null)
