@@ -70,48 +70,7 @@ namespace back_end.Controller
             return Ok(member);
         }
 
-        [HttpPut("UpdateUsername/{userID}")]
-        [Authorize(Roles = "MB")]
-        public async Task<IActionResult> UpdateUsernameAsync([FromRoute] int userID, [FromBody] string username)
-        {
-            var user = await _context.TblUsers.FindAsync(userID);
-            if (user == null)
-            {
-                return BadRequest("Cannot find user account.");
-            }
-            user.UserName = username;
-            await _context.SaveChangesAsync();
-            return Ok(user);
-        }
-
-
-        [HttpPut("UpdatePasswordd/{userID}")]
-        [Authorize(Roles = "MB, AT,MN")]
-        public async Task<IActionResult> UpdateePasswordAsync([FromRoute] int userID, string oldPassword, string newPassword)
-        {
-            var user = await _context.TblUsers.FindAsync(userID);
-            if (user == null)
-            {
-                return BadRequest("User not found.");
-            }
-
-            // Lấy mật khẩu đã lưu trong cơ sở dữ liệu
-            string savedPassword = user.Password;
-
-            // Băm oldPassword và so sánh với savedPassword
-            bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(oldPassword, savedPassword);
-
-            if (!isPasswordCorrect)
-            {
-                return BadRequest("Old password incorrect!");
-            }
-
-            // Tiếp tục cập nhật mật khẩu nếu oldPassword là hợp lệ
-            string hashedNewPassword = Utils.Utils.HashSaltPassword(newPassword);
-            user.Password = hashedNewPassword;
-            await _context.SaveChangesAsync();
-            return Ok("Update password successfully!");
-        }
+        
 
 
         [HttpDelete("DeleteMember/{userID}")]
