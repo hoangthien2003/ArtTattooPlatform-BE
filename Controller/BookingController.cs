@@ -190,7 +190,7 @@ namespace back_end.Controllers
         public class UpdateStatusRequest
         {
             public string status { get; set; }
-            public string notes { get; set; }
+            public string? notes { get; set; }
         }
         [HttpPut("UpdateStatus/{bookingID}")]
         [Authorize]
