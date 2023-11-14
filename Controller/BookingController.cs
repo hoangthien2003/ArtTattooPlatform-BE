@@ -72,10 +72,20 @@ namespace back_end.Controllers
         }
 
         [HttpPost("AddBooking/{email}")]
-        [Authorize]
+       
         public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string email)
         {
             var user = await _context.TblUsers.FirstOrDefaultAsync(user => user.Email == email);
+            if (!DateTime.TryParse(bookingRequest.BookingDate, out DateTime bookingDate))
+            {
+                return BadRequest("Invalid date format for BookingDate.");
+            }
+            bool canBook = CanBookAppointment(bookingRequest.ServiceID, bookingRequest.StudioID,bookingDate);
+
+            if (!canBook)
+            {
+                return BadRequest("Không thể đặt lịch vào thời điểm này. Số lượng đã đạt giới hạn.");
+            }
             var booking = new TblBooking
             {
                 UserId = user.UserId,
@@ -91,6 +101,17 @@ namespace back_end.Controllers
             _context.TblBookings.Add(booking);
             await _context.SaveChangesAsync();
             return Ok(booking);
+        }
+        private bool CanBookAppointment(int serviceId, int studioId, DateTime bookingDate)
+        {
+            // Lấy số lượng booking hiện tại cho dịch vụ và studio trong khoảng thời gian đã chọn
+            int currentBookings = _context.TblBookings
+                .Count(b => b.ServiceId == serviceId &&
+                            b.StudioId == studioId &&
+                            b.BookingDate == bookingDate);
+
+            // Kiểm tra xem số lượng booking đã đạt mức tối đa hay chưa (ở đây giả sử là 2)
+            return currentBookings < 2;
         }
 
 
