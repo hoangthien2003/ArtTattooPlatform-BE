@@ -40,7 +40,8 @@ namespace back_end.Controller
 
 
         [HttpPost("AddFeedback")]
-        
+        [Authorize]
+
         public async Task<IActionResult> AddFeedback([FromForm]  Feedback feedbackRequest)
         {
             
