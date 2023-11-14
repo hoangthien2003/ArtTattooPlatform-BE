@@ -20,7 +20,7 @@ namespace back_end.Controllers
         }
 
         [HttpGet("GetAll")]
-        
+
         public async Task<IActionResult> GetBookings()
         {
             var bookings = await _context.TblBookings
@@ -29,7 +29,7 @@ namespace back_end.Controllers
         }
 
         [HttpGet("GetBookingsByStudio/{studioID}")]
-      
+
         public IActionResult GetBookingsByStudio([FromRoute] int studioID)
         {
             var bookings = _context.TblBookings.Where(booking => booking.StudioId == studioID).ToList();
@@ -43,7 +43,7 @@ namespace back_end.Controllers
         }
 
         [HttpGet("GetBookingsByService/{serviceID}")]
-        
+
         public IActionResult GetBookingsByService([FromRoute] int serviceID)
         {
             var bookings = _context.TblBookings.Where(booking => booking.ServiceId == serviceID).ToList();
@@ -57,7 +57,7 @@ namespace back_end.Controllers
         }
 
         [HttpGet("GetBookingByID/{bookingID}")]
-        
+
         public async Task<IActionResult> GetBookingByID([FromRoute] string bookingID)
 
         {
@@ -76,7 +76,7 @@ namespace back_end.Controllers
         public async Task<IActionResult> AddBooking([FromBody] Booking bookingRequest, [FromRoute] string email)
         {
             var user = await _context.TblUsers.FirstOrDefaultAsync(user => user.Email == email);
-            var  booking = new TblBooking
+            var booking = new TblBooking
             {
                 UserId = user.UserId,
                 ServiceId = bookingRequest.ServiceID,
@@ -110,7 +110,7 @@ namespace back_end.Controllers
         }
 
         [HttpGet("GetAllByUserID/{userID}")]
-       
+
         public async Task<IActionResult> GetAllByMemberIDAsync([FromRoute] int userID)
         {
             var bookingList = await _context.TblBookings
@@ -166,7 +166,7 @@ namespace back_end.Controllers
 
         [HttpPut("UpdateStatus/{bookingID}")]
         [Authorize]
-        public async Task<IActionResult> UpdateStatusAsync([FromRoute] int bookingID, string status)
+        public async Task<IActionResult> UpdateStatusAsync([FromRoute] int bookingID, [FromBody] string status)
         {
             var booking = await _context.TblBookings.FirstOrDefaultAsync(b => b.BookingId == bookingID);
             if (booking == null)
