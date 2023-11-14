@@ -166,9 +166,9 @@ namespace back_end.Controllers
             return Ok(booking);
         }
 
-        [HttpPut("UpdateStatus")]
+        [HttpPut("UpdateStatus/{bookingID}")]
         [Authorize]
-        public async Task<IActionResult> UpdateStatusAsync(int bookingID, string status)
+        public async Task<IActionResult> UpdateStatusAsync([FromRoute] int bookingID, [FromBody] string status)
         {
             var booking = await _context.TblBookings.FirstOrDefaultAsync(b => b.BookingId == bookingID);
             if (booking == null)
