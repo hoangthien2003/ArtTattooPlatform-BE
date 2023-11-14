@@ -20,4 +20,6 @@ public partial class TblArtist
     public string? AvatarArtist { get; set; }
 
     public virtual ICollection<TblSchedule> TblSchedules { get; set; } = new List<TblSchedule>();
+
+    public virtual TblUser? User { get; set; }
 }

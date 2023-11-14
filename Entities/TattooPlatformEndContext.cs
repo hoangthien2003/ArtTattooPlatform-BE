@@ -56,6 +56,10 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.AvatarArtist).HasMaxLength(250);
             entity.Property(e => e.PhoneNumber).HasMaxLength(30);
             entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblArtists)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tbl_Artist_tbl_User");
         });
 
         modelBuilder.Entity<TblBooking>(entity =>
@@ -236,7 +240,6 @@ public partial class TattooPlatformEndContext : DbContext
                 .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.ImageService).IsUnicode(false);
-            entity.Property(e => e.Price).HasColumnType("money");
             entity.Property(e => e.ServiceName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
