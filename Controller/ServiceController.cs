@@ -190,9 +190,7 @@ namespace back_end.Controller
 
         [HttpPut("UpdateService/{serviceID}")]
         [Authorize(Roles = "MN")]
-        
-        public async Task<IActionResult> UpdateServiceAsync([FromForm] Service serviceRequest,
-            [FromRoute] int serviceID)
+        public async Task<IActionResult> UpdateServiceAsync([FromRoute] int serviceID, Service serviceRequest)
         {
             var service = await _context.TblServices.FindAsync(serviceID);
             if (service == null)
