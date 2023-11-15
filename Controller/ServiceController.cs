@@ -139,52 +139,7 @@ namespace back_end.Controller
             return Ok(service);
         }
 
-        //[HttpPost("Add")]
-        //[Authorize(Roles = "MN")]
-        //public async Task<IActionResult> AddServiceAsync([FromForm] Service serviceRequest)
-        //{
-        //    var service = new TblService
-        //    {
-        //        ServiceName = serviceRequest.ServiceName,
-        //        Description = serviceRequest.Description,
-        //        CategoryId = serviceRequest.CategoryID,
-        //        StudioId = serviceRequest.StudioID,
-        //        Price = serviceRequest.Price
-        //    };
-
-
-
-        //    _context.TblServices.Add(service);
-        //    _context.SaveChanges(); // Lưu dịch vụ và tạo ID
-
-
-
-        //    // Lấy ID sau khi đã được tạo
-        //    int serviceId = service.ServiceId;
-
-        //    if (serviceRequest.Image.Length > 0)
-        //    {
-        //        // Lấy đường dẫn cho thư mục lưu trữ tệp tin hình ảnh
-        //        string storagePath = GetFileProductPath(serviceId);
-        //        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(serviceRequest.Image.FileName);
-
-        //        // Tạo đường dẫn đầy đủ tới tệp tin hình ảnh
-        //        string imageUrl = GetImageProductPath(serviceId, fileName);
-
-        //        // Lưu tệp tin hình ảnh vào thư mục lưu trữ
-        //        var filePath = Path.Combine(storagePath, fileName);
-        //        using (var stream = new FileStream(filePath, FileMode.Create))
-        //        {
-        //            await serviceRequest.Image.CopyToAsync(stream);
-        //        }
-
-        //        // Cập nhật đường dẫn hình ảnh vào đối tượng service
-        //        service.ImageService = imageUrl;
-        //        _context.SaveChanges(); // Lưu thông tin hình ảnh vào cơ sở dữ liệu
-        //    }
-
-        //    return Ok(service);
-        //}
+      
 
 
 
@@ -268,25 +223,7 @@ namespace back_end.Controller
             }
         }
 
-        //[HttpGet("NewServices")]
-        //public IActionResult GetNewServices()
-        //{
-        //try
-        //{
-        // Định nghĩa thời gian tối đa để xem dịch vụ là mới.
-        //var maxNewServiceAge = DateTime.UtcNow.AddMonths(-1); // Ví dụ: Lấy dịch vụ mới trong vòng 1 tháng (số tháng có thể điều chỉnh).
-
-        //var newServices = _context.TblServices
-        //.Where(service => service.CreatedAt >= maxNewServiceAge) // Lọc các dịch vụ mới
-        //.ToList();
-
-        //return Ok(newServices);
-        //}
-        //catch (Exception ex)
-        //{
-        //return BadRequest("Lỗi trong quá trình lấy danh sách new services.");
-        //}
-        // }
+     
 
         [HttpGet("NewestServices")]
         public IActionResult GetNewestServices()
