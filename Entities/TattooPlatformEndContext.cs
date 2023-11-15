@@ -21,6 +21,8 @@ public partial class TattooPlatformEndContext : DbContext
 
     public virtual DbSet<TblCategory> TblCategories { get; set; }
 
+    public virtual DbSet<TblComment> TblComments { get; set; }
+
     public virtual DbSet<TblFeedback> TblFeedbacks { get; set; }
 
     public virtual DbSet<TblManager> TblManagers { get; set; }
@@ -111,6 +113,20 @@ public partial class TattooPlatformEndContext : DbContext
             entity.Property(e => e.CategoryName)
                 .HasMaxLength(10)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<TblComment>(entity =>
+        {
+            entity.HasKey(e => e.CommentId).HasName("PK__tbl_Comm__C3B4DFAAA6369FB6");
+
+            entity.ToTable("tbl_Comment");
+
+            entity.Property(e => e.CommentId).HasColumnName("CommentID");
+            entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
+
+            entity.HasOne(d => d.Feedback).WithMany(p => p.TblComments)
+                .HasForeignKey(d => d.FeedbackId)
+                .HasConstraintName("FK_Comment");
         });
 
         modelBuilder.Entity<TblFeedback>(entity =>

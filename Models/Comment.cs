@@ -6,6 +6,6 @@
 
         public int? FeedbackID { get; set; }
 
-        public string? CommentText { get; set; }
+        public string? CommentDetail { get; set; }
     }
 }

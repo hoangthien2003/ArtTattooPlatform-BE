@@ -9,7 +9,7 @@ public partial class TblComment
 
     public int? FeedbackId { get; set; }
 
-    public string? CommentText { get; set; }
+    public string? CommentDetail { get; set; }
 
     public virtual TblFeedback? Feedback { get; set; }
 }
