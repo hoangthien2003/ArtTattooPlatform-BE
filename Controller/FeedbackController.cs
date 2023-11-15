@@ -40,13 +40,10 @@ namespace back_end.Controller
 
 
         [HttpPost("AddFeedback")]
-        
-        public async Task<IActionResult> AddFeedback([FromForm]  Feedback feedbackRequest)
+        public async Task<IActionResult> AddFeedback([FromBody] Feedback feedbackRequest)
         {
-            
             var Feedback0 = new TblFeedback
             {  
-               
                 FeedbackDetail = feedbackRequest.FeedbackDetail,
                 UserId = feedbackRequest.UserID,
                 ServiceId = feedbackRequest.ServiceID,
