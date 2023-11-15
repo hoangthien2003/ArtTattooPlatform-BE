@@ -122,6 +122,7 @@ namespace back_end.Controller
                     f.FeedbackDate,
                     f.ServiceId,
                     f.Rating,
+                    f.User.UserName,
                     f.User
                 })
                 .Where(s => s.ServiceId == ServiceID).ToListAsync();
